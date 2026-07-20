@@ -1,0 +1,416 @@
+@import "tailwindcss";
+
+/*
+  Sistema de diseño — ortoptikaterapia.com
+  Concepto: EDITORIAL / PREMIUM cálido para salud visual, con la MARCA REAL.
+  Paleta oficial Ortoptika (logo ojo+cerebro):
+    · Principal  #0E4D7A (azul profundo)  → primary-700. Texto/UI sobre claro OK.
+    · Secundario #A8CF45 (verde lima)     → accent-500. SOLO acento GRÁFICO:
+      formas, fondos, bloques grandes o con texto oscuro encima. ⚠️ NUNCA como
+      texto ni iconos finos sobre blanco/crema (falla contraste AA).
+    · Terciario  #02223B (navy muy oscuro) → slate-ink-900. Texto y fondos dark.
+  Neutros crema cálidos conservados (eco de la calidez de la foto real).
+  Titulares con serif display (Fraunces); Plus Jakarta para eyebrows/UI e
+  Inter para cuerpo. Enfoque CSS-first de Tailwind v4: los tokens viven en @theme.
+*/
+
+@theme {
+  /* ---- Color: primario (azul profundo de marca — #0E4D7A en el 700) ---- */
+  --color-primary-50: #f1f7fb;
+  --color-primary-100: #ddebf5;
+  --color-primary-200: #c0dbec;
+  --color-primary-300: #93c1dd;
+  --color-primary-400: #5f9fc8;
+  --color-primary-500: #3a82b1;
+  --color-primary-600: #1d6395;
+  --color-primary-700: #0e4d7a; /* AZUL DE MARCA */
+  --color-primary-800: #0e405f;
+  --color-primary-900: #0f364e;
+  --color-primary-950: #0a2438;
+
+  /* ---- Color: tinta navy (terciario de marca — #02223B en el 900) ---- */
+  --color-slate-ink-50: #f3f7fa;
+  --color-slate-ink-100: #e5edf4;
+  --color-slate-ink-200: #cddce7;
+  --color-slate-ink-300: #a4c0d3;
+  --color-slate-ink-400: #6f96b2;
+  --color-slate-ink-500: #446e8e;
+  --color-slate-ink-600: #355976;
+  --color-slate-ink-700: #294763;
+  --color-slate-ink-800: #113a5e;
+  --color-slate-ink-900: #02223b; /* NAVY DE MARCA: texto principal + fondos dark */
+  --color-slate-ink-950: #021627;
+
+  /* ---- Color: acento (verde lima de marca — #A8CF45 en el 500) ----
+     ⚠️ 50-500 solo para formas/fondos; para texto sobre claro usar 700+. */
+  --color-accent-50: #f8fbec;
+  --color-accent-100: #eef6d3;
+  --color-accent-200: #ddecab;
+  --color-accent-300: #cbe282;
+  --color-accent-400: #bad962;
+  --color-accent-500: #a8cf45; /* LIMA DE MARCA */
+  --color-accent-600: #8ab32c;
+  --color-accent-700: #596f1e;
+  --color-accent-800: #47591d;
+  --color-accent-900: #3c4a1d;
+
+  /* ---- Neutros cálidos (crema / off-white / gris cálido) ---- */
+  --color-cream: #fbf9f5;
+  --color-cream-soft: #f5f1ea;
+  --color-cream-deep: #efe9df; /* bloque cálido más marcado */
+  --color-surface: #ffffff;
+
+  /* ---- Semánticos ---- */
+  --color-background: var(--color-cream);
+  --color-foreground: var(--color-slate-ink-900);
+  --color-muted: var(--color-slate-ink-500);
+  --color-line: color-mix(in srgb, var(--color-slate-ink-900) 12%, transparent);
+
+  /* ---- Tipografía ---- */
+  /* DISPLAY — Fraunces (serif) para titulares h1/h2 (preloaded, candidato LCP). */
+  --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  /* Itálica de Fraunces como FAMILIA SEPARADA (accent-words / watermarks /
+     índices). Instancia aparte con display:"optional" + preload:false; en frío
+     cae a Georgia itálica métricamente ajustada (ver .accent-word, que fija
+     font-style: italic). */
+  --font-display-italic: var(--font-fraunces-italic), Georgia,
+    "Times New Roman", serif;
+  /* UI — Plus Jakarta Sans para subtítulos (h3-h6), eyebrows y nav. */
+  --font-heading: var(--font-plus-jakarta), ui-sans-serif, system-ui, sans-serif;
+  /* CUERPO — Inter (preloaded). */
+  --font-body: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  /* Escala tipográfica editorial — fluida en los tamaños display (clamp) */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: clamp(1.75rem, 1.4rem + 1.5vw, 2.25rem);
+  --text-4xl: clamp(2.1rem, 1.6rem + 2.4vw, 3rem);
+  --text-4xl--line-height: 1.08;
+  --text-5xl: clamp(2.6rem, 1.8rem + 3.6vw, 3.9rem);
+  --text-5xl--line-height: 1.04;
+  --text-6xl: clamp(3.1rem, 1.9rem + 5.4vw, 5rem);
+  --text-6xl--line-height: 1;
+  --text-7xl: clamp(3.6rem, 1.6rem + 8.5vw, 6.75rem);
+  --text-7xl--line-height: 0.98;
+  /* Escala EXTREMA para texto-como-gráfico (títulos que sangran / marcas de agua) */
+  --text-8xl: clamp(4rem, 1rem + 13vw, 9rem);
+  --text-8xl--line-height: 0.9;
+  --text-9xl: clamp(5rem, -1.5rem + 24vw, 15rem);
+  --text-9xl--line-height: 0.82;
+
+  /* ---- Radios suaves ---- */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.875rem;
+  --radius-lg: 1.25rem;
+  --radius-xl: 1.75rem;
+  --radius-2xl: 2.25rem;
+  --radius-3xl: 3rem;
+
+  /* ---- Sombras suaves ---- */
+  --shadow-soft: 0 4px 24px -8px rgb(2 34 59 / 0.12);
+  --shadow-card: 0 8px 32px -12px rgb(2 34 59 / 0.14);
+  --shadow-lift: 0 24px 60px -28px rgb(2 34 59 / 0.28);
+}
+
+/*
+  Base — en @layer base para que las utilidades de Tailwind (p. ej. text-white
+  en un heading sobre fondo oscuro) puedan sobrescribir estas reglas de elemento.
+  En Tailwind v4 el CSS sin capa gana a las utilidades; sin @layer, un h2.text-white
+  quedaría del color base (invisible sobre oscuro).
+*/
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Titulares grandes: Fraunces display (serif cálida, de confianza). */
+  h1,
+  h2 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.05;
+    color: var(--color-slate-ink-900);
+  }
+
+  /* Subtítulos / UI: Plus Jakarta Sans. */
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    letter-spacing: -0.005em;
+    line-height: 1.15;
+    color: var(--color-slate-ink-900);
+  }
+}
+
+/*
+  Clases de composición — en @layer components para que las utilidades de
+  Tailwind puedan sobrescribir propiedades puntuales (p. ej. un watermark con
+  text-cream-deep, o un accent-word con text-accent-300 sobre fondo navy).
+  Sin capa ganarían siempre estas reglas y esas utilidades serían inertes.
+*/
+@layer components {
+  /* Palabra acentuada dentro de un titular (recurso editorial): Fraunces
+     ITÁLICA en color de marca (azul). Suele aplicarse sobre <em>, pero fijamos
+     font-style: italic de forma explícita para no depender del elemento. */
+  .accent-word {
+    font-family: var(--font-display-italic);
+    font-style: italic;
+    font-weight: 500;
+    color: var(--color-primary-600);
+  }
+
+  /* Meta-info vertical en el borde de una sección (writing-mode, lee de abajo a arriba). */
+  .vertical-text {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+  }
+
+  /* Texto contorneado: palabra-gráfico gigante de fondo, ligera. */
+  .text-outline {
+    color: transparent;
+    -webkit-text-stroke: 2px var(--color-primary-200);
+    paint-order: stroke fill;
+  }
+
+  /* Marca de agua tipográfica gigante de fondo (números/palabra como gráfico). */
+  .watermark {
+    font-family: var(--font-display-italic);
+    font-style: italic;
+    font-weight: 500;
+    line-height: 0.72;
+    letter-spacing: -0.02em;
+    color: var(--color-primary-100);
+    pointer-events: none;
+    user-select: none;
+  }
+
+  /* Eyebrow: etiqueta corta de sección con regla de acento lima (gráfica). */
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-primary-700);
+  }
+  .eyebrow::before {
+    content: "";
+    width: 1.75rem;
+    height: 3px;
+    background: var(--color-accent-500);
+  }
+
+  /* Índice sobredimensionado de sección (marca de agua tipográfica). */
+  .section-index {
+    font-family: var(--font-display-italic);
+    font-weight: 500;
+    font-style: italic;
+    line-height: 1;
+    color: var(--color-primary-200);
+  }
+
+  /* Placeholder de imagen editorial: proporción + marco fácil de reemplazar. */
+  .img-placeholder {
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(
+        120% 120% at 15% 10%,
+        var(--color-primary-100),
+        transparent 55%
+      ),
+      radial-gradient(
+        120% 120% at 85% 90%,
+        var(--color-accent-100),
+        transparent 55%
+      ),
+      var(--color-cream-soft);
+  }
+  .img-placeholder::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(
+      var(--color-line) 1px,
+      transparent 1px
+    );
+    background-size: 22px 22px;
+    opacity: 0.5;
+  }
+
+  /* Marco para la foto real recortada (PNG/WebP con transparencia): fondo
+     de marca suave detrás del sujeto, mismo lenguaje que img-placeholder. */
+  .photo-frame {
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(
+        120% 120% at 20% 12%,
+        var(--color-primary-100),
+        transparent 60%
+      ),
+      radial-gradient(
+        110% 110% at 85% 95%,
+        var(--color-accent-200),
+        transparent 55%
+      ),
+      var(--color-cream-soft);
+  }
+}
+
+/*
+  Entrada above-the-fold por CSS (Sesión 8) — el hero NO puede depender de GSAP
+  (el Reveal no anima nada en el viewport inicial: ocultar contenido ya pintado
+  hasta hidratar disparaba el LCP a 7s+). Estas clases corren desde el primer
+  frame del CSS, sin JS.
+  REGLA LCP: el candidato a LCP (foto del hero / titular 8xl) solo puede usar
+  `.enter-shift` (transform puro, nunca opacity:0 — un elemento transparente no
+  pinta y retrasa el LCP). `.enter-up` / `.enter-fade` quedan para los
+  elementos secundarios. Delay por elemento vía `--enter-delay` (el bloque de
+  prefers-reduced-motion de abajo anula duración Y delay).
+*/
+/* Usamos la propiedad individual `translate` (no `transform`): compone con los
+   utilities de rotate y translate de Tailwind v4 sin pisarlos al terminar. */
+@keyframes enter-up {
+  from {
+    opacity: 0;
+    translate: 0 18px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+@keyframes enter-shift {
+  from {
+    translate: 0 16px;
+  }
+  to {
+    translate: 0 0;
+  }
+}
+@keyframes enter-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@layer components {
+  .enter-up {
+    animation: enter-up 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: var(--enter-delay, 0s);
+  }
+  /* Transform puro: seguro para el elemento LCP (no retrasa su pintado). */
+  .enter-shift {
+    animation: enter-shift 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: var(--enter-delay, 0s);
+  }
+  .enter-fade {
+    animation: enter-fade 0.9s ease-out both;
+    animation-delay: var(--enter-delay, 0s);
+  }
+}
+
+/*
+  Animaciones ambiente para las capas de fondo SVG (<Backdrop/>).
+  Reglas: SOLO transform/opacity (compositor GPU), movimiento LENTO y de bajo
+  contraste — ambiente, nunca protagonista. El bloque global de
+  prefers-reduced-motion (abajo) las congela en su primer frame.
+*/
+@keyframes bg-drift {
+  from {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+  }
+  to {
+    transform: translate3d(2.5%, -3%, 0) rotate(4deg) scale(1.05);
+  }
+}
+@keyframes bg-drift-reverse {
+  from {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1.04);
+  }
+  to {
+    transform: translate3d(-3%, 2%, 0) rotate(-5deg) scale(1);
+  }
+}
+@keyframes bg-breathe {
+  from {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  to {
+    transform: scale(1.06);
+    opacity: 1;
+  }
+}
+@keyframes bg-wave {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-3.5%, 1.5%, 0);
+  }
+}
+
+.anim-drift {
+  animation: bg-drift 26s ease-in-out infinite alternate;
+  will-change: transform;
+}
+.anim-drift-reverse {
+  animation: bg-drift-reverse 32s ease-in-out infinite alternate;
+  will-change: transform;
+}
+.anim-breathe {
+  animation: bg-breathe 14s ease-in-out infinite alternate;
+  transform-box: fill-box;
+  transform-origin: center;
+  will-change: transform, opacity;
+}
+.anim-wave {
+  animation: bg-wave 30s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+/* Accesibilidad: foco visible AA */
+:focus-visible {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Respeto a preferencias de movimiento reducido (animaciones sutiles) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+}

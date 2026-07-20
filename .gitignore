@@ -24,6 +24,10 @@
 .DS_Store
 *.pem
 
+# dev/QA artifacts (no forman parte del sitio)
+/.playwright-mcp/
+/qa-screenshots/
+
 # debug
 npm-debug.log*
 yarn-debug.log*
