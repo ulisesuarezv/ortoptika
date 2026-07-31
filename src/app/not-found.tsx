@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { SERVICES } from "@/lib/constants";
 import Backdrop from "@/components/ui/Backdrop";
@@ -8,6 +9,11 @@ import Button from "@/components/ui/Button";
  * watermark, mensaje empático y salidas útiles (home + servicios).
  * Sin Reveal: en una página de error el contenido debe verse al instante.
  */
+export const metadata: Metadata = {
+  title: "Página no encontrada",
+  robots: { index: false, follow: true },
+};
+
 export default function NotFound() {
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-cream to-cream-soft">

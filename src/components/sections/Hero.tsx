@@ -73,7 +73,7 @@ export default function Hero() {
                 para tu familia
               </span>
               <span className="enter-up mt-4 inline-block font-heading text-xs font-semibold uppercase tracking-[0.24em] text-primary-700 [--enter-delay:260ms]">
-                , en Ibagué · Colombia
+                En Ibagué · Colombia
               </span>
             </h1>
           </Reveal>
