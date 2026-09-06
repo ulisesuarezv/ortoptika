@@ -6,6 +6,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { NAV_LINKS, whatsappLink } from "@/lib/constants";
 import Button from "@/components/ui/Button";
+import { useMagnetic } from "@/hooks/useMagnetic";
 
 /**
  * ¿Está activo el link para la ruta actual? Compara por primer segmento
@@ -34,6 +35,7 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
   const close = () => setOpen(false);
+  const menuTriggerRef = useMagnetic<HTMLButtonElement>(0.35);
 
   // Cierra con Escape y bloquea el scroll del body cuando está abierto.
   useEffect(() => {
@@ -145,8 +147,12 @@ export default function Header() {
             </span>
           </a>
 
-          {/* Disparador móvil */}
+          {/* Disparador móvil: magnético (useMagnetic) — sin clases de
+              transform propias, así que no choca con el `rotate: none`/
+              `translate: none` inline que GSAP fija sobre el nodo que anima
+              (ver memoria del proyecto sobre el gotcha GSAP↔Tailwind). */}
           <button
+            ref={menuTriggerRef}
             type="button"
             className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-slate-ink-800 transition-colors hover:bg-slate-ink-100 sm:hidden"
             aria-expanded={open}

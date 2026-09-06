@@ -80,14 +80,22 @@ Ninguno de estos puntos fue respondido en el cuestionario — sigue en cero:
 - [x] Sesión 2 — Hero con entrada palabra por palabra + cortina de marca.
 - [x] Sesión 3 — motion en ServicesGrid/AboutPreview/ContactSection (`Reveal`
       gana prop `scale`), limpieza de comentarios obsoletos en `/sobre-mi`.
-- [ ] Pendiente de una sesión futura: Header y Footer con este mismo sistema
-      de motion (explícitamente fuera de alcance de la Sesión 3 por tener
-      "sesiones propias").
-- [ ] Verificación aún sin cerrar de la Sesión 3: comportamiento en
-      breakpoint `lg` (≥1024px) y con `prefers-reduced-motion: reduce` real
-      — no se pudo probar con la herramienta de automatización usada (viewport
-      fijo <1024px, sin control de reduced-motion). Confirmar en un navegador
-      real antes de dar por cerrada esa sesión.
+- [x] Sesión 4 — Header (botón de menú móvil magnético) y Footer (`Reveal`/
+      `Parallax` en las secciones, CTA de WhatsApp magnético vía el nuevo
+      `ui/MagneticLink.tsx`). Ver memoria `ortoptika-motion-rediseno` para el
+      detalle y el porqué del componente nuevo (mantiene Footer como Server
+      Component).
+- [ ] Verificación real de navegador AÚN PENDIENTE (Sesiones 3 y 4): la
+      herramienta de automatización usada en ambas sesiones tuvo el viewport
+      fijo <1024px y la pestaña en segundo plano (rAF congelado), así que
+      falta confirmar con un navegador real y en foco:
+  - [ ] Breakpoint `lg` (≥1024px): rotación de la tarjeta 5 de ServicesGrid,
+        grid de 4 columnas del TrustBar, offset `lg:-translate-y-4
+        lg:translate-x-4` del CTA del Footer.
+  - [ ] `prefers-reduced-motion: reduce` real (DevTools o SO).
+  - [ ] `PageTransition` completa (el "parpadeo" entre páginas) navegando
+        por los links del Header/Footer — no se pudo verificar de punta a
+        punta por el rAF congelado.
       Paleta actual (azul profundo, verde lima, navy) ya confirmada por la
       doctora, sin cambios — este rediseño de motion no la toca.
 

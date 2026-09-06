@@ -2,9 +2,14 @@ import Link from "next/link";
 import Image from "next/image";
 import { NAV_LINKS, SITE_CONFIG, whatsappLink } from "@/lib/constants";
 import Backdrop from "@/components/ui/Backdrop";
+import Reveal from "@/components/ui/Reveal";
+import Parallax from "@/components/ui/Parallax";
+import MagneticLink from "@/components/ui/MagneticLink";
 
 /**
  * Footer: continuación editorial del flujo (banda CTA display + datos).
+ * Sigue siendo Server Component: el motion vive en los client leaves
+ * <Reveal>/<Parallax>/<MagneticLink>.
  */
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -12,26 +17,38 @@ export default function Footer() {
   return (
     <footer className="relative overflow-hidden bg-slate-ink-900 text-slate-ink-200">
       {/* Capa de fondo: ondas ópticas en tono oscuro, muy sutiles */}
-      <Backdrop variant="waves" tone="dark" className="z-0" />
+      <Parallax className="absolute inset-0 z-0" amount={8}>
+        <Backdrop variant="waves" tone="dark" />
+      </Parallax>
       {/* Banda CTA: cierre cálido a escala extrema, continuación del flujo */}
       <div className="relative mx-auto max-w-7xl px-5 pb-16 pt-20 sm:px-8 lg:pt-28">
-        <div className="border-b border-slate-ink-800 pb-16">
+        <Reveal className="border-b border-slate-ink-800 pb-16">
           <h2 className="max-w-[14ch] text-5xl leading-[0.95] text-white sm:text-7xl lg:text-8xl">
             ¿Hablamos de la visión de{" "}
             <em className="accent-word text-accent-300">tu familia</em>?
           </h2>
-          <a
-            href={whatsappLink()}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-10 inline-flex shrink-0 items-center gap-2 rounded-full bg-accent-500 px-8 py-4 font-heading text-lg font-semibold text-slate-ink-900 transition-colors hover:bg-accent-400 lg:-translate-y-4 lg:translate-x-4"
-          >
-            Escribir por WhatsApp
-          </a>
-        </div>
+          {/* El offset estático (lg:-translate-y-4 lg:translate-x-4) vive en
+              este wrapper, NO en el <a> magnético: useMagnetic fija el x/y
+              vía GSAP sobre el nodo que anima, y eso pisaría permanentemente
+              cualquier translate-* de Tailwind puesto en ese mismo nodo (ver
+              memoria del proyecto — mismo gotcha de ServicesGrid/TrustBar). */}
+          <span className="mt-10 inline-block lg:-translate-y-4 lg:translate-x-4">
+            <MagneticLink
+              href={whatsappLink()}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex shrink-0 items-center gap-2 rounded-full bg-accent-500 px-8 py-4 font-heading text-lg font-semibold text-slate-ink-900 transition-colors hover:bg-accent-400"
+            >
+              Escribir por WhatsApp
+            </MagneticLink>
+          </span>
+        </Reveal>
       </div>
 
-      <div className="relative mx-auto grid max-w-7xl gap-10 px-5 py-14 sm:px-8 md:grid-cols-3">
+      <Reveal
+        stagger
+        className="relative mx-auto grid max-w-7xl gap-10 px-5 py-14 sm:px-8 md:grid-cols-3"
+      >
         <div>
           {/* Logo completo sobre tarjeta clara: el line-art azul del original
               sería ilegible directamente sobre navy. */}
@@ -97,7 +114,7 @@ export default function Footer() {
             </p>
           </address>
         </div>
-      </div>
+      </Reveal>
 
       <div className="relative border-t border-slate-ink-800 px-5 py-6 text-center text-xs text-slate-ink-400 sm:px-8">
         © {year} {SITE_CONFIG.name}. Todos los derechos reservados.
