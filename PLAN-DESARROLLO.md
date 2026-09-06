@@ -4,6 +4,15 @@ Plan dividido en sesiones para cuidar el contexto. Cada sesión es autocontenida
 tiene un objetivo, entregables verificables y un criterio de "hecho". Al empezar
 cada sesión, leer este archivo y la memoria del proyecto.
 
+> ⚠️ **Este archivo no incluye una ronda de trabajo posterior** (motion:
+> PageTransition/CustomCursor/useMagnetic, Hero rediseñado, motion en la
+> home) hecha en septiembre 2026, que reutilizó la numeración "Sesión
+> 1/2/3" para un objetivo DISTINTO al de las Sesiones 1–3 documentadas
+> abajo. Ver memoria `ortoptika-motion-rediseno` y el commit `fe8b782` en
+> `feat/sitio-ortoptika` para el detalle real de esa ronda antes de asumir
+> que las Sesiones 1–8 de aquí abajo son el estado completo del motion del
+> sitio.
+
 ## Datos base (fuente de verdad)
 - Profesional: **Yeimmy Paola Barragan** — optómetra, especialista en ortóptica y terapia visual
 - WhatsApp/teléfono: **+57 321 3394829**

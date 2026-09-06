@@ -32,7 +32,7 @@ const HOME_FAQ: FAQItem[] = [
 /**
  * Contacto disruptivo: "Hablemos" a escala 25vw como gráfico de fondo, tarjeta
  * de contacto superpuesta y ligeramente rotada (columna estrecha) y FAQ ancho
- * con índice 02. Canal único WhatsApp; horarios placeholder hasta confirmar.
+ * con índice 02. Canal único WhatsApp; horarios reales (SITE_CONFIG.horarios).
  */
 export default function ContactSection() {
   return (

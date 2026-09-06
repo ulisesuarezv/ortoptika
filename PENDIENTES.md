@@ -66,12 +66,30 @@ Ninguno de estos puntos fue respondido en el cuestionario — sigue en cero:
 - [ ] Configurar `contacto@ortoptikaterapia.com` (hoy el sitio usa el Gmail
       de la doctora, `ortoptika.2020@gmail.com`, como respaldo de WhatsApp)
 
-## 🎨 Diseño
+## 🎨 Diseño (rediseño de motion — EN CURSO, no confundir con el rediseño
+      visual de Sesiones 3.5/3.6 de `PLAN-DESARROLLO.md`, ya cerrado)
 
-- [ ] Sesión(es) dedicada(s) al diseño visual — pendiente de agendar,
-      pedido explícito de Ulises (no urgente, en paralelo a lo anterior).
+> ⚠️ Esta ronda usa su PROPIA numeración de "Sesión 1/2/3…" en el chat,
+> independiente de las Sesiones 1–8 de `PLAN-DESARROLLO.md` (ese doc ya
+> tiene su propia "Sesión 8 — Motion pass + Header", completada en julio).
+> No están en `PLAN-DESARROLLO.md` todavía — ver commit `fe8b782` y memoria
+> `ortoptika-motion-rediseno` para el detalle real de qué se hizo.
+
+- [x] Sesión 1 — sistema de motion global: `PageTransition`, `CustomCursor`
+      (variantes link/media), hook `useMagnetic` (en `Button`).
+- [x] Sesión 2 — Hero con entrada palabra por palabra + cortina de marca.
+- [x] Sesión 3 — motion en ServicesGrid/AboutPreview/ContactSection (`Reveal`
+      gana prop `scale`), limpieza de comentarios obsoletos en `/sobre-mi`.
+- [ ] Pendiente de una sesión futura: Header y Footer con este mismo sistema
+      de motion (explícitamente fuera de alcance de la Sesión 3 por tener
+      "sesiones propias").
+- [ ] Verificación aún sin cerrar de la Sesión 3: comportamiento en
+      breakpoint `lg` (≥1024px) y con `prefers-reduced-motion: reduce` real
+      — no se pudo probar con la herramienta de automatización usada (viewport
+      fijo <1024px, sin control de reduced-motion). Confirmar en un navegador
+      real antes de dar por cerrada esa sesión.
       Paleta actual (azul profundo, verde lima, navy) ya confirmada por la
-      doctora, sin cambios.
+      doctora, sin cambios — este rediseño de motion no la toca.
 
 ---
 

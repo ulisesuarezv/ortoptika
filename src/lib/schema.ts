@@ -1,10 +1,11 @@
 /**
  * Generadores de JSON-LD (schema.org) para SEO.
  *
- * Sólo se usan datos REALES confirmados (SITE_CONFIG). Los campos que dependen
- * de datos aún no confirmados (horarios, geo, credenciales concretas) se OMITEN
- * a propósito en lugar de inventarse: un schema con datos falsos es peor que uno
- * incompleto. Ver PLAN-DESARROLLO.md y la memoria del proyecto.
+ * Sólo se usan datos REALES confirmados (SITE_CONFIG) — horarios y credenciales
+ * ya están cargados. Lo que sigue sin confirmar (hoy solo `geo`: lat/lng, falta
+ * el enlace de Google Maps) se OMITE a propósito en lugar de inventarse: un
+ * schema con datos falsos es peor que uno incompleto. Ver PLAN-DESARROLLO.md y
+ * la memoria del proyecto.
  *
  * Cada generador devuelve un objeto plano; se inyecta con:
  *   <script type="application/ld+json"
