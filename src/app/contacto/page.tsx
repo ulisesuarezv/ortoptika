@@ -18,8 +18,8 @@ export const metadata: Metadata = buildMetadata({
  * Mapa embebido: el iframe queda listo; falta pegar la URL de embed en
  * SITE_CONFIG.googleMapsEmbed (placeholder visual mientras tanto).
  *
- * JSON-LD: MedicalBusiness (mismo @id que en la home). `geo` y horarios
- * reales se añadirán cuando se confirmen — no se inventan coordenadas.
+ * JSON-LD: MedicalBusiness (mismo @id que en la home), ya con horarios
+ * reales. `geo` (lat/lng) sigue pendiente — no se inventan coordenadas.
  */
 export default function ContactoPage() {
   const embedUrl = SITE_CONFIG.googleMapsEmbed;
@@ -122,24 +122,28 @@ export default function ContactoPage() {
                       Horarios
                     </dt>
                     <dd className="mt-2 leading-relaxed text-slate-ink-700">
-                      {/* ⚠️ PLACEHOLDER: confirmar horarios reales con la doctora */}
-                      <span className="inline-block rounded-md border border-dashed border-accent-400 bg-accent-100/40 px-3 py-1.5 text-sm">
-                        ⚠️ Por confirmar — se publicarán en cuanto estén
-                        definidos
+                      <span className="font-semibold text-slate-ink-900">
+                        {SITE_CONFIG.horarios.dias}
                       </span>
                       <br />
+                      {SITE_CONFIG.horarios.turnos.map((turno) => (
+                        <span key={turno} className="block text-sm">
+                          {turno}
+                        </span>
+                      ))}
                       <span className="mt-2 inline-block text-sm text-muted">
-                        Mientras tanto, escríbeme por WhatsApp y coordinamos el
-                        horario de tu cita.
+                        Atención solo particular (sin EPS ni prepagada). Cita
+                        siempre con reserva previa — la primera valoración dura
+                        aproximadamente una hora.
                       </span>
                     </dd>
                   </div>
 
                   <div>
                     <dt className="font-heading text-xs font-bold uppercase tracking-[0.16em] text-primary-700">
-                      Instagram
+                      Redes e email
                     </dt>
-                    <dd className="mt-2">
+                    <dd className="mt-2 leading-relaxed text-slate-ink-700">
                       <a
                         href={SITE_CONFIG.social.instagram}
                         target="_blank"
@@ -147,6 +151,13 @@ export default function ContactoPage() {
                         className="inline-block py-1 font-semibold text-primary-700 underline-offset-2 hover:underline"
                       >
                         {SITE_CONFIG.social.instagramHandle}
+                      </a>
+                      <br />
+                      <a
+                        href={`mailto:${SITE_CONFIG.email}`}
+                        className="inline-block py-1 text-sm text-slate-ink-700 underline-offset-2 hover:underline"
+                      >
+                        {SITE_CONFIG.email}
                       </a>
                     </dd>
                   </div>

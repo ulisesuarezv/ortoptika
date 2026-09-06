@@ -46,7 +46,7 @@ export default function ServiceCard({
       )}
 
       <div className="relative flex items-start gap-4">
-        <span className="mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary-600 text-white shadow-soft transition-colors group-hover:bg-primary-700">
+        <span className="mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary-600 text-white shadow-soft transition-all duration-300 group-hover:-translate-y-0.5 group-hover:rotate-6 group-hover:bg-primary-700">
           <ServiceIcon slug={service.slug} className="h-5 w-5" />
         </span>
         <div className="flex flex-col gap-2">

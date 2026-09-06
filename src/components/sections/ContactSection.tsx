@@ -46,17 +46,19 @@ export default function ContactSection() {
       </Parallax>
 
       {/* Palabra gigante como gráfico de fondo */}
-      <span
-        aria-hidden="true"
-        className="watermark absolute -left-[3vw] top-[8vh] text-[25vw] text-cream-deep"
-      >
-        Hablemos
-      </span>
+      <Parallax className="absolute -left-[3vw] top-[8vh] z-0" amount={6}>
+        <span
+          aria-hidden="true"
+          className="watermark block text-[25vw] text-cream-deep"
+        >
+          Hablemos
+        </span>
+      </Parallax>
 
       <div className="relative z-10 mx-auto max-w-7xl px-5 py-20 sm:px-8 lg:py-28">
         <div className="grid gap-y-14 lg:grid-cols-12 lg:gap-x-10">
           {/* Tarjeta de contacto superpuesta y rotada */}
-          <Reveal from="left" className="lg:col-span-5">
+          <Reveal from="left" scale className="lg:col-span-5">
             <div className="flex -rotate-[1.5deg] flex-col items-start gap-5 rounded-[2rem] border border-line bg-surface p-8 shadow-lift sm:p-10">
               <span className="eyebrow">Contacto</span>
               <h2 id="contact-title" className="text-4xl sm:text-5xl">
@@ -82,11 +84,7 @@ export default function ContactSection() {
                     Horarios
                   </dt>
                   <dd className="text-slate-ink-700">
-                    {SITE_CONFIG.horarios.semana}
-                    <br />
-                    {SITE_CONFIG.horarios.sabado}
-                    <br />
-                    {SITE_CONFIG.horarios.domingo}
+                    {SITE_CONFIG.horarios.texto}
                   </dd>
                 </div>
                 <div className="flex flex-col gap-1 py-4">

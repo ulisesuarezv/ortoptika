@@ -20,8 +20,8 @@ const PERSON_ID = `${SITE_CONFIG.url}/#yeimmy-barragan`;
  * MedicalBusiness: la clínica/consulta como negocio local sanitario.
  * Es el nodo clave para el SEO local (aparecer en el pack de mapas).
  *
- * PENDIENTE (rellenar cuando se confirmen): `openingHoursSpecification`
- * (horarios reales) y `geo` (lat/lng). Se añaden en la sesión 5 (/contacto).
+ * PENDIENTE (rellenar cuando se confirme): `geo` (lat/lng, falta el enlace
+ * de Google Maps). `openingHoursSpecification` ya usa horarios reales.
  */
 export function medicalBusinessSchema() {
   return {
@@ -32,6 +32,7 @@ export function medicalBusinessSchema() {
     url: SITE_CONFIG.url,
     description: SITE_CONFIG.descripcion,
     telephone: SITE_CONFIG.telefono,
+    email: SITE_CONFIG.email,
     medicalSpecialty: "Optometric",
     address: {
       "@type": "PostalAddress",
@@ -41,6 +42,21 @@ export function medicalBusinessSchema() {
       addressRegion: SITE_CONFIG.direccion.departamento,
       addressCountry: SITE_CONFIG.direccion.pais,
     },
+    // Dos franjas (mañana/tarde) porque hay pausa de 12:00 a 14:00.
+    openingHoursSpecification: [
+      {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: ["Tuesday", "Wednesday", "Thursday"],
+        opens: "08:00",
+        closes: "12:00",
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: ["Tuesday", "Wednesday", "Thursday"],
+        opens: "14:00",
+        closes: "18:00",
+      },
+    ],
     // Dos capas honestas: la ciudad de la sede (local pack) + el país, porque
     // recibe pacientes de toda Colombia que acuden PRESENCIALMENTE a Ibagué.
     // Una sola sede física (address/geo); no se inventan ubicaciones.
@@ -54,7 +70,7 @@ export function medicalBusinessSchema() {
         name: SITE_CONFIG.direccion.pais,
       },
     ],
-    sameAs: [SITE_CONFIG.social.instagram],
+    sameAs: [SITE_CONFIG.social.instagram, ...(SITE_CONFIG.social.facebook ? [SITE_CONFIG.social.facebook] : [])],
     // El profesional que atiende, enlazado por @id al nodo Person.
     employee: { "@id": PERSON_ID },
   };
@@ -64,9 +80,10 @@ export function medicalBusinessSchema() {
  * Person: la profesional (Yeimmy Paola Barragan).
  * Refuerza E-E-A-T: quién está detrás de la información de salud.
  *
- * PENDIENTE (rellenar sólo con datos verificados por la doctora):
- * `alumniOf` (universidad), `hasCredential` (títulos/colegiatura).
- * Se dejan FUERA hasta confirmarlos — no inventar.
+ * `alumniOf`/`hasCredential` usan datos verificados por la doctora
+ * (Ortoptika-Preguntas-Doctora, sesión 9). No se incluye su número de
+ * cédula (ReTHUS) — a pedido explícito suyo solo se publica el registro
+ * CTNPO.
  */
 export function personSchema() {
   return {
@@ -78,6 +95,44 @@ export function personSchema() {
     image: `${SITE_CONFIG.url}/images/dra-yeimmy-barragan.png`,
     url: `${SITE_CONFIG.url}/sobre-mi`,
     worksFor: { "@id": BUSINESS_ID },
+    alumniOf: [
+      {
+        "@type": "CollegeOrUniversity",
+        name: "Universidad de La Salle",
+        address: "Bogotá, Colombia",
+      },
+      {
+        "@type": "CollegeOrUniversity",
+        name: "Universidad Gama Filho",
+        address: "Río de Janeiro, Brasil",
+      },
+      {
+        "@type": "CollegeOrUniversity",
+        name: "Fundación Oswaldo Cruz",
+        address: "Río de Janeiro, Brasil",
+      },
+    ],
+    hasCredential: [
+      {
+        "@type": "EducationalOccupationalCredential",
+        credentialCategory: "degree",
+        name: "Optómetra",
+        recognizedBy: { "@type": "CollegeOrUniversity", name: "Universidad de La Salle" },
+        dateCreated: "2004",
+      },
+      {
+        "@type": "EducationalOccupationalCredential",
+        credentialCategory: "postgraduate degree",
+        name: "Especialización en Ortóptica y Terapia Visual",
+        recognizedBy: { "@type": "CollegeOrUniversity", name: "Universidad de La Salle" },
+        dateCreated: "2021",
+      },
+      {
+        "@type": "EducationalOccupationalCredential",
+        credentialCategory: "license",
+        name: SITE_CONFIG.credenciales.registroProfesional,
+      },
+    ],
     knowsAbout: [
       "Ortóptica",
       "Terapia visual",
@@ -86,7 +141,7 @@ export function personSchema() {
       "Visión binocular",
       "Optometría pediátrica",
     ],
-    sameAs: [SITE_CONFIG.social.instagram],
+    sameAs: [SITE_CONFIG.social.instagram, ...(SITE_CONFIG.social.facebook ? [SITE_CONFIG.social.facebook] : [])],
   };
 }
 

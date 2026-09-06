@@ -24,6 +24,12 @@ type RevealProps = {
    * lado). El desplazamiento es sutil; la opacidad hace el trabajo principal.
    */
   from?: RevealDirection;
+  /**
+   * Si es true, suma un leve scale de entrada (0.94 → 1) al fade/slide.
+   * Para elementos superpuestos/rotados que deben sentirse "asentándose"
+   * en su sitio (fotos, tarjetas flotantes) en vez de solo aparecer.
+   */
+  scale?: boolean;
 };
 
 /** Desplazamiento inicial por dirección (px). Sutil: ambiente, no efecto. */
@@ -47,6 +53,7 @@ export default function Reveal({
   stagger = false,
   delay = 0,
   from = "up",
+  scale = false,
 }: RevealProps) {
   const scope = useGSAP<HTMLElement>(
     ({ self, gsap }) => {
@@ -64,7 +71,12 @@ export default function Reveal({
       // Patrón set + to (en vez de .from): con .from + stagger, GSAP registra
       // el estado final con los hijos ya ocultos y anima de 0 a 0. set() fija
       // el estado inicial y to() revela de forma fiable.
-      gsap.set(targets, { autoAlpha: 0, x: offset.x, y: offset.y });
+      gsap.set(targets, {
+        autoAlpha: 0,
+        x: offset.x,
+        y: offset.y,
+        ...(scale ? { scale: 0.94 } : {}),
+      });
 
       // Trigger DESACOPLADO del tween (ScrollTrigger.create + onEnter, en vez
       // de pasar scrollTrigger dentro del tween): si el tween va vinculado,
@@ -82,6 +94,7 @@ export default function Reveal({
             autoAlpha: 1,
             x: 0,
             y: 0,
+            ...(scale ? { scale: 1 } : {}),
             duration: 0.8,
             ease: "power3.out",
             delay,
@@ -93,7 +106,7 @@ export default function Reveal({
         },
       });
     },
-    [stagger, delay, from],
+    [stagger, delay, from, scale],
   );
 
   return createElement(as, { ref: scope, className }, children);

@@ -9,6 +9,13 @@ import Parallax from "@/components/ui/Parallax";
  * gigante "ver" como gráfico de fondo que sangra por la derecha, retrato solapado
  * con z-index narrativo sobre el titular y meta-info en columna vertical lateral
  * (writing-mode). Copy borrador de la sesión 3 sin cambios. h1 único.
+ *
+ * Coreografía de entrada (Sesión 2 de motion): cada línea del h1 se divide en
+ * palabras pre-separadas en el server (sin SplitText de GSAP, que no está
+ * instalado — es plugin de pago) y cada palabra anima con `.enter-shift`
+ * (transform puro) o `.enter-up`, heredando el patrón ya validado para el LCP.
+ * La línea "terapia visual" es la candidata a LCP: sus palabras SOLO usan
+ * `.enter-shift` (nunca opacity:0) para no retrasar su pintado.
  */
 export default function Hero() {
   return (
@@ -63,16 +70,32 @@ export default function Hero() {
               Ortóptica &amp; Terapia Visual
             </span>
             <h1 id="hero-title" className="mt-7">
-              <span className="enter-up block font-display text-2xl font-normal italic text-slate-ink-400 [--enter-delay:80ms] sm:text-3xl">
-                Ortóptica y
+              <span className="block font-display text-2xl font-normal italic text-slate-ink-400 sm:text-3xl">
+                <span className="enter-up inline-block [--enter-delay:110ms]">
+                  Ortóptica
+                </span>{" "}
+                <span className="enter-up inline-block [--enter-delay:160ms]">
+                  y
+                </span>
               </span>
-              <span className="enter-shift -mt-1 block text-6xl font-medium leading-[0.9] text-slate-ink-900 sm:text-7xl lg:text-8xl">
-                terapia visual
+              <span className="-mt-1 block text-6xl font-medium leading-[0.9] text-slate-ink-900 sm:text-7xl lg:text-8xl">
+                <span className="enter-shift inline-block">terapia</span>{" "}
+                <span className="enter-shift inline-block [--enter-delay:60ms]">
+                  visual
+                </span>
               </span>
-              <span className="accent-word enter-up mt-1 block text-5xl leading-[0.95] [--enter-delay:160ms] sm:text-6xl lg:text-7xl">
-                para tu familia
+              <span className="accent-word mt-1 block text-5xl leading-[0.95] sm:text-6xl lg:text-7xl">
+                <span className="enter-up inline-block [--enter-delay:210ms]">
+                  para
+                </span>{" "}
+                <span className="enter-up inline-block [--enter-delay:250ms]">
+                  tu
+                </span>{" "}
+                <span className="enter-up inline-block [--enter-delay:290ms]">
+                  familia
+                </span>
               </span>
-              <span className="enter-up mt-4 inline-block font-heading text-xs font-semibold uppercase tracking-[0.24em] text-primary-700 [--enter-delay:260ms]">
+              <span className="enter-up mt-4 inline-block font-heading text-xs font-semibold uppercase tracking-[0.24em] text-primary-700 [--enter-delay:350ms]">
                 En Ibagué · Colombia
               </span>
             </h1>
@@ -109,9 +132,16 @@ export default function Hero() {
                     className="absolute inset-0 h-full w-full object-cover object-[42%_50%]"
                   />
                 </picture>
+                {/* Cortina de marca: cubre la foto y se retira (scale, no
+                    opacity) — el <img> de arriba ya está pintado desde el
+                    frame 0, esto es puro teatro visual encima. */}
+                <div
+                  aria-hidden="true"
+                  className="enter-curtain pointer-events-none absolute inset-0 z-10 bg-primary-700 [--enter-delay:420ms]"
+                />
               </div>
               {/* Chip de credencial flotante, contra-rotado */}
-              <div className="enter-up absolute -bottom-6 -left-5 flex -rotate-[1.5deg] items-center gap-3 rounded-2xl border border-line bg-surface/95 px-4 py-3 shadow-card backdrop-blur-sm [--enter-delay:520ms]">
+              <div className="enter-up absolute -bottom-6 -left-5 z-20 flex -rotate-[1.5deg] items-center gap-3 rounded-2xl border border-line bg-surface/95 px-4 py-3 shadow-card backdrop-blur-sm [--enter-delay:600ms]">
                 <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary-600 font-heading text-sm font-bold text-white">
                   YB
                 </span>
@@ -132,13 +162,13 @@ export default function Hero() {
             delay={0.1}
             className="relative z-20 flex flex-col items-start gap-7 lg:col-span-7 lg:mt-6"
           >
-            <p className="enter-up max-w-[46ch] border-l-2 border-accent-500 pl-5 text-lg leading-relaxed text-slate-ink-700 [--enter-delay:220ms]">
+            <p className="enter-up max-w-[46ch] border-l-2 border-accent-500 pl-5 text-lg leading-relaxed text-slate-ink-700 [--enter-delay:380ms]">
               Si notas que tu hijo tuerce un ojo, se acerca mucho para ver o se
               cansa al leer, no estás solo. Acompaño a niños y adultos con una
               valoración cuidadosa y un plan de terapia visual pensado para cada
               caso, siempre a tu ritmo y con explicaciones claras.
             </p>
-            <div className="enter-up flex flex-wrap items-center gap-x-5 gap-y-3 [--enter-delay:320ms]">
+            <div className="enter-up flex flex-wrap items-center gap-x-5 gap-y-3 [--enter-delay:460ms]">
               <Button href={whatsappLink()} external size="lg">
                 Agendar cita por WhatsApp
               </Button>

@@ -9,6 +9,8 @@ import Reveal from "@/components/ui/Reveal";
 import Backdrop from "@/components/ui/Backdrop";
 import Parallax from "@/components/ui/Parallax";
 
+const { credenciales } = SITE_CONFIG;
+
 export const metadata: Metadata = buildMetadata({
   title: `Sobre ${SITE_CONFIG.profesional}`,
   description: `Conoce a ${SITE_CONFIG.profesional}, ${SITE_CONFIG.titulo.toLowerCase()} en ${SITE_CONFIG.direccion.ciudad}, Colombia. Trayectoria, formación y una forma cercana de acompañar a niños y adultos en su salud visual.`,
@@ -22,9 +24,9 @@ export const metadata: Metadata = buildMetadata({
  * y servicios como índice editorial. Server Component; animación solo en
  * <Reveal>/<Parallax> y capas <Backdrop> CSS.
  *
- * ⚠️ Los datos de FORMACIÓN, CREDENCIALES y AÑOS DE EXPERIENCIA son
- * PLACEHOLDER marcados: hay que rellenarlos con datos verificados por la
- * doctora antes de publicar. No inventar títulos, universidades ni cifras.
+ * Formación, credenciales y años de experiencia: datos reales confirmados
+ * por la doctora (ver SITE_CONFIG.credenciales). Su frase personal ("por
+ * qué me dediqué a esto") también viene directo de ella.
  */
 export default function SobreMiPage() {
   return (
@@ -107,7 +109,7 @@ export default function SobreMiPage() {
         </div>
       </section>
 
-      {/* 01 — Trayectoria (PLACEHOLDER de datos reales) */}
+      {/* 01 — Trayectoria */}
       <section
         aria-labelledby="trayectoria-title"
         className="relative overflow-hidden bg-cream"
@@ -133,40 +135,27 @@ export default function SobreMiPage() {
             </Reveal>
 
             <Reveal className="flex flex-col gap-6 lg:col-span-7 lg:col-start-6 lg:pt-16">
-              {/* ▼▼▼ DATOS A CONFIRMAR POR LA DOCTORA — NO PUBLICAR SIN VERIFICAR ▼▼▼ */}
-              <div className="-rotate-[1.2deg] rounded-xl border border-dashed border-accent-500 bg-accent-100/40 p-5 text-sm text-slate-ink-700 shadow-soft">
-                <p className="font-semibold text-accent-700">
-                  ⚠️ Placeholder — rellenar con datos reales verificados
-                </p>
-                <p className="mt-2 leading-relaxed">
-                  Formación (universidad y título de optometría),
-                  especialización/posgrado en ortóptica y terapia visual, número
-                  de colegiatura o registro profesional, y años de experiencia.
-                  No redactar cifras ni instituciones concretas hasta
-                  confirmarlas.
-                </p>
-              </div>
-              {/* ▲▲▲ FIN DEL PLACEHOLDER ▲▲▲ */}
-
               <p className="leading-relaxed text-slate-ink-700">
-                Me formé como optómetra [PLACEHOLDER: universidad y año] y desde
-                entonces he orientado mi práctica hacia la ortóptica y la
-                terapia visual, el área que más me apasiona: entender cómo
+                Me gradué como optómetra en la Universidad de La Salle (Bogotá,
+                2004) y en 2021 completé mi especialización en Ortóptica y
+                Terapia Visual, el área que más me apasiona: entender cómo
                 colaboran ambos ojos y ayudar a que ese trabajo en equipo
                 funcione mejor.
               </p>
               <p className="max-w-[56ch] leading-relaxed text-slate-ink-700 lg:ml-12">
-                A lo largo de estos años [PLACEHOLDER: nº de años / etapas
-                relevantes] he acompañado a niños y adultos con estrabismo,
-                ambliopía y dificultades de visión binocular, siempre desde el
-                trato cercano y la constancia que requiere este tipo de terapia.
+                Llevo 22 años ejerciendo la optometría y 6 dedicada
+                específicamente a la ortóptica, acompañando a niños y adultos
+                con estrabismo, ambliopía y dificultades de visión binocular,
+                siempre desde el trato cercano y la constancia que requiere
+                este tipo de terapia. Me gusta mi profesión porque creo que es
+                una manera de ayudar a las personas en momentos difíciles.
               </p>
             </Reveal>
           </div>
         </div>
       </section>
 
-      {/* 02 — Formación y credenciales: tarjetas escalonadas, toda placeholder */}
+      {/* 02 — Formación y credenciales: tarjetas escalonadas */}
       <section
         aria-labelledby="formacion-title"
         className="relative overflow-hidden border-y border-line bg-surface"
@@ -191,8 +180,7 @@ export default function SobreMiPage() {
                 Formación y credenciales
               </h2>
               <p className="mt-4 max-w-[36ch] text-muted lg:ml-auto">
-                Estas credenciales respaldan la información de este sitio. Se
-                publicarán una vez verificadas.
+                Estas credenciales respaldan la información de este sitio.
               </p>
             </Reveal>
 
@@ -202,14 +190,14 @@ export default function SobreMiPage() {
               className="flex flex-col gap-5 lg:col-span-6 lg:col-start-7"
             >
               {[
-                "Título de Optometría — [PLACEHOLDER: universidad y año]",
-                "Especialización / posgrado en Ortóptica y Terapia Visual — [PLACEHOLDER: institución y año]",
-                "Colegiatura / registro profesional — [PLACEHOLDER: entidad y número]",
-                "Formación continua y cursos relevantes — [PLACEHOLDER, opcional]",
+                credenciales.tituloOptometra,
+                credenciales.especializacion,
+                credenciales.registroProfesional,
+                `Formación continua: ${credenciales.formacionAdicional.length} cursos y especializaciones adicionales`,
               ].map((item, i) => (
                 <div
                   key={item}
-                  className={`flex items-start gap-4 rounded-xl border border-dashed border-slate-ink-200 bg-cream px-5 py-4 text-sm text-slate-ink-700 shadow-soft ${
+                  className={`flex items-start gap-4 rounded-xl border border-line bg-cream px-5 py-4 text-sm text-slate-ink-700 shadow-soft ${
                     ["lg:mr-16", "lg:ml-10", "lg:mr-6 lg:-rotate-[0.8deg]", "lg:ml-20"][i]
                   }`}
                 >

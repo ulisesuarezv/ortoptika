@@ -1,7 +1,6 @@
 /**
  * Fuente de verdad de datos de contacto, negocio y navegación.
- * Datos reales confirmados (ver memoria del proyecto).
- * Horarios = placeholder hasta confirmar con la doctora.
+ * Datos reales confirmados por la doctora (Ortoptika-Preguntas-Doctora, sesión 9).
  */
 
 const WHATSAPP_NUMBER = "573213394829"; // formato E.164 sin "+" para wa.me
@@ -11,7 +10,7 @@ const WHATSAPP_DEFAULT_MESSAGE =
 export const SITE_CONFIG = {
   name: "Ortoptika Terapia",
   shortName: "Ortoptika",
-  url: "https://ortoptikaterapia.com", // dominio asumido (aún no comprado)
+  url: "https://ortoptikaterapia.com", // dominio comprado
   locale: "es_CO",
 
   profesional: "Yeimmy Paola Barragan",
@@ -20,13 +19,15 @@ export const SITE_CONFIG = {
   descripcion:
     "Ortóptica y terapia visual en Colombia, con atención presencial en Ibagué, Tolima. Tratamiento de estrabismo, ojo vago (ambliopía), problemas de visión binocular y optometría pediátrica.",
 
-  // Contacto — canal único: WhatsApp
+  // Contacto — canal principal: WhatsApp. Email de respaldo (Gmail de la
+  // doctora; migrar a contacto@ortoptikaterapia.com cuando exista ese buzón).
   telefono: "+57 321 3394829",
   telefonoHref: "tel:+573213394829",
   whatsappNumber: WHATSAPP_NUMBER,
   whatsapp: `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
     WHATSAPP_DEFAULT_MESSAGE,
   )}`,
+  email: "ortoptika.2020@gmail.com",
 
   // Ubicación
   direccion: {
@@ -42,17 +43,38 @@ export const SITE_CONFIG = {
     lng: null as number | null,
   },
 
-  // Horarios — PLACEHOLDER, por confirmar con la doctora
+  // Horarios reales confirmados por la doctora: solo atiende martes a jueves.
   horarios: {
-    porConfirmar: true,
-    semana: "Lunes a viernes: por confirmar",
-    sabado: "Sábado: por confirmar",
-    domingo: "Domingo: cerrado",
+    dias: "Martes a jueves",
+    turnos: ["8:00 a. m. – 12:00 p. m.", "2:00 p. m. – 6:00 p. m."],
+    texto: "Martes a jueves: 8:00 a. m. – 12:00 p. m. y 2:00 p. m. – 6:00 p. m.",
+    cerrado: "Lunes, viernes y fines de semana: cerrado",
   },
 
   social: {
     instagram: "https://www.instagram.com/ortoptikaterapia/",
     instagramHandle: "@ortoptikaterapia",
+    // Facebook confirmado como activo por la doctora, URL aún pendiente de
+    // que nos la comparta — no enlazar hasta tenerla.
+    facebook: null as string | null,
+  },
+
+  // Credenciales y trayectoria reales (confirmadas por la doctora).
+  // Nota: NO se publica el número de cédula (ReTHUS), a pedido explícito
+  // de la doctora — solo el registro CTNPO, que sí autorizó mostrar.
+  credenciales: {
+    tituloOptometra: "Optómetra — Universidad de La Salle, Bogotá (2004)",
+    especializacion:
+      "Especialista en Ortóptica y Terapia Visual — Universidad de La Salle, Bogotá (2021)",
+    registroProfesional: "Registro profesional 1368 CTNPO — Consejo Técnico Nacional Profesional de Optometría",
+    aniosExperiencia: 22,
+    aniosComoOrtoptista: 6,
+    formacionAdicional: [
+      "Especialización en Salud Colectiva — Universidad Gama Filho, Río de Janeiro, Brasil (2005)",
+      "Especialización en Salud Pública — Fundación Oswaldo Cruz, Río de Janeiro, Brasil (2009)",
+      "Curso de Procesamiento Visual — Centro Internacional de Educación Continuada Latinoamérica, Estereoptik & Eyebix Performance (2020)",
+      "Congreso Visión y Deporte SVVT LATAM (2020)",
+    ],
   },
 
   // Pendiente: embed URL de Google Maps (sesión 5)

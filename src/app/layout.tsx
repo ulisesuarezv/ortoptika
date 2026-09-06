@@ -6,6 +6,8 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import WhatsAppButton from "@/components/layout/WhatsAppButton";
 import { GtmNoScript, GtmScript } from "@/components/layout/GoogleTagManager";
+import PageTransition from "@/components/motion/PageTransition";
+import CustomCursor from "@/components/motion/CustomCursor";
 
 // Tipografía de marca (next/font/google) — estrategia anti-CLS de la Sesión 7:
 // SOLO 2 woff2 en el camino crítico (Fraunces normal + Inter, ~115KB), que son
@@ -86,10 +88,13 @@ export default function RootLayout({
   return (
     <html
       lang="es"
+      data-scroll-behavior="smooth"
       className={`${fraunces.variable} ${frauncesItalic.variable} ${plusJakarta.variable} ${inter.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <GtmNoScript />
+        <PageTransition />
+        <CustomCursor />
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />

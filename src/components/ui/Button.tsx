@@ -1,5 +1,13 @@
+"use client";
+
 import Link from "next/link";
-import type { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactNode } from "react";
+import type {
+  AnchorHTMLAttributes,
+  ButtonHTMLAttributes,
+  ReactNode,
+  RefObject,
+} from "react";
+import { useMagnetic } from "@/hooks/useMagnetic";
 
 type Variant = "primary" | "secondary" | "ghost";
 type Size = "md" | "lg";
@@ -80,10 +88,15 @@ function domProps<T extends Record<string, unknown>>(props: T) {
  * - Sin `href` → <button>.
  * - Con `href` externo → <a target="_blank">.
  * - Con `href` interno → <Link> de Next.
+ *
+ * Magnético sutil en desktop (useMagnetic, strength baja: el CTA es un botón
+ * real, no debe sentirse suelto). Inerte en touch y bajo prefers-reduced-motion
+ * (ambos resueltos dentro del hook).
  */
 export default function Button(props: ButtonProps) {
   const { variant = "primary", size = "md", className, children } = props;
   const cls = classes(variant, size, className);
+  const magnetRef = useMagnetic<HTMLElement>(0.25);
 
   if ("href" in props && props.href !== undefined) {
     const { href, external } = props;
@@ -91,6 +104,7 @@ export default function Button(props: ButtonProps) {
     if (external) {
       return (
         <a
+          ref={magnetRef as RefObject<HTMLAnchorElement>}
           href={href}
           target="_blank"
           rel="noopener noreferrer"
@@ -102,14 +116,23 @@ export default function Button(props: ButtonProps) {
       );
     }
     return (
-      <Link href={href} className={cls} {...rest}>
+      <Link
+        ref={magnetRef as RefObject<HTMLAnchorElement>}
+        href={href}
+        className={cls}
+        {...rest}
+      >
         {children}
       </Link>
     );
   }
 
   return (
-    <button className={cls} {...domProps(props)}>
+    <button
+      ref={magnetRef as RefObject<HTMLButtonElement>}
+      className={cls}
+      {...domProps(props)}
+    >
       {children}
     </button>
   );

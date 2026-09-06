@@ -7,12 +7,17 @@ import Parallax from "@/components/ui/Parallax";
 // Posicionamiento irregular por tarjeta: spans desiguales + offsets que rompen la
 // línea base + una tarjeta ligeramente girada. La rejilla deja de ser una fila
 // regular de tarjetas iguales.
+//
+// La rotación de la tarjeta 05 vive en un wrapper separado (no en el elemento
+// que anima <Reveal>): el fade/scale de entrada fija su propio `transform`
+// inline sobre el nodo que anima, lo que pisaría permanentemente cualquier
+// rotate-* de Tailwind puesto en ese mismo nodo.
 const PLACEMENT = [
   "sm:col-span-2 lg:col-span-7", // 01 destacada, ancha
   "lg:col-span-5 lg:mt-20", // 02 cae
   "lg:col-span-4", // 03
   "lg:col-span-4 lg:mt-16", // 04 cae
-  "lg:col-span-4 lg:-mt-6 lg:-rotate-[1.3deg] hover:rotate-0", // 05 girada, sube
+  "lg:col-span-4 lg:-mt-6", // 05 sube
 ];
 
 /**
@@ -32,12 +37,17 @@ export default function ServicesGrid() {
       </Parallax>
 
       {/* Marca de agua tipográfica que sangra por la izquierda */}
-      <span
-        aria-hidden="true"
-        className="watermark absolute -left-[3vw] top-24 text-[26vw] text-primary-100/60 sm:text-[18vw]"
+      <Parallax
+        className="absolute -left-[3vw] top-24 z-0"
+        amount={6}
       >
-        áreas
-      </span>
+        <span
+          aria-hidden="true"
+          className="watermark block text-[26vw] text-primary-100/60 sm:text-[18vw]"
+        >
+          áreas
+        </span>
+      </Parallax>
 
       <div className="relative z-10 mx-auto max-w-7xl px-5 py-20 sm:px-8 lg:py-28">
         {/* Encabezado 80/20 */}
@@ -60,17 +70,28 @@ export default function ServicesGrid() {
 
         <Reveal
           stagger
+          scale
           className="mt-14 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-12 lg:items-start lg:gap-6"
         >
-          {SERVICES.map((service, i) => (
-            <ServiceCard
-              key={service.slug}
-              service={service}
-              index={i + 1}
-              featured={i === 0}
-              className={PLACEMENT[i]}
-            />
-          ))}
+          {SERVICES.map((service, i) =>
+            i === 4 ? (
+              // Tarjeta girada: el wrapper lleva la rotación CSS, la tarjeta
+              // interior el fade/scale de <Reveal> (transforms independientes).
+              <div key={service.slug} className={PLACEMENT[i]}>
+                <div className="h-full lg:-rotate-[1.3deg] lg:transition-transform lg:duration-300 lg:hover:rotate-0">
+                  <ServiceCard service={service} index={i + 1} className="h-full" />
+                </div>
+              </div>
+            ) : (
+              <ServiceCard
+                key={service.slug}
+                service={service}
+                index={i + 1}
+                featured={i === 0}
+                className={PLACEMENT[i]}
+              />
+            ),
+          )}
         </Reveal>
       </div>
     </section>

@@ -24,12 +24,14 @@ export default function AboutPreview() {
       </Parallax>
 
       {/* Palabra-cita gigante de fondo */}
-      <span
-        aria-hidden="true"
-        className="watermark absolute -bottom-[4vw] right-[3vw] text-[24vw] text-cream-deep sm:text-[16vw]"
-      >
-        cerca
-      </span>
+      <Parallax className="absolute -bottom-[4vw] right-[3vw] z-0" amount={6}>
+        <span
+          aria-hidden="true"
+          className="watermark block text-[24vw] text-cream-deep sm:text-[16vw]"
+        >
+          cerca
+        </span>
+      </Parallax>
 
       <div className="relative z-10 mx-auto max-w-7xl px-5 py-20 sm:px-8 lg:py-28">
         <div className="grid items-center gap-y-8 lg:grid-cols-12">
@@ -37,6 +39,7 @@ export default function AboutPreview() {
           <Reveal
             delay={0.1}
             from="right"
+            scale
             className="relative lg:col-span-7 lg:col-start-6 lg:row-start-1"
           >
             <span
@@ -82,9 +85,7 @@ export default function AboutPreview() {
           </Reveal>
         </div>
 
-        <Reveal className="mt-20 lg:mt-28">
-          <TrustBar />
-        </Reveal>
+        <TrustBar className="mt-20 lg:mt-28" />
       </div>
     </section>
   );
