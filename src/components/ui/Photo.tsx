@@ -23,7 +23,10 @@ type PhotoProps = {
   variant?: Variant;
   /** Clases del contenedor (aspecto, radios orgánicos, offsets, márgenes). */
   className?: string;
-  /** Pie de foto; en "frame" se revela al hacer hover. */
+  /**
+   * Pie de foto; en "frame" se revela al hacer hover. Si no se pasa, se usa
+   * el de la propia foto (`photo.caption`).
+   */
   caption?: string;
   /**
    * `sizes` del <img>. Sólo informativo aquí (no hay srcset de anchos), pero
@@ -45,6 +48,7 @@ export default function Photo({
   priority = false,
 }: PhotoProps) {
   const loading = priority ? undefined : "lazy";
+  const pie = caption ?? photo.caption;
 
   const img = (
     <picture>
@@ -82,10 +86,10 @@ export default function Photo({
   return (
     <figure className={`photo-frame group relative ${className}`}>
       {img}
-      {caption ? (
+      {pie ? (
         // Visible siempre en táctil; en dispositivos con puntero sube al hover.
         <figcaption className="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-slate-ink-900/85 to-transparent px-5 pb-4 pt-10 font-heading text-sm font-medium leading-snug text-cream transition-transform duration-500 ease-out [@media(hover:hover)]:translate-y-full [@media(hover:hover)]:group-hover:translate-y-0">
-          {caption}
+          {pie}
         </figcaption>
       ) : null}
     </figure>

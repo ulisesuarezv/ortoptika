@@ -21,6 +21,12 @@ export type Photo = {
   width: number;
   height: number;
   alt: string;
+  /**
+   * Pie de foto por defecto. Describe LO QUE SE VE, nunca la sección que la
+   * acompaña: en táctil el pie está siempre visible, así que repetir el
+   * titular de al lado sólo ocupa sitio.
+   */
+  caption: string;
   /** Aparecen personas identificables → requiere autorización firmada. */
   personas: boolean;
 };
@@ -34,6 +40,8 @@ export const PHOTOS = {
     width: 1600,
     height: 900,
     alt: "Gimnasio visual del consultorio: tapete de equilibrio, minitrampolín, balón de pilates y tabla de letras para terapia visual",
+    caption:
+      "El gimnasio visual del consultorio, donde se hacen las sesiones de terapia",
     personas: false,
   },
   instrumentos: {
@@ -42,6 +50,8 @@ export const PHOTOS = {
     width: 1200,
     height: 800,
     alt: "Instrumental de ortóptica: caja de prismas, gafa de prueba, flippers, regla de convergencia y transiluminador",
+    caption:
+      "Parte del instrumental de una valoración de ortóptica",
     personas: false,
   },
   sinoptoforo: {
@@ -50,6 +60,8 @@ export const PHOTOS = {
     width: 1200,
     height: 900,
     alt: "Paciente en el sinoptóforo, el equipo con el que se mide y se entrena la visión binocular",
+    caption:
+      "Sinoptóforo: mide y entrena cómo trabajan juntos los dos ojos",
     personas: true,
   },
   doctoraConsulta: {
@@ -58,6 +70,8 @@ export const PHOTOS = {
     width: 900,
     height: 1125,
     alt: "La Dra. Yeimmy Barragan guiando a un paciente adulto en un ejercicio de percepción visual",
+    caption:
+      "Ejercicio de percepción visual durante una consulta",
     personas: true,
   },
   sesionVasos: {
@@ -66,6 +80,8 @@ export const PHOTOS = {
     width: 900,
     height: 1125,
     alt: "Niño con gafas ordenando vasos de colores según un patrón, ejercicio de percepción y motricidad visual",
+    caption:
+      "Ejercicio de percepción y coordinación con material concreto",
     personas: true,
   },
   sesionSecuencias: {
@@ -74,6 +90,8 @@ export const PHOTOS = {
     width: 900,
     height: 1125,
     alt: "Niño con gafas resolviendo una tabla de secuencias numéricas junto a una lámina de círculos de colores",
+    caption:
+      "Trabajo de secuencias y motilidad ocular en sesión",
     personas: true,
   },
 } as const satisfies Record<string, Photo>;

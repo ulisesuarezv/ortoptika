@@ -54,7 +54,6 @@ export default function AboutPreview() {
                 bloque "Sobre mí". Regenerable con scripts/optimize-photos.mjs. */}
             <Photo
               photo={PHOTOS.doctoraConsulta}
-              caption="Ejercicio de percepción visual en consulta"
               objectPosition="60% 45%"
               className="mx-auto aspect-[4/5] w-full max-w-md overflow-hidden rounded-[63%_37%_58%_42%/54%_48%_52%_46%] shadow-lift ring-1 ring-line lg:mr-[-6vw] lg:max-w-none"
             />

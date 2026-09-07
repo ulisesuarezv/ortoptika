@@ -462,7 +462,7 @@ export default function ServiceLanding({
               <div className="lg:sticky lg:top-32">
                 <Photo
                   photo={fotoProceso}
-                  caption={proceso.titulo}
+                  caption={fotoProceso.caption}
                   className={`w-full overflow-hidden rounded-[2.5rem] shadow-lift ring-1 ring-line ${
                     procesoApaisada ? "aspect-[3/2]" : "aspect-[4/5]"
                   }`}
