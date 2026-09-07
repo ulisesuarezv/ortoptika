@@ -1,8 +1,9 @@
 # Estado del proyecto — ortoptikaterapia.com
 
 > **Punto de entrada para una sesión nueva.** Última actualización: 7-sep-2026.
-> El sitio está **en producción**. Este documento dice dónde está todo, qué
-> falta y qué no hay que romper. Los otros tres documentos del repo
+> El sitio está **en producción** en https://ortoptikaterapia.com (el apex;
+> `www` redirige ahí). Este documento dice dónde está todo, qué falta y qué
+> no hay que romper. Los otros tres documentos del repo
 > (`PLAN-DESARROLLO.md`, `PENDIENTES.md`, `PLAN-FOTOGRAFIA.md`) siguen siendo
 > válidos: este los indexa, no los sustituye.
 
@@ -17,7 +18,7 @@ Ibagué (Tolima). Objetivo comercial: que la encuentren pacientes de Ibagué
 atiende sólo presencialmente, así que la estrategia SEO tiene dos capas
 (local + nacional). Canal único de conversión: **WhatsApp**, sin formularios.
 
-**En producción:** https://www.ortoptikaterapia.com
+**En producción:** https://ortoptikaterapia.com
 
 ## 2. Stack y reglas que no se negocian
 
@@ -71,8 +72,9 @@ docs-doctora/               PDFs para la doctora — GITIGNOREADO
 
 ## 4. Infraestructura
 
-- **Dominio:** registrado en **Hostinger**, DNS apuntando a Vercel.
-  Hoy `ortoptikaterapia.com` **redirige (308) a `www.`** — ver hallazgo 🔴 en §7.
+- **Dominio:** registrado en **Hostinger**, DNS apuntando a Vercel. El
+  **apex `ortoptikaterapia.com` es el principal**; `www` redirige a él (308).
+  Coincide con `SITE_CONFIG.url`, canonical, sitemap y JSON-LD.
 - **Deploy:** `main` está conectada. **Cada push a `main` publica en
   producción** en ~30 s, sin promover nada a mano. Trabajo que no deba verse
   todavía va en rama aparte.
@@ -125,13 +127,14 @@ export estático.
    publicado. Documento en
    `docs-doctora/4-Validacion-clinica-del-contenido-Ortoptika.pdf`, con las 6
    afirmaciones citadas literalmente.
-3. **Conflicto www / apex.** `SITE_CONFIG.url`, los canonical, el sitemap y
-   el JSON-LD apuntan **al apex sin `www`**, pero el apex **redirige a www**.
-   Le estamos diciendo a Google que la versión buena es una que redirige.
-   Arreglo recomendado: en Vercel → proyecto → Settings → Domains, marcar
-   **`ortoptikaterapia.com` como principal** y que `www` redirija a él. Así no
-   se toca una línea de código. La alternativa (cambiar `SITE_CONFIG.url` a
-   `www`) obliga a revisar canonical, sitemap, schema y la ficha de Google.
+3. ~~Conflicto www / apex~~ → **RESUELTO el 7-sep-2026.** Se invirtió la
+   redirección en Vercel: **`ortoptikaterapia.com` (apex) es ahora el dominio
+   principal** y `www` redirige a él con 308, conservando ruta y query.
+   Verificado: el apex sirve 200 y `www/servicios/estrabismo/` redirige a
+   `ortoptikaterapia.com/servicios/estrabismo/`. Canonical, sitemap, JSON-LD y
+   la ficha de Google apuntan ya todos al mismo sitio. **No se tocó código.**
+   El flujo de datos de GA4 quedó declarado con la URL `www`: es sólo metadato
+   del stream y no afecta a la medición.
 
 ### 🟡 Depende de la doctora
 
@@ -160,14 +163,12 @@ export estático.
 - **`credenciales.aniosExperiencia: 22`** está hardcodeado y envejece solo.
   Convendría calcularlo desde el año de grado (2004).
 
-## 8. Duda abierta de la que nadie ha decidido
+## 8. El apellido va SIN tilde
 
-**¿«Barragan» o «Barragán»?** Todo el sitio publica el apellido **sin tilde**
-(`SITE_CONFIG.profesional`, alts, JSON-LD, footer), tal como llegó en el
-cuestionario. Los dos PDF para la doctora lo escriben **con tilde**. Uno de los
-dos está mal y hay que preguntárselo a ella: es su nombre, aparece en el
-JSON-LD `Person` y es una señal de identidad para Google. Cambiarlo son dos
-líneas, pero nadie debería decidirlo por ella.
+**«Barragan», no «Barragán».** Confirmado por Ulises el 7-sep-2026. El sitio
+ya lo publicaba bien; los cuatro PDF de `docs-doctora/` lo escribían con
+tilde y se regeneraron corregidos. Si aparece con tilde en algo nuevo, es un
+error.
 
 ## 9. Numeración de sesiones — cuidado
 
