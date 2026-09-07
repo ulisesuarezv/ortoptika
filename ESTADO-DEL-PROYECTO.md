@@ -108,7 +108,14 @@ export estático.
 - Copy clínico sin erratas y bien cubierto: nada promete resultados, hay
   criterios de derivación explícitos y un desmentido claro sobre dislexia/TDAH
 
-**Corregido en esta sesión** (commit `bd7e988`):
+**Responsive** — 9 páginas × 5 anchos (320 / 390 / 768 / 1024 / 1280):
+**cero desbordamiento horizontal**. Nav de escritorio bien oculta en móvil,
+botón de menú 40×40, enlaces del menú móvil 44px, CTAs de 40 a 60px.
+
+**Corregido en esta sesión** (commits `bd7e988` y `a1f8908`):
+- Enlaces del footer a 28px de alto → 40px. Pasaban WCAG 2.5.8 (mínimo
+  24px) pero se quedaban cortos para el pulgar en un sitio de tráfico
+  mayoritariamente móvil.
 - Las fotos de la sección «Proceso» usaban el titular de la sección como pie
   de foto, repetido justo debajo de ese mismo titular. En táctil el pie está
   siempre visible, así que se leía dos veces. Ahora cada foto tiene su pie
