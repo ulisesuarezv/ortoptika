@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { SERVICES, SITE_CONFIG, whatsappLink } from "@/lib/constants";
 import type { ServiceContent } from "@/lib/services-content";
+import { SERVICE_PHOTOS } from "@/lib/photos";
 import Backdrop from "@/components/ui/Backdrop";
 import Button from "@/components/ui/Button";
 import FAQAccordion from "@/components/ui/FAQAccordion";
 import Parallax from "@/components/ui/Parallax";
+import Photo from "@/components/ui/Photo";
 import Reveal from "@/components/ui/Reveal";
 
 /**
@@ -40,6 +42,14 @@ export default function ServiceLanding({
     content;
   const flip = Boolean(theme.flip);
   const otros = SERVICES.filter((s) => s.slug !== content.slug);
+
+  // Fotografía asignada a esta landing (ver src/lib/photos.ts). Las tres
+  // ranuras son opcionales e independientes: ninguna landing las usa todas.
+  const fotos = SERVICE_PHOTOS[content.slug] ?? {};
+  const fotoProceso = fotos.proceso;
+  const procesoApaisada = fotoProceso
+    ? fotoProceso.width > fotoProceso.height
+    : false;
 
   // Offsets escalonados reutilizados en tarjetas (anti-grid sin caos).
   const cardOffsets = ["lg:mr-14", "lg:ml-10 lg:-rotate-[0.8deg]", "lg:mr-4", "lg:ml-16"];
@@ -101,7 +111,11 @@ export default function ServiceLanding({
           </Reveal>
 
           <div className="grid gap-y-10 lg:grid-cols-12 lg:gap-x-6">
-            <Reveal className="flex flex-col items-start gap-5 lg:col-span-9">
+            <Reveal
+              className={`flex flex-col items-start gap-5 ${
+                fotos.cutout ? "lg:col-span-7" : "lg:col-span-9"
+              }`}
+            >
               <span className="eyebrow">{hero.eyebrow}</span>
               <h1 className="max-w-[16ch]">
                 <span className="block font-display text-2xl italic text-slate-ink-500 sm:text-3xl">
@@ -116,9 +130,33 @@ export default function ServiceLanding({
               </h1>
             </Reveal>
 
+            {/* Recorte con alfa: flota sobre el crema sin marco y sangra por el
+                borde. Parallax más alto que el resto (20): al no tener marco,
+                el desplazamiento es lo único que le da profundidad. */}
+            {fotos.cutout ? (
+              <Reveal
+                delay={0.08}
+                from="right"
+                scale
+                className="lg:col-span-5 lg:col-start-8 lg:row-start-1 lg:row-span-2 lg:self-center"
+              >
+                <Parallax amount={20}>
+                  <Photo
+                    photo={fotos.cutout}
+                    variant="cutout"
+                    className="mx-auto max-w-[20rem] sm:max-w-sm lg:max-w-none lg:-mr-[6vw]"
+                  />
+                </Parallax>
+              </Reveal>
+            ) : null}
+
             <Reveal
               delay={0.12}
-              className="flex flex-col items-start gap-6 lg:col-span-8 lg:col-start-4"
+              className={`flex flex-col items-start gap-6 ${
+                fotos.cutout
+                  ? "lg:col-span-7 lg:col-start-1 lg:row-start-2"
+                  : "lg:col-span-8 lg:col-start-4"
+              }`}
             >
               <p className="max-w-[52ch] border-l-2 border-accent-500 pl-5 text-lg leading-relaxed text-slate-ink-700">
                 {hero.lead}
@@ -338,6 +376,25 @@ export default function ServiceLanding({
         </div>
       </section>
 
+      {/* ============ BANDA A SANGRE — el espacio real (opcional) ============ */}
+      {fotos.bleed ? (
+        <section
+          aria-label="El espacio donde se hace la terapia"
+          className="relative border-y border-line bg-slate-ink-900"
+        >
+          <div className="relative h-[clamp(16rem,38vh,26rem)] overflow-hidden">
+            <Parallax className="absolute inset-x-0 -inset-y-[10%]" amount={12}>
+              <Photo
+                photo={fotos.bleed}
+                variant="bleed"
+                objectPosition="50% 62%"
+                className="h-full w-full"
+              />
+            </Parallax>
+          </div>
+        </section>
+      ) : null}
+
       {/* ============ 04 · PROCESO — numerales gigantes alternados ============ */}
       <section
         aria-labelledby={`${content.slug}-proceso`}
@@ -348,6 +405,8 @@ export default function ServiceLanding({
         </Parallax>
 
         <div className="relative z-10 mx-auto max-w-7xl px-5 py-20 sm:px-8 lg:py-28">
+          <div className={fotoProceso ? "lg:grid lg:grid-cols-12 lg:gap-x-10" : ""}>
+          <div className={fotoProceso ? "lg:col-span-8" : ""}>
           <Reveal className="max-w-2xl">
             <SectionIndex n="04" />
             <h2
@@ -389,6 +448,29 @@ export default function ServiceLanding({
               </Reveal>
             ))}
           </ol>
+          </div>
+
+          {/* Foto de apoyo: acompaña los pasos en scroll (sticky) en vez de
+              interrumpirlos. Debajo de lg vuelve al flujo, al final. */}
+          {fotoProceso ? (
+            <Reveal
+              delay={0.15}
+              from="right"
+              scale
+              className="mt-14 lg:col-span-4 lg:mt-0"
+            >
+              <div className="lg:sticky lg:top-32">
+                <Photo
+                  photo={fotoProceso}
+                  caption={proceso.titulo}
+                  className={`w-full overflow-hidden rounded-[2.5rem] shadow-lift ring-1 ring-line ${
+                    procesoApaisada ? "aspect-[3/2]" : "aspect-[4/5]"
+                  }`}
+                />
+              </div>
+            </Reveal>
+          ) : null}
+          </div>
         </div>
       </section>
 

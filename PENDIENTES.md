@@ -63,13 +63,21 @@
 - [x] ~~6–10 fotos del consultorio y equipos~~ → **6 recibidas**: sala de
       terapia completa, bodegón de instrumentos, sinoptóforo recortado con
       alpha, doctora atendiendo y dos de niños en sesión.
-- [ ] **Autorizaciones de uso de imagen firmadas** — bloquea publicar las 4
-      fotos con personas (una por paciente; por acudiente si es menor).
+- [ ] **Autorizaciones de uso de imagen firmadas** — las fotos ya están
+      montadas; las firmas deben existir antes de que el sitio salga a
+      producción (una por paciente; por acudiente si es menor).
 - [ ] Faltan aún: fachada de la clínica, la doctora sola en plano medio
       horizontal, detalle de lámpara de hendidura, y una horizontal limpia
       para la imagen `og:` de redes.
-- [ ] Ejecutar la **Fase A** de `PLAN-FOTOGRAFIA.md` (las fotos sin personas
-      y los recortes sin cara — no depende de nadie).
+- [x] ~~Montar las fotos en el sitio~~ → **hecho**: las 6 están publicadas
+      (banda a sangre del consultorio en la home y en Terapia Visual, doctora
+      en consulta en «Sobre mí», instrumental en `/sobre-mi` y Visión
+      Binocular, sinoptóforo recortado en la portada de Estrabismo, y las dos
+      sesiones infantiles en Ambliopía y Optometría Pediátrica). Pipeline en
+      `scripts/optimize-photos.mjs`, componente `ui/Photo.tsx`.
+- [ ] 🔴 **Recoger las autorizaciones firmadas antes del `deploy --prod`** —
+      formatos listos en `docs-doctora/3-Autorizacion-uso-de-imagen-Ortoptika.pdf`
+      (Formato A para los dos adultos, Formato B para los dos menores).
 - [ ] Video corto (30–60s) de presentación
 - [ ] Logo en vectorial (SVG/AI/PDF) + versión para fondo oscuro
 - [ ] 3–5 testimonios de pacientes (con autorización escrita; nunca de

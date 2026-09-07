@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Hero from "@/components/sections/Hero";
 import ServicesGrid from "@/components/sections/ServicesGrid";
 import AboutPreview from "@/components/sections/AboutPreview";
+import ConsultorioBand from "@/components/sections/ConsultorioBand";
 import ContactSection from "@/components/sections/ContactSection";
 import { SITE_CONFIG } from "@/lib/constants";
 import { buildMetadata } from "@/lib/metadata";
@@ -47,6 +48,7 @@ export default function Home() {
       <Hero />
       <ServicesGrid />
       <AboutPreview />
+      <ConsultorioBand />
       <ContactSection />
     </>
   );

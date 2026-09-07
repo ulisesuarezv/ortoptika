@@ -1,5 +1,6 @@
-import Image from "next/image";
 import { SITE_CONFIG } from "@/lib/constants";
+import { PHOTOS } from "@/lib/photos";
+import Photo from "@/components/ui/Photo";
 import Button from "@/components/ui/Button";
 import TrustBar from "@/components/ui/TrustBar";
 import Reveal from "@/components/ui/Reveal";
@@ -48,16 +49,15 @@ export default function AboutPreview() {
             >
               01
             </span>
-            {/* Foto real (WebP optimizado, regenerable desde el PNG fuente). */}
-            <div className="photo-frame mx-auto aspect-[4/5] w-full max-w-md rounded-[63%_37%_58%_42%/54%_48%_52%_46%] shadow-lift ring-1 ring-line lg:mr-[-6vw] lg:max-w-none">
-              <Image
-                src="/images/dra-yeimmy-barragan.webp"
-                alt="Dra. Yeimmy Paola Barragan en consulta, junto a su equipo de terapia visual"
-                fill
-                sizes="(min-width: 1024px) 40rem, 28rem"
-                className="object-cover object-[42%_50%]"
-              />
-            </div>
+            {/* Foto real de consulta. El retrato de la doctora ya abre el Hero:
+                aquí interesa mostrarla TRABAJANDO, que es lo que sostiene el
+                bloque "Sobre mí". Regenerable con scripts/optimize-photos.mjs. */}
+            <Photo
+              photo={PHOTOS.doctoraConsulta}
+              caption="Ejercicio de percepción visual en consulta"
+              objectPosition="60% 45%"
+              className="mx-auto aspect-[4/5] w-full max-w-md overflow-hidden rounded-[63%_37%_58%_42%/54%_48%_52%_46%] shadow-lift ring-1 ring-line lg:mr-[-6vw] lg:max-w-none"
+            />
           </Reveal>
 
           {/* Tarjeta de texto que cabalga sobre el retrato */}

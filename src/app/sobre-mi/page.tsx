@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
+import { PHOTOS } from "@/lib/photos";
+import Photo from "@/components/ui/Photo";
 import { SITE_CONFIG, SERVICES, whatsappLink } from "@/lib/constants";
 import { buildMetadata } from "@/lib/metadata";
 import { jsonLd, personSchema } from "@/lib/schema";
@@ -243,6 +245,18 @@ export default function SobreMiPage() {
               pequeño— puede generar dudas y algo de nervios. Por eso cuido tres
               cosas en cada cita:
             </p>
+          </Reveal>
+
+          {/* Corte editorial con instrumental real: rompe el bloque de texto y
+              respalda el "cómo trabajo" con lo que de verdad hay sobre la mesa
+              (el mug con el logo hace de firma de marca dentro de la foto). */}
+          <Reveal delay={0.1} scale className="mt-12">
+            <Photo
+              photo={PHOTOS.instrumentos}
+              caption="Prismas, gafa de prueba, flippers y regla de convergencia: el instrumental de una valoración de ortóptica"
+              objectPosition="50% 55%"
+              className="aspect-[3/2] w-full overflow-hidden rounded-[2.5rem] shadow-lift ring-1 ring-line sm:aspect-[2/1] lg:aspect-[21/9]"
+            />
           </Reveal>
 
           {/* Principios en filas alternadas: izquierda / derecha / izquierda */}
