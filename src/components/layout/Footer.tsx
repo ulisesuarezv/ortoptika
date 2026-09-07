@@ -77,7 +77,7 @@ export default function Footer() {
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="inline-block py-1 transition-colors hover:text-white"
+                  className="inline-block py-2.5 transition-colors hover:text-white"
                 >
                   {link.label}
                 </Link>
@@ -97,7 +97,7 @@ export default function Footer() {
                 href={SITE_CONFIG.whatsapp}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block py-1 transition-colors hover:text-white"
+                className="inline-block py-2.5 transition-colors hover:text-white"
               >
                 WhatsApp: {SITE_CONFIG.telefono}
               </a>
@@ -107,7 +107,7 @@ export default function Footer() {
                 href={SITE_CONFIG.social.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block py-1 transition-colors hover:text-white"
+                className="inline-block py-2.5 transition-colors hover:text-white"
               >
                 Instagram {SITE_CONFIG.social.instagramHandle}
               </a>
