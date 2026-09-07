@@ -21,7 +21,9 @@ export default function ConsultorioBand() {
       aria-labelledby="consultorio-title"
       className="relative border-y border-line bg-slate-ink-900"
     >
-      <div className="relative h-[clamp(20rem,45vh,32rem)] overflow-hidden">
+      {/* min-h, no h: en ventanas bajas el texto crece más que la banda y con
+          altura fija el overflow-hidden se comía el eyebrow y el título. */}
+      <div className="relative flex min-h-[clamp(20rem,45vh,32rem)] flex-col justify-end overflow-hidden">
         {/* El sobreancho vertical evita que el parallax descubra los bordes. */}
         <Parallax className="absolute inset-x-0 -inset-y-[10%]" amount={12}>
           <Photo
@@ -39,7 +41,7 @@ export default function ConsultorioBand() {
           className="absolute inset-0 bg-gradient-to-r from-slate-ink-900/90 via-slate-ink-900/55 to-slate-ink-900/10"
         />
 
-        <div className="relative z-10 mx-auto flex h-full max-w-7xl items-end px-5 pb-8 sm:px-8 lg:pb-12">
+        <div className="relative z-10 mx-auto w-full max-w-7xl px-5 pb-8 pt-16 sm:px-8 sm:pt-20 lg:pb-12">
           <Reveal from="left" className="max-w-xl">
             <span className="eyebrow text-accent-300">El consultorio</span>
             <h2
