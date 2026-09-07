@@ -1,5 +1,9 @@
 # Pendientes — ortoptikaterapia.com
 
+> 🚀 **EN PRODUCCIÓN desde el 7-sep-2026** en https://www.ortoptikaterapia.com
+> Dominio en Vercel (DNS en Hostinger), `main` mergeada: cada push a `main`
+> despliega solo, sin promover nada a mano.
+
 > Estado: **dominio comprado** y **credenciales/horarios reales ya en el código**
 > (sesión 9: respuestas de la doctora en `Ortoptika-Preguntas-Doctora.docx`).
 > Lo que falta ahora es sobre todo material (fotos/video/testimonios) y
@@ -9,8 +13,9 @@
 
 ## 🔴 Bloqueantes de lanzamiento
 
-- [x] ~~Comprar el dominio `ortoptikaterapia.com`~~ → **comprado**. Falta
-      `vercel deploy --prod` + añadir el dominio custom al proyecto Vercel.
+- [x] ~~Comprar el dominio y publicar~~ → **hecho**. Dominio añadido al
+      proyecto Vercel, DNS apuntando desde Hostinger, apex redirige a `www`,
+      y `main` mergeada para que cada push despliegue a producción.
 - [x] ~~Datos reales de la doctora~~ → **cargados** en
       `src/lib/constants.ts` (`SITE_CONFIG.credenciales`) y reflejados en
       `/sobre-mi`, TrustBar y JSON-LD (`alumniOf`/`hasCredential` en
@@ -42,12 +47,14 @@
       pin real de Maps). Ya salen en el `geo` del MedicalBusiness, junto con
       `hasMap`.
 - [x] ~~ID de Google Tag Manager~~ → **`GTM-K829BB3C`** cargado en
-      `SITE_CONFIG.gtmId`. El guard `hasRealGtmId()` ya deja pasar la
-      inyección; contenedor creado el 7-sep-2026. Falta publicar etiquetas
-      dentro de GTM (p. ej. GA4) desde su interfaz, no desde el código.
-- [~] **Google Business Profile** — ficha ya creada (`Ortoptika Terapia`,
+      `SITE_CONFIG.gtmId` y verificado en vivo.
+- [x] ~~Analítica~~ → **GA4 creado y conectado dentro de GTM**, etiqueta
+      publicada y comprobada en el informe de Tiempo real (7-sep-2026). El
+      ID `G-…` vive en GTM, no en el repo: no hay nada que tocar en código.
+- [~] **Google Business Profile** — ficha creada (`Ortoptika Terapia`,
       Cra 12 sur #93-21, Ibagué). Falta terminar de completarla: descripción,
-      categorías, horario, fotos y verificación.
+      categorías, horario, fotos y verificación. Ahora que el sitio está en
+      línea, añadirle también la URL.
 - [ ] **URL de Facebook** — confirmó que lo usa activo, pero no dio el
       enlace (`SITE_CONFIG.social.facebook` queda en `null` hasta tenerlo)
 
