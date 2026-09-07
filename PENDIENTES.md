@@ -41,7 +41,10 @@
 - [x] ~~Coordenadas lat/lng~~ → **4.4252077, -75.1763545** (verificadas en el
       pin real de Maps). Ya salen en el `geo` del MedicalBusiness, junto con
       `hasMap`.
-- [ ] **ID de Google Tag Manager** → sigue como placeholder `GTM-XXXXXXX`
+- [x] ~~ID de Google Tag Manager~~ → **`GTM-K829BB3C`** cargado en
+      `SITE_CONFIG.gtmId`. El guard `hasRealGtmId()` ya deja pasar la
+      inyección; contenedor creado el 7-sep-2026. Falta publicar etiquetas
+      dentro de GTM (p. ej. GA4) desde su interfaz, no desde el código.
 - [~] **Google Business Profile** — ficha ya creada (`Ortoptika Terapia`,
       Cra 12 sur #93-21, Ibagué). Falta terminar de completarla: descripción,
       categorías, horario, fotos y verificación.

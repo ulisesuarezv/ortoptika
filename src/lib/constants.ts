@@ -89,9 +89,9 @@ export const SITE_CONFIG = {
   googleMapsEmbed:
     "https://maps.google.com/maps?cid=10961633092813368645&hl=es&z=17&output=embed",
 
-  // Google Tag Manager — PLACEHOLDER hasta crear el contenedor real.
-  // Mientras siga el valor "GTM-XXXXXXX", el layout NO inyecta ningún script.
-  gtmId: "GTM-XXXXXXX",
+  // Google Tag Manager — contenedor real (creado el 7-sep-2026).
+  // El guard hasRealGtmId() deja de bloquear la inyección con este valor.
+  gtmId: "GTM-K829BB3C",
 } as const;
 
 /** true sólo cuando gtmId es un contenedor real (no el placeholder). */
