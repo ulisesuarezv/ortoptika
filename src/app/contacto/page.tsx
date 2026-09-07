@@ -58,7 +58,7 @@ export default function ContactoPage() {
             </h1>
             <p className="max-w-[50ch] border-l-2 border-accent-500 pl-5 text-lg leading-relaxed text-slate-ink-700">
               Sin formularios ni esperas: escríbeme directamente, me cuentas
-              qué te preocupa y coordinamos la cita. Respondo personalmente.
+              qué te preocupa y coordinamos la cita.
             </p>
             <Button href={whatsappLink()} external size="lg">
               Escribir por WhatsApp

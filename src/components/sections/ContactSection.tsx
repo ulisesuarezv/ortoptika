@@ -20,7 +20,7 @@ const HOME_FAQ: FAQItem[] = [
   },
   {
     question: "¿Dónde atiendes y cómo agendo?",
-    answer: `Atiendo en ${SITE_CONFIG.direccion.completa}. La forma más cómoda de reservar es por WhatsApp: te respondo personalmente para encontrar un horario que te venga bien.`,
+    answer: `Atiendo en ${SITE_CONFIG.direccion.completa}. La forma más cómoda de reservar es por WhatsApp: ahí coordinamos un horario que te venga bien.`,
   },
   {
     question: "¿Atiendes a pacientes de otras ciudades de Colombia?",
@@ -66,8 +66,8 @@ export default function ContactSection() {
               </h2>
               <p className="max-w-prose leading-relaxed text-slate-ink-700">
                 La atención es con cita previa. La forma más rápida de reservar o
-                de resolver una duda es por WhatsApp: escríbeme y te respondo
-                personalmente para orientarte sobre el primer paso.
+                de resolver una duda es por WhatsApp: escríbeme y coordinamos
+                el primer paso.
               </p>
 
               <dl className="mt-2 w-full divide-y divide-line border-t border-line text-sm">
