@@ -38,10 +38,16 @@ export const SITE_CONFIG = {
     pais: "Colombia",
     completa:
       "Clínica Medicadiz – Sede Samaria, Cra. 12 sur #93-21, Consultorio 212, Ibagué, Tolima, Colombia",
-    // Coordenadas por confirmar (para schema geo en /contacto, sesión 5).
-    lat: null as number | null,
-    lng: null as number | null,
+    // Coordenadas reales del pin de Google Business (verificadas en Maps).
+    lat: 4.4252077 as number | null,
+    lng: -75.1763545 as number | null,
   },
+
+  // Ficha de Google Business ya creada. El CID es el identificador estable del
+  // lugar: sobrevive a cambios de nombre/dirección, a diferencia de la URL
+  // larga con /place/<nombre>/@lat,lng que Maps genera al compartir.
+  googleMapsCid: "10961633092813368645",
+  googleMapsUrl: "https://maps.google.com/?cid=10961633092813368645",
 
   // Horarios reales confirmados por la doctora: solo atiende martes a jueves.
   horarios: {
@@ -77,8 +83,11 @@ export const SITE_CONFIG = {
     ],
   },
 
-  // Pendiente: embed URL de Google Maps (sesión 5)
-  googleMapsEmbed: "",
+  // Embed del mapa para /contacto. Se construye desde el CID (no desde
+  // coordenadas sueltas) para que el pin salga rotulado "Ortoptika Terapia"
+  // con su tarjeta de dirección, y no como un punto anónimo.
+  googleMapsEmbed:
+    "https://maps.google.com/maps?cid=10961633092813368645&hl=es&z=17&output=embed",
 
   // Google Tag Manager — PLACEHOLDER hasta crear el contenedor real.
   // Mientras siga el valor "GTM-XXXXXXX", el layout NO inyecta ningún script.

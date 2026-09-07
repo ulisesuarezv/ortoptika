@@ -15,11 +15,12 @@ export const metadata: Metadata = buildMetadata({
 
 /**
  * /contacto — canal único: WhatsApp (sin formulario, decisión del brief).
- * Mapa embebido: el iframe queda listo; falta pegar la URL de embed en
- * SITE_CONFIG.googleMapsEmbed (placeholder visual mientras tanto).
+ * Mapa embebido: iframe con la URL de SITE_CONFIG.googleMapsEmbed (ya apunta
+ * al CID real de la ficha de Google Business). El bloque de abajo queda como
+ * fallback por si esa constante se vacía.
  *
- * JSON-LD: MedicalBusiness (mismo @id que en la home), ya con horarios
- * reales. `geo` (lat/lng) sigue pendiente — no se inventan coordenadas.
+ * JSON-LD: MedicalBusiness (mismo @id que en la home), con horarios reales y
+ * `geo`/`hasMap` del pin real.
  */
 export default function ContactoPage() {
   const embedUrl = SITE_CONFIG.googleMapsEmbed;
@@ -189,8 +190,8 @@ export default function ContactoPage() {
                     referrerPolicy="no-referrer-when-downgrade"
                   />
                 ) : (
-                  /* ⚠️ PLACEHOLDER: pegar la URL de embed de Google Maps en
-                     SITE_CONFIG.googleMapsEmbed y este bloque se sustituye solo. */
+                  /* Fallback: sólo se ve si SITE_CONFIG.googleMapsEmbed queda
+                     vacío. Hoy tiene valor real, así que el iframe gana. */
                   <div className="img-placeholder flex aspect-[4/3] items-center justify-center sm:aspect-[16/10]">
                     <div className="relative z-10 mx-6 max-w-sm rounded-xl border border-dashed border-slate-ink-300 bg-surface/90 p-5 text-center text-sm leading-relaxed text-slate-ink-700">
                       <p className="font-semibold text-slate-ink-900">

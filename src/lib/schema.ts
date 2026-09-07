@@ -1,11 +1,11 @@
 /**
  * Generadores de JSON-LD (schema.org) para SEO.
  *
- * Sólo se usan datos REALES confirmados (SITE_CONFIG) — horarios y credenciales
- * ya están cargados. Lo que sigue sin confirmar (hoy solo `geo`: lat/lng, falta
- * el enlace de Google Maps) se OMITE a propósito en lugar de inventarse: un
- * schema con datos falsos es peor que uno incompleto. Ver PLAN-DESARROLLO.md y
- * la memoria del proyecto.
+ * Sólo se usan datos REALES confirmados (SITE_CONFIG) — horarios, credenciales
+ * y, desde que existe la ficha de Google Business, también `geo`/`hasMap`.
+ * Cualquier dato que vuelva a quedar sin confirmar se OMITE a propósito en
+ * lugar de inventarse: un schema con datos falsos es peor que uno incompleto.
+ * Ver PLAN-DESARROLLO.md y la memoria del proyecto.
  *
  * Cada generador devuelve un objeto plano; se inyecta con:
  *   <script type="application/ld+json"
@@ -21,10 +21,12 @@ const PERSON_ID = `${SITE_CONFIG.url}/#yeimmy-barragan`;
  * MedicalBusiness: la clínica/consulta como negocio local sanitario.
  * Es el nodo clave para el SEO local (aparecer en el pack de mapas).
  *
- * PENDIENTE (rellenar cuando se confirme): `geo` (lat/lng, falta el enlace
- * de Google Maps). `openingHoursSpecification` ya usa horarios reales.
+ * `openingHoursSpecification` usa horarios reales y `geo`/`hasMap` apuntan al
+ * pin real de la ficha de Google Business (CID en SITE_CONFIG).
  */
 export function medicalBusinessSchema() {
+  const { lat, lng } = SITE_CONFIG.direccion;
+
   return {
     "@context": "https://schema.org",
     "@type": "MedicalBusiness",
@@ -43,6 +45,18 @@ export function medicalBusinessSchema() {
       addressRegion: SITE_CONFIG.direccion.departamento,
       addressCountry: SITE_CONFIG.direccion.pais,
     },
+    // Coordenadas del pin de Google Business; se omiten si alguna vez faltan
+    // en vez de aproximarlas.
+    ...(lat !== null && lng !== null
+      ? {
+          geo: {
+            "@type": "GeoCoordinates",
+            latitude: lat,
+            longitude: lng,
+          },
+        }
+      : {}),
+    hasMap: SITE_CONFIG.googleMapsUrl,
     // Dos franjas (mañana/tarde) porque hay pausa de 12:00 a 14:00.
     openingHoursSpecification: [
       {
