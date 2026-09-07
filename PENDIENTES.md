@@ -58,8 +58,10 @@
       Cra 12 sur #93-21, Ibagué). Falta terminar de completarla: descripción,
       categorías, horario, fotos y verificación. Ahora que el sitio está en
       línea, añadirle también la URL.
-- [ ] **URL de Facebook** — confirmó que lo usa activo, pero no dio el
-      enlace (`SITE_CONFIG.social.facebook` queda en `null` hasta tenerlo)
+- [x] ~~URL de Facebook~~ → **https://www.facebook.com/OrtoptikaIbague/**
+      («Ortoptika Terapia Visual | Ibagué»). Cargada en
+      `SITE_CONFIG.social.facebook`: sale en el `sameAs` del JSON-LD y ahora
+      también como enlace visible en el footer, junto a Instagram.
 
 ## 🟢 Contenido (autoridad SEO nacional)
 

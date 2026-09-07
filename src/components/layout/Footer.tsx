@@ -112,6 +112,20 @@ export default function Footer() {
                 Instagram {SITE_CONFIG.social.instagramHandle}
               </a>
             </p>
+            {/* Condicional: si algún día se retira la página, basta con poner
+                social.facebook en null y desaparece de aquí y del sameAs. */}
+            {SITE_CONFIG.social.facebook ? (
+              <p>
+                <a
+                  href={SITE_CONFIG.social.facebook}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block py-2.5 transition-colors hover:text-white"
+                >
+                  Facebook {SITE_CONFIG.social.facebookHandle}
+                </a>
+              </p>
+            ) : null}
           </address>
         </div>
       </Reveal>

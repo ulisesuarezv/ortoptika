@@ -145,7 +145,6 @@ botón de menú 40×40, enlaces del menú móvil 44px, CTAs de 40 a 60px.
 
 ### 🟡 Depende de la doctora
 
-- **URL de Facebook** (confirmó que lo usa; `social.facebook` sigue en `null`)
 - **Logo en vectorial** (SVG/AI/PDF) — limita la nitidez de la marca
 - **`contacto@ortoptikaterapia.com`** — hoy se publica su Gmail personal
 - **Fotos que faltan:** fachada de la clínica (la necesita la ficha de

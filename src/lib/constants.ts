@@ -60,9 +60,8 @@ export const SITE_CONFIG = {
   social: {
     instagram: "https://www.instagram.com/ortoptikaterapia/",
     instagramHandle: "@ortoptikaterapia",
-    // Facebook confirmado como activo por la doctora, URL aún pendiente de
-    // que nos la comparta — no enlazar hasta tenerla.
-    facebook: null as string | null,
+    facebook: "https://www.facebook.com/OrtoptikaIbague/" as string | null,
+    facebookHandle: "Ortoptika Terapia Visual",
   },
 
   // Credenciales y trayectoria reales (confirmadas por la doctora).
