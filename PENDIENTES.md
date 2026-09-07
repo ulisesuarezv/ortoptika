@@ -34,12 +34,17 @@
 
 ## 🟡 SEO / analítica
 
-- [ ] **URL de embed de Google Maps** → pegar en `SITE_CONFIG.googleMapsEmbed`
-      (la doctora no dio el enlace del pin ni las referencias de cómo llegar)
-- [ ] **Coordenadas lat/lng** para el `geo` del schema MedicalBusiness
+- [x] ~~URL de embed de Google Maps~~ → **cargada** en
+      `SITE_CONFIG.googleMapsEmbed`, construida desde el CID de la ficha
+      (`10961633092813368645`) para que el pin salga rotulado con el nombre
+      del negocio. El iframe de `/contacto` ya la usa.
+- [x] ~~Coordenadas lat/lng~~ → **4.4252077, -75.1763545** (verificadas en el
+      pin real de Maps). Ya salen en el `geo` del MedicalBusiness, junto con
+      `hasMap`.
 - [ ] **ID de Google Tag Manager** → sigue como placeholder `GTM-XXXXXXX`
-- [ ] **Crear Google Business Profile** (ella no lo tiene; confirmó que no
-      está en Doctoralia ni la menciona la web de Medicadiz)
+- [~] **Google Business Profile** — ficha ya creada (`Ortoptika Terapia`,
+      Cra 12 sur #93-21, Ibagué). Falta terminar de completarla: descripción,
+      categorías, horario, fotos y verificación.
 - [ ] **URL de Facebook** — confirmó que lo usa activo, pero no dio el
       enlace (`SITE_CONFIG.social.facebook` queda en `null` hasta tenerlo)
 
@@ -50,10 +55,21 @@
 
 ## 🟣 Fotografía y video (lo que más cambia el resultado visual)
 
-Ninguno de estos puntos fue respondido en el cuestionario — sigue en cero:
+> **7-sep-2026: llegaron las 6 primeras fotos.** Análisis, encuadres, uso por
+> sección y fases de implementación en **`PLAN-FOTOGRAFIA.md`**. Originales
+> (orientación ya corregida) en `assets/fotos-originales/`, carpeta
+> gitignorada porque el repo es público y hay menores y pacientes visibles.
 
-- [ ] 6–10 fotos del consultorio y equipos (horizontales, luz natural)
-- [ ] Fotos de la doctora trabajando (lámpara de hendidura, sesión de terapia)
+- [x] ~~6–10 fotos del consultorio y equipos~~ → **6 recibidas**: sala de
+      terapia completa, bodegón de instrumentos, sinoptóforo recortado con
+      alpha, doctora atendiendo y dos de niños en sesión.
+- [ ] **Autorizaciones de uso de imagen firmadas** — bloquea publicar las 4
+      fotos con personas (una por paciente; por acudiente si es menor).
+- [ ] Faltan aún: fachada de la clínica, la doctora sola en plano medio
+      horizontal, detalle de lámpara de hendidura, y una horizontal limpia
+      para la imagen `og:` de redes.
+- [ ] Ejecutar la **Fase A** de `PLAN-FOTOGRAFIA.md` (las fotos sin personas
+      y los recortes sin cara — no depende de nadie).
 - [ ] Video corto (30–60s) de presentación
 - [ ] Logo en vectorial (SVG/AI/PDF) + versión para fondo oscuro
 - [ ] 3–5 testimonios de pacientes (con autorización escrita; nunca de

@@ -28,6 +28,16 @@
 /.playwright-mcp/
 /qa-screenshots/
 
+# documentos comerciales para la doctora (precios, propuestas, respuestas del
+# cuestionario). No forman parte del sitio y no deben salir del equipo.
+/docs-doctora/
+/Ortoptika-Preguntas-Doctora.*
+
+# fotos originales del consultorio (full-res, sin recortar). El repo es
+# PÚBLICO y varias muestran menores y pacientes identificables: sólo se
+# publican los derivados de public/images/fotos/ que tengan autorización.
+/assets/fotos-originales/
+
 # debug
 npm-debug.log*
 yarn-debug.log*
