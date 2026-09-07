@@ -1,5 +1,8 @@
 # Pendientes — ortoptikaterapia.com
 
+> 📍 **Empieza por `ESTADO-DEL-PROYECTO.md`** si llegas nuevo: resume stack,
+> reglas, infraestructura y prioridades. Este archivo es sólo el checklist.
+>
 > 🚀 **EN PRODUCCIÓN desde el 7-sep-2026** en https://www.ortoptikaterapia.com
 > Dominio en Vercel (DNS en Hostinger), `main` mergeada: cada push a `main`
 > despliega solo, sin promover nada a mano.
