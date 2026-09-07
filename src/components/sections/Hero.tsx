@@ -163,7 +163,7 @@ export default function Hero() {
             className="relative z-20 flex flex-col items-start gap-7 lg:col-span-7 lg:mt-6"
           >
             <p className="enter-up max-w-[46ch] border-l-2 border-accent-500 pl-5 text-lg leading-relaxed text-slate-ink-700 [--enter-delay:380ms]">
-              Si notas que tu hijo tuerce un ojo, se acerca mucho para ver o se
+              Si notas que tu hijo desvía un ojo, se acerca mucho para ver o se
               cansa al leer, no estás solo. Acompaño a niños y adultos con una
               valoración cuidadosa y un plan de terapia visual pensado para cada
               caso, siempre a tu ritmo y con explicaciones claras.
