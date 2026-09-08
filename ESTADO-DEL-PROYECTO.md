@@ -89,9 +89,17 @@ docs-doctora/               PDFs para la doctora — GITIGNOREADO
 
 ## 5. Qué hay construido
 
-8 páginas: home, `/sobre-mi`, `/contacto`, `/blog` (con `noindex` hasta tener
-3 artículos), 404 y 5 landings de servicio (estrabismo, ambliopía, terapia
-visual, visión binocular, optometría pediátrica).
+9 páginas: home, `/sobre-mi`, `/contacto`, `/blog` (con `noindex` hasta tener
+3 artículos), `/privacidad`, 404 y 5 landings de servicio (estrabismo,
+ambliopía, terapia visual, visión binocular, optometría pediátrica).
+
+`/privacidad` es la política de tratamiento de datos (Ley 1581 de 2012). Está
+fuera del sitemap a propósito —no compite por posicionamiento— pero indexable,
+porque es información que debe ser accesible. La analítica arranca DENEGADA vía
+Google Consent Mode v2 y solo se activa si la persona acepta en el aviso; el
+snippet del default es un `<script>` inline crudo en el layout raíz, no
+`next/script`, porque con `output: "export"` incluso `beforeInteractive` se
+difiere al runtime de Next y llegaría tarde.
 
 Fotografía real en 8 ubicaciones — reparto completo en `PLAN-FOTOGRAFIA.md §6`.
 

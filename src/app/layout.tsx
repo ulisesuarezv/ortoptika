@@ -6,6 +6,8 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import WhatsAppButton from "@/components/layout/WhatsAppButton";
 import { GtmNoScript, GtmScript } from "@/components/layout/GoogleTagManager";
+import ConsentMode from "@/components/layout/ConsentMode";
+import CookieBanner from "@/components/layout/CookieBanner";
 import PageTransition from "@/components/motion/PageTransition";
 import CustomCursor from "@/components/motion/CustomCursor";
 
@@ -92,6 +94,7 @@ export default function RootLayout({
       className={`${fraunces.variable} ${frauncesItalic.variable} ${plusJakarta.variable} ${inter.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <ConsentMode />
         <GtmNoScript />
         <PageTransition />
         <CustomCursor />
@@ -99,6 +102,7 @@ export default function RootLayout({
         <main className="flex-1">{children}</main>
         <Footer />
         <WhatsAppButton />
+        <CookieBanner />
         <GtmScript />
       </body>
     </html>

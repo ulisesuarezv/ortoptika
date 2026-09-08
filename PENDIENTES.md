@@ -63,6 +63,20 @@
       `SITE_CONFIG.social.facebook`: sale en el `sameAs` del JSON-LD y ahora
       también como enlace visible en el footer, junto a Instagram.
 
+- [x] ~~Consentimiento de cookies~~ → **hecho el 8-sep-2026**. Google
+      Consent Mode v2 con `analytics_storage: 'denied'` por defecto
+      (`components/layout/ConsentMode.tsx`), aviso no bloqueante
+      (`CookieBanner.tsx`) y página `/privacidad` con la política de
+      tratamiento de datos (Ley 1581 de 2012) más un panel para cambiar o
+      revocar la decisión. Verificado en el build estático: con GTM cargado y
+      sin aceptar, cero cookies `_ga`.
+- [ ] **Revisar el contenedor de GTM si se añaden etiquetas nuevas.** Las de
+      GA4 respetan `analytics_storage` solas; cualquier otra (píxel de Meta,
+      Google Ads) hay que configurarla con comprobaciones de consentimiento
+      adicionales o se saltará el aviso.
+- [ ] **Que la doctora lea `/privacidad`** y confirme los datos de contacto
+      para peticiones de habeas data (hoy: `ortoptika.2020@gmail.com`).
+
 ## 🟢 Contenido (autoridad SEO nacional)
 
 - [ ] **Blog: escribir ≥3 artículos** y quitar el `noindex`. Ya hay 8 títulos

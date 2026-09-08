@@ -130,8 +130,14 @@ export default function Footer() {
         </div>
       </Reveal>
 
-      <div className="relative border-t border-slate-ink-800 px-5 py-6 text-center text-xs text-slate-ink-400 sm:px-8">
-        © {year} {SITE_CONFIG.name}. Todos los derechos reservados.
+      <div className="relative flex flex-col items-center gap-2 border-t border-slate-ink-800 px-5 py-6 text-center text-xs text-slate-ink-400 sm:flex-row sm:justify-between sm:px-8 sm:text-left">
+        <p>© {year} {SITE_CONFIG.name}. Todos los derechos reservados.</p>
+        <Link
+          href="/privacidad/"
+          className="inline-block py-2 transition-colors hover:text-white"
+        >
+          Política de tratamiento de datos y cookies
+        </Link>
       </div>
     </footer>
   );
