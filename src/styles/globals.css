@@ -474,6 +474,22 @@ html.has-custom-cursor .cursor-root {
   border-color: var(--color-primary-700);
 }
 
+/* Sobre superficies oscuras (footer, bandas de consultorio) el cursor navy
+   quedaba invisible: es el MISMO slate-ink-900 del fondo. CustomCursor marca
+   el root con data-theme="dark" al entrar en un [data-cursor-theme="dark"] y
+   aquí se invierte a crema. El lima de la variante "link" ya contrasta contra
+   navy y se conserva; el azul de "media" no, y sube a primary-300. */
+.cursor-root[data-theme="dark"] .cursor-dot {
+  background-color: var(--color-cream);
+}
+.cursor-root[data-theme="dark"] .cursor-ring {
+  border-color: var(--color-cream);
+}
+.cursor-root[data-theme="dark"] .cursor-ring[data-variant="media"] {
+  background-color: color-mix(in srgb, var(--color-primary-300) 18%, transparent);
+  border-color: var(--color-primary-300);
+}
+
 /* Accesibilidad: foco visible AA */
 :focus-visible {
   outline: 2px solid var(--color-primary-500);

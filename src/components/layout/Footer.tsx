@@ -15,7 +15,10 @@ export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative overflow-hidden bg-slate-ink-900 text-slate-ink-200">
+    <footer
+      data-cursor-theme="dark"
+      className="relative overflow-hidden bg-slate-ink-900 text-slate-ink-200"
+    >
       {/* Capa de fondo: ondas ópticas en tono oscuro, muy sutiles */}
       <Parallax className="absolute inset-0 z-0" amount={8}>
         <Backdrop variant="waves" tone="dark" />
@@ -130,7 +133,7 @@ export default function Footer() {
         </div>
       </Reveal>
 
-      <div className="relative flex flex-col items-center gap-2 border-t border-slate-ink-800 px-5 py-6 text-center text-xs text-slate-ink-400 sm:flex-row sm:justify-between sm:px-8 sm:text-left">
+      <div className="relative flex flex-col items-center gap-2 border-t border-slate-ink-800 px-5 pb-24 pt-6 text-center text-xs text-slate-ink-400 sm:flex-row sm:justify-between sm:px-8 sm:pb-6 sm:pr-48 sm:text-left">
         <p>© {year} {SITE_CONFIG.name}. Todos los derechos reservados.</p>
         <Link
           href="/privacidad/"

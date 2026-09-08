@@ -380,6 +380,7 @@ export default function ServiceLanding({
       {fotos.bleed ? (
         <section
           aria-label="El espacio donde se hace la terapia"
+          data-cursor-theme="dark"
           className="relative border-y border-line bg-slate-ink-900"
         >
           <div className="relative h-[clamp(16rem,38vh,26rem)] overflow-hidden">

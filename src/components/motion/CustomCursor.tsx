@@ -26,6 +26,17 @@ function resolveVariant(target: EventTarget | null): Variant {
 }
 
 /**
+ * Tema de la superficie bajo el puntero. El cursor es navy (slate-ink-900),
+ * el mismo color exacto que los fondos oscuros del sitio: sobre el footer o
+ * las bandas de consultorio quedaba invisible. Las secciones oscuras se
+ * marcan con data-cursor-theme="dark" y aquí se lee para invertirlo.
+ */
+function resolveTheme(target: EventTarget | null): "dark" | "" {
+  if (!(target instanceof Element)) return "";
+  return target.closest('[data-cursor-theme="dark"]') ? "dark" : "";
+}
+
+/**
  * Cursor custom: un punto (sigue exacto) + un anillo (sigue con inercia vía
  * gsap.quickTo). La POSICIÓN la mueve GSAP sobre un wrapper propio (x/y →
  * transform); el TAMAÑO/COLOR de variante lo resuelve una transición CSS en
@@ -37,6 +48,7 @@ function resolveVariant(target: EventTarget | null): Variant {
  * hasta confirmar que el custom está listo (evita quedarse sin cursor).
  */
 export default function CustomCursor() {
+  const rootRef = useRef<HTMLDivElement>(null);
   const dotWrapRef = useRef<HTMLDivElement>(null);
   const ringWrapRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
@@ -50,10 +62,11 @@ export default function CustomCursor() {
     ).matches;
     if (!isDesktopPointer || prefersReduced) return;
 
+    const root = rootRef.current;
     const dotWrap = dotWrapRef.current;
     const ringWrap = ringWrapRef.current;
     const ring = ringRef.current;
-    if (!dotWrap || !ringWrap || !ring) return;
+    if (!root || !dotWrap || !ringWrap || !ring) return;
 
     document.documentElement.classList.add("has-custom-cursor");
 
@@ -63,6 +76,7 @@ export default function CustomCursor() {
     const ringY = gsap.quickTo(ringWrap, "y", { duration: 0.45, ease: "power3.out" });
 
     let currentVariant: Variant = "";
+    let currentTheme: "dark" | "" = "";
 
     function onMove(e: PointerEvent) {
       dotX(e.clientX);
@@ -75,6 +89,13 @@ export default function CustomCursor() {
         currentVariant = variant;
         if (variant) ring!.dataset.variant = variant;
         else delete ring!.dataset.variant;
+      }
+
+      const theme = resolveTheme(e.target);
+      if (theme !== currentTheme) {
+        currentTheme = theme;
+        if (theme) root!.dataset.theme = theme;
+        else delete root!.dataset.theme;
       }
     }
 
@@ -107,7 +128,11 @@ export default function CustomCursor() {
   }, []);
 
   return (
-    <div aria-hidden="true" className="cursor-root pointer-events-none fixed inset-0 z-[200]">
+    <div
+      ref={rootRef}
+      aria-hidden="true"
+      className="cursor-root pointer-events-none fixed inset-0 z-[200]"
+    >
       <div ref={dotWrapRef} className="cursor-wrap">
         <div className="cursor-dot" />
       </div>

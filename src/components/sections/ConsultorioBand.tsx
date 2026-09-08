@@ -19,6 +19,7 @@ export default function ConsultorioBand() {
   return (
     <section
       aria-labelledby="consultorio-title"
+      data-cursor-theme="dark"
       className="relative border-y border-line bg-slate-ink-900"
     >
       {/* min-h, no h: en ventanas bajas el texto crece más que la banda y con
