@@ -22,7 +22,7 @@ export const metadata: Metadata = buildMetadata({
 });
 
 /** Última revisión del texto. Actualizar al cambiar el contenido de la política. */
-const ULTIMA_ACTUALIZACION = "8 de septiembre de 2026";
+const ULTIMA_ACTUALIZACION = "12 de septiembre de 2026";
 
 const COOKIES = [
   {
@@ -241,9 +241,47 @@ export default function PrivacidadPage() {
             </p>
           </section>
 
+          <section aria-labelledby="imagenes">
+            <h2 id="imagenes" className="text-2xl sm:text-3xl">
+              7. Fotografías tomadas en el consultorio
+            </h2>
+            <p className="mt-4 leading-relaxed">
+              Algunas de las fotografías de este sitio se tomaron en el
+              consultorio y en ellas aparecen personas identificables. La imagen
+              de una persona es un dato personal: por eso, toda fotografía en la
+              que alguien sea reconocible requiere su{" "}
+              <strong>autorización previa, expresa y escrita</strong> y, cuando
+              se trata de un menor de edad, la de su padre, madre o
+              representante legal, atendiendo al interés superior del menor.
+            </p>
+            <p className="mt-4 leading-relaxed">
+              Esas imágenes se usan únicamente para informar sobre los servicios
+              del consultorio, en este sitio web, en la ficha de Google Business
+              y en los perfiles de Instagram y Facebook. Nunca se publica el
+              nombre, el diagnóstico, la historia clínica ni ningún resultado de
+              exámenes de quien aparece, y las imágenes no se ceden a terceros
+              con fines publicitarios o comerciales distintos de los anteriores.
+              La autorización se otorga de forma gratuita.
+            </p>
+            <p className="mt-4 leading-relaxed">
+              Si apareces en una fotografía publicada y quieres que se retire,
+              basta con pedirlo por WhatsApp al {SITE_CONFIG.telefono} o
+              escribiendo a{" "}
+              <a
+                href={`mailto:${SITE_CONFIG.email}`}
+                className="text-primary-700 underline underline-offset-2 hover:text-primary-800"
+              >
+                {SITE_CONFIG.email}
+              </a>
+              . No hace falta dar explicaciones y la imagen se retira dentro de
+              los quince (15) días hábiles siguientes. La revocatoria opera
+              hacia el futuro y no afecta los usos anteriores.
+            </p>
+          </section>
+
           <section aria-labelledby="derechos">
             <h2 id="derechos" className="text-2xl sm:text-3xl">
-              7. Tus derechos como titular
+              8. Tus derechos como titular
             </h2>
             <p className="mt-4 leading-relaxed">
               De acuerdo con el artículo 8 de la Ley 1581 de 2012, puedes:
@@ -283,7 +321,7 @@ export default function PrivacidadPage() {
 
           <section aria-labelledby="vigencia">
             <h2 id="vigencia" className="text-2xl sm:text-3xl">
-              8. Vigencia y cambios
+              9. Vigencia y cambios
             </h2>
             <p className="mt-4 leading-relaxed">
               Esta política rige desde el {ULTIMA_ACTUALIZACION}. Los datos se
