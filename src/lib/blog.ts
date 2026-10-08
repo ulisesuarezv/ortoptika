@@ -43,8 +43,12 @@ export type Post = {
   /** Fechas ISO (AAAA-MM-DD). */
   publicado: string;
   actualizado?: string;
-  /** Fecha en que la doctora aprobó el contenido clínico. Obligatoria. */
-  revisadoEl: string;
+  /**
+   * Fecha en que la doctora aprobó el contenido clínico. `null` = borrador en
+   * revisión: se ve con un aviso en las ramas de trabajo, pero el build de
+   * producción se niega a compilarlo (ver la comprobación más abajo).
+   */
+  revisadoEl: string | null;
   /** Tema médico principal, para `about` en el JSON-LD (ej. "Ambliopía"). */
   tema: string;
   keywords?: string[];
@@ -55,7 +59,38 @@ export type Post = {
  * No puede quedar vacío: con `output: "export"` Next exige al menos un slug
  * para /blog/[slug] y el build falla (ver src/content/blog/_plantilla.mdx).
  */
-const POSTS: Post[] = [];
+const POSTS: Post[] = [
+  {
+    slug: "ojo-vago-en-adultos",
+    titulo: "Ojo vago en adultos: qué sí se recupera y qué no",
+    metaTitle: "Ojo vago en adultos: ¿tiene tratamiento?",
+    descripcion:
+      "Qué dice hoy la evidencia sobre el tratamiento de la ambliopía en adultos: qué mejoría es realista, qué no se recupera y qué riesgos evaluar antes.",
+    cluster: "ojo-vago-estrabismo",
+    servicio: "ambliopia",
+    publicado: "2026-10-08", // provisional: se fija el día que se publique
+    revisadoEl: null, // BORRADOR: pendiente de revisión de la doctora
+    tema: "Ambliopía",
+    keywords: [
+      "ojo vago en adultos",
+      "ambliopía en adultos",
+      "tratamiento ojo vago adultos",
+      "se puede corregir el ojo vago en adultos",
+    ],
+  },
+];
+
+// Red de seguridad: un artículo sin aprobación clínica nunca llega a
+// producción, aunque la rama se mergee a main por error. VERCEL_ENV existe
+// durante el build en Vercel ("production" sólo para main).
+const sinRevisar = POSTS.filter((post) => post.revisadoEl === null);
+if (process.env.VERCEL_ENV === "production" && sinRevisar.length > 0) {
+  throw new Error(
+    `Artículos sin revisión clínica en un build de producción: ${sinRevisar
+      .map((post) => post.slug)
+      .join(", ")}. Añade la fecha de aprobación en revisadoEl.`,
+  );
+}
 
 /**
  * Por debajo de este número /blog queda en noindex y fuera del sitemap y de

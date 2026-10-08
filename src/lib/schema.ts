@@ -263,7 +263,7 @@ export function blogPostingSchema({
   descripcion: string;
   publicado: string;
   actualizado: string;
-  revisadoEl: string;
+  revisadoEl: string | null;
   tema: string;
   keywords?: string[];
 }) {
@@ -288,8 +288,8 @@ export function blogPostingSchema({
         inLanguage: "es-CO",
         about: { "@type": "MedicalCondition", name: tema },
         audience: { "@type": "PeopleAudience", audienceType: "Pacientes y familias" },
-        reviewedBy: autora,
-        lastReviewed: revisadoEl,
+        // Sólo se declara la revisión si existe (los borradores no la tienen).
+        ...(revisadoEl ? { reviewedBy: autora, lastReviewed: revisadoEl } : {}),
         breadcrumb: { "@id": `${url}#breadcrumb` },
         mainEntity: { "@id": `${url}#article` },
       },

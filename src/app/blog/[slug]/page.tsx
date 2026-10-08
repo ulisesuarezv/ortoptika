@@ -95,6 +95,13 @@ export default async function BlogPostPage({ params }: Props) {
 
           <div className="relative z-10 mx-auto max-w-7xl px-5 pb-14 pt-12 sm:px-8 lg:pb-20 lg:pt-16">
             <Reveal className="flex max-w-4xl flex-col items-start gap-6">
+              {/* Sólo visible en ramas de trabajo: producción no compila
+                  borradores (ver src/lib/blog.ts). */}
+              {!post.revisadoEl && (
+                <p className="rounded-full bg-accent-200 px-4 py-1.5 font-heading text-xs font-bold uppercase tracking-[0.15em] text-slate-ink-900">
+                  Borrador · pendiente de revisión clínica
+                </p>
+              )}
               <nav aria-label="Migas de pan" className="font-heading text-sm text-slate-ink-500">
                 <ol className="flex flex-wrap items-center gap-2">
                   <li>
@@ -156,9 +163,18 @@ export default async function BlogPostPage({ params }: Props) {
                 <Contenido />
 
                 <p className="mt-14 rounded-2xl bg-cream-soft px-6 py-5 text-sm leading-relaxed text-slate-ink-500">
-                  Contenido informativo revisado clínicamente por{" "}
-                  {SITE_CONFIG.profesional} el{" "}
-                  <time dateTime={post.revisadoEl}>{formatFecha(post.revisadoEl)}</time>.
+                  {post.revisadoEl ? (
+                    <>
+                      Contenido informativo revisado clínicamente por{" "}
+                      {SITE_CONFIG.profesional} el{" "}
+                      <time dateTime={post.revisadoEl}>
+                        {formatFecha(post.revisadoEl)}
+                      </time>
+                      .
+                    </>
+                  ) : (
+                    "Contenido informativo."
+                  )}{" "}
                   No reemplaza una valoración: cada caso necesita un examen
                   presencial.
                 </p>
