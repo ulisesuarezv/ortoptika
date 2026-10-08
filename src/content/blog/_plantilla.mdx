@@ -1,0 +1,34 @@
+{/*
+  PLANTILLA — no se publica: sólo existen las rutas de los slugs registrados
+  en src/lib/blog.ts, y este archivo no está ahí.
+
+  OJO: con `output: "export"` el build FALLA si POSTS está vacío (Next exige
+  al menos un parámetro en /blog/[slug]). Por eso el motor del blog llega a
+  main junto con el primer artículo aprobado, nunca antes.
+
+  Para publicar un artículo:
+  1. Copiar este archivo como <slug>.mdx (minúsculas, guiones, sin tildes).
+  2. Añadir su entrada a POSTS en src/lib/blog.ts, con `revisadoEl` = fecha
+     en que la doctora aprobó el contenido. Sin esa aprobación, no entra.
+  3. Trabajarlo en una rama: cada push a main publica en producción.
+
+  Convenciones:
+  - Sin título #: el <h1> sale del registro. Los apartados empiezan en ##.
+  - Markdown normal; la tipografía la pone src/mdx-components.tsx.
+  - Enlaces internos con ruta relativa y slash final: [estrabismo](/servicios/estrabismo/)
+  - Al menos un enlace a la landing del servicio y, si existe, a otro artículo
+    del mismo bloque.
+  - <Nota>…</Nota> para un dato a destacar.
+  - <Nota tipo="consulta">…</Nota> para señales de alarma o cuándo consultar.
+  - Nada de promesas de curación ni de atención a distancia (sólo presencial).
+*/}
+
+Entradilla: la respuesta corta a la pregunta del título, en dos o tres frases.
+
+## Primer apartado
+
+Texto.
+
+<Nota tipo="consulta">
+  Señales que justifican una valoración.
+</Nota>

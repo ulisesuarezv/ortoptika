@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import createMDX from "@next/mdx";
 
 const nextConfig: NextConfig = {
   // Static export para deploy en Vercel/Netlify/Cloudflare Pages (sin servidor).
@@ -11,4 +12,8 @@ const nextConfig: NextConfig = {
   trailingSlash: true,
 };
 
-export default nextConfig;
+// MDX sólo se usa por import (cuerpo de los artículos en src/content/blog/),
+// no como rutas: por eso no se toca `pageExtensions`.
+const withMDX = createMDX({});
+
+export default withMDX(nextConfig);

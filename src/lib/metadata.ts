@@ -14,6 +14,8 @@ export type PageMeta = {
   ogTitle?: string;
   /** Si es false, marca la página como noindex (ej. /blog hasta tener artículos). */
   index?: boolean;
+  /** Para artículos del blog: OpenGraph `article` con sus fechas. */
+  article?: { publishedTime: string; modifiedTime: string };
 };
 
 /**
@@ -30,6 +32,7 @@ export function buildMetadata({
   path,
   ogTitle,
   index = true,
+  article,
 }: PageMeta): Metadata {
   const fullTitle =
     ogTitle ?? (path === "/" ? title : `${title} | ${SITE_CONFIG.name}`);
@@ -41,7 +44,14 @@ export function buildMetadata({
       canonical: path,
     },
     openGraph: {
-      type: "website",
+      ...(article
+        ? {
+            type: "article",
+            publishedTime: article.publishedTime,
+            modifiedTime: article.modifiedTime,
+            authors: [`${SITE_CONFIG.url}/sobre-mi/`],
+          }
+        : { type: "website" }),
       locale: SITE_CONFIG.locale,
       url: path,
       siteName: SITE_CONFIG.name,

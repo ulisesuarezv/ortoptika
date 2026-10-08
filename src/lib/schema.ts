@@ -240,6 +240,88 @@ export function faqPageSchema(
 }
 
 /**
+ * Artículo del blog: MedicalWebPage (revisada por la profesional, con
+ * `lastReviewed`) cuyo `mainEntity` es el BlogPosting, más las migas de pan.
+ * Va en un único @graph para que los nodos se enlacen por @id.
+ *
+ * Autora y revisora son la misma persona: la doctora firma lo que aprueba.
+ * El nodo Person se repite en forma compacta (nombre, cargo, url) para que
+ * la autoría se entienda aunque Google no haya rastreado /sobre-mi.
+ */
+export function blogPostingSchema({
+  slug,
+  titulo,
+  descripcion,
+  publicado,
+  actualizado,
+  revisadoEl,
+  tema,
+  keywords,
+}: {
+  slug: string;
+  titulo: string;
+  descripcion: string;
+  publicado: string;
+  actualizado: string;
+  revisadoEl: string;
+  tema: string;
+  keywords?: string[];
+}) {
+  const url = `${SITE_CONFIG.url}/blog/${slug}/`;
+  const autora = {
+    "@type": "Person",
+    "@id": PERSON_ID,
+    name: SITE_CONFIG.profesional,
+    jobTitle: SITE_CONFIG.titulo,
+    url: `${SITE_CONFIG.url}/sobre-mi/`,
+  };
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "MedicalWebPage",
+        "@id": `${url}#webpage`,
+        url,
+        name: titulo,
+        description: descripcion,
+        inLanguage: "es-CO",
+        about: { "@type": "MedicalCondition", name: tema },
+        audience: { "@type": "PeopleAudience", audienceType: "Pacientes y familias" },
+        reviewedBy: autora,
+        lastReviewed: revisadoEl,
+        breadcrumb: { "@id": `${url}#breadcrumb` },
+        mainEntity: { "@id": `${url}#article` },
+      },
+      {
+        "@type": "BlogPosting",
+        "@id": `${url}#article`,
+        headline: titulo,
+        description: descripcion,
+        url,
+        mainEntityOfPage: { "@id": `${url}#webpage` },
+        image: `${url}opengraph-image`,
+        datePublished: publicado,
+        dateModified: actualizado,
+        inLanguage: "es-CO",
+        author: autora,
+        publisher: { "@id": BUSINESS_ID, "@type": "MedicalBusiness", name: SITE_CONFIG.name, url: SITE_CONFIG.url },
+        ...(keywords?.length ? { keywords: keywords.join(", ") } : {}),
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": `${url}#breadcrumb`,
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Inicio", item: `${SITE_CONFIG.url}/` },
+          { "@type": "ListItem", position: 2, name: "Blog", item: `${SITE_CONFIG.url}/blog/` },
+          { "@type": "ListItem", position: 3, name: titulo, item: url },
+        ],
+      },
+    ],
+  };
+}
+
+/**
  * Helper de presentación: props listas para <script> de JSON-LD.
  * Uso: <script {...jsonLd(medicalBusinessSchema())} />
  */
