@@ -8,7 +8,7 @@ export default function LabOjo() {
   return (
     <>
       <Ojo className="absolute inset-0" pupila={pupila} />
-      <div className="absolute bottom-6 left-1/2 z-10 flex -translate-x-1/2 items-center gap-3 rounded-full bg-white/10 px-5 py-3 text-xs text-white backdrop-blur">
+      <div className="absolute top-6 left-1/2 z-10 flex -translate-x-1/2 items-center gap-3 rounded-full bg-white/10 px-5 py-3 text-xs text-white backdrop-blur">
         <span>Pupila</span>
         <input
           type="range"

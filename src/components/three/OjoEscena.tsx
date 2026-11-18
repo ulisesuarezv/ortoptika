@@ -31,32 +31,31 @@ export type OjoProps = {
 };
 
 function Ojo({ pupila = 0.3, seguir = true, vivo = true }: OjoProps) {
-  const [iris, altura] = useTexture(["/3d/ojo/iris-color.webp", "/3d/ojo/iris-altura.webp"]);
+  const [iris, altura] = useTexture(
+    ["/3d/ojo/iris-color.webp", "/3d/ojo/iris-altura.webp"],
+    (ts) => {
+      const [c] = ts as THREE.Texture[];
+      c.colorSpace = THREE.SRGBColorSpace;
+      for (const t of ts as THREE.Texture[]) {
+        t.wrapS = THREE.RepeatWrapping;
+        t.wrapT = THREE.ClampToEdgeWrapping;
+        t.anisotropy = 8;
+        t.needsUpdate = true;
+      }
+    },
+  );
   const grupo = useRef<THREE.Group>(null);
   const ojo = useRef<THREE.Mesh>(null);
   const { camera, pointer } = useThree();
 
-  useMemo(() => {
-    iris.colorSpace = THREE.SRGBColorSpace;
-    for (const t of [iris, altura]) {
-      t.wrapS = THREE.RepeatWrapping;
-      t.wrapT = THREE.ClampToEdgeWrapping;
-      t.anisotropy = 8;
-      t.needsUpdate = true;
-    }
-  }, [iris, altura]);
-
-  const uniforms = useMemo(
-    () => ({
-      uIris: { value: iris },
-      uAltura: { value: altura },
-      uCamObj: { value: new THREE.Vector3() },
-      uPupila: { value: pupila },
-      uProf: { value: 0.16 },
-    }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [iris, altura],
-  );
+  // uniforms en un ref: se mutan cada frame desde useFrame
+  const uRef = useRef({
+    uIris: { value: iris },
+    uAltura: { value: altura },
+    uCamObj: { value: new THREE.Vector3() },
+    uPupila: { value: pupila },
+    uProf: { value: 0.16 },
+  });
 
   const material = useMemo(() => {
     const m = new THREE.MeshPhysicalMaterial({
@@ -67,7 +66,7 @@ function Ojo({ pupila = 0.3, seguir = true, vivo = true }: OjoProps) {
       sheen: 0,
     });
     m.onBeforeCompile = (s) => {
-      Object.assign(s.uniforms, uniforms);
+      Object.assign(s.uniforms, uRef.current);
       s.vertexShader = s.vertexShader
         .replace("#include <common>", "#include <common>\nvarying vec3 vObj;")
         .replace("#include <begin_vertex>", "#include <begin_vertex>\nvObj = position;");
@@ -126,7 +125,7 @@ function Ojo({ pupila = 0.3, seguir = true, vivo = true }: OjoProps) {
         );
     };
     return m;
-  }, [uniforms]);
+  }, []);
 
   // material de la córnea: solo reflejos (aditivo), el difuso negro no suma nada
   const cornea = useMemo(
@@ -147,7 +146,7 @@ function Ojo({ pupila = 0.3, seguir = true, vivo = true }: OjoProps) {
   // mirada: objetivo suavizado + microsacadas
   const mirada = useRef(new THREE.Vector2());
   const sacada = useRef({ off: new THREE.Vector2(), proxima: 0 });
-  const tmp = useMemo(() => new THREE.Matrix4(), []);
+  const tmp = useRef(new THREE.Matrix4());
   const reduce = useRef(false);
   useEffect(() => {
     reduce.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -156,6 +155,7 @@ function Ojo({ pupila = 0.3, seguir = true, vivo = true }: OjoProps) {
   useFrame((state, dt) => {
     const g = grupo.current;
     if (!g || !ojo.current) return;
+    const u = uRef.current;
     const tt = state.clock.elapsedTime;
     // microsacadas: saltos pequeños cada 0.6–2.2 s
     const sc = sacada.current;
@@ -172,12 +172,12 @@ function Ojo({ pupila = 0.3, seguir = true, vivo = true }: OjoProps) {
 
     // pupila con "respiración" (hippus) muy leve
     const resp = vivo && !reduce.current ? Math.sin(tt * 1.3) * 0.012 + Math.sin(tt * 0.37) * 0.01 : 0;
-    uniforms.uPupila.value += (pupila + resp - uniforms.uPupila.value) * Math.min(1, dt * 4);
+    u.uPupila.value += (pupila + resp - u.uPupila.value) * Math.min(1, dt * 4);
 
     // cámara en espacio objeto (para el parallax)
     ojo.current.updateWorldMatrix(true, false);
-    tmp.copy(ojo.current.matrixWorld).invert();
-    uniforms.uCamObj.value.copy(camera.position).applyMatrix4(tmp);
+    tmp.current.copy(ojo.current.matrixWorld).invert();
+    u.uCamObj.value.copy(camera.position).applyMatrix4(tmp.current);
   });
 
   return (
