@@ -43,6 +43,7 @@ Estado al 19-nov-2026: home v2 completa y aprobada en `/lab/v2`. Lint y build en
 - (misma sesión) Ojos 3D reales (OjoModelo, R 0.4) en lugar de puntos: la escena se gira 180° para que miren a la luz y a la cámara (`mundo()` convierte puntos). Hero: ciclo solo naranja/verde (la azul saca la cuenta doble del cuadro).
 - `BrockRecorrido.tsx`: sección navy sticky de 460svh tras el hero (solo estrabismo), mismo patrón que DosOjos de la home; 4 pasos + recuadro «Lo que se ve» (la X del cordón). La escena en modo "scroll" lee `brockScroll.p` y la cámara viaja entre `PLANOS`. **Copy de los pasos = borrador para la doctora** (ver PENDIENTES).
 - Estado de las escenas en refs propias + registro `ETIQUETAS` por `useId` (el React Compiler no deja mutar objetos que llegan por props).
+- Rendimiento (19-nov): todo lienzo 3D va por `src/components/three/Lienzo.tsx` (resolución adaptativa con PerformanceMonitor: dpr 2 y solo baja si ese equipo no da; respaldo `public/3d/respaldo/*.webp` si no hay WebGL). **Regla: una sola escena 3D dibujando a la vez** — la sección que toma la pantalla emite `ESCENA_PROTAGONISTA` (`src/components/v2/escenas.ts`) y las demás se pausan; activarla con `rootMargin "0px 0px -35% 0px"` y precalentarla en `requestIdleCallback`. Sombras de contacto con `frames={1}`. Medición: `perf3.mjs` (móvil 390, CPU ×4) → estrabismo de 26–205 frames lentos a 1.
 - Siguientes piezas 3D: cartilla (ambliopía), tabla de Hart (terapia visual), pájaro y jaula / sinoptóforo (binocular), cuaderno (pediátrica).
 
 ## Pendientes abiertos

@@ -17,10 +17,11 @@
  * Fuente: KayaoCC/contenido/kayao/2026-11-18_serie-ojo-ortoptika/scripts/iris_textura.py
  */
 import { useEffect, useMemo, useRef } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import { Environment, Lightformer, useTexture } from "@react-three/drei";
 import * as THREE from "three";
 import { ojoEstado } from "./ojoEstado";
+import Lienzo, { Respaldo } from "./Lienzo";
 
 const R_IRIS = 0.5; // radio del limbo sobre la esfera de radio 1
 const Z_LIMBO = Math.sqrt(1 - R_IRIS * R_IRIS);
@@ -463,17 +464,17 @@ export function OjoEstudio() {
 
 export { Ojo as OjoModelo };
 
-export default function OjoEscena({ activo = true, ...props }: OjoProps & { activo?: boolean }) {
+export default function OjoEscena({ activo = true, respaldo = "/3d/respaldo/ojo.webp", ...props }: OjoProps & { activo?: boolean; respaldo?: string }) {
   return (
-    <Canvas
+    <Lienzo
+      respaldo={<Respaldo src={respaldo} />}
       frameloop={activo ? "always" : "never"}
-      dpr={[1, 2]}
       camera={{ position: [0, 0, 8], fov: 30 }}
       gl={{ antialias: true, alpha: true, toneMapping: THREE.NeutralToneMapping }}
     >
       <OjoEstudio />
       <Encuadre />
       <Ojo {...props} />
-    </Canvas>
+    </Lienzo>
   );
 }

@@ -11,6 +11,7 @@
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
 import { dosOjosEstado } from "../DosOjosEscena";
+import { ESCENA_PROTAGONISTA } from "../escenas";
 
 const OjoEscena = dynamic(() => import("@/components/three/OjoEscena"), { ssr: false });
 const DosOjosEscena = dynamic(() => import("../DosOjosEscena"), { ssr: false });
@@ -66,11 +67,14 @@ const MIRADAS: Record<string, Mirada> = {
 export default function OjoServicio({ slug, className = "" }: { slug: string; className?: string }) {
   const caja = useRef<HTMLDivElement>(null);
   const [activo, setActivo] = useState(false);
+  const [tapado, setTapado] = useState(false); // otra escena 3D (el recorrido) tiene la pantalla
 
   useEffect(() => {
     const el = caja.current;
     if (!el) return;
     const io = new IntersectionObserver(([e]) => setActivo(e.isIntersecting), { rootMargin: "10% 0px" });
+    const ceder = (e: Event) => setTapado((e as CustomEvent<boolean>).detail);
+    window.addEventListener(ESCENA_PROTAGONISTA, ceder);
     io.observe(el);
     const mover = (e: PointerEvent) => {
       puntero.x = (e.clientX / window.innerWidth) * 2 - 1;
@@ -91,6 +95,7 @@ export default function OjoServicio({ slug, className = "" }: { slug: string; cl
     }
     return () => {
       io.disconnect();
+      window.removeEventListener(ESCENA_PROTAGONISTA, ceder);
       window.removeEventListener("pointermove", mover);
       cancelAnimationFrame(raf);
       dosOjosEstado.p = 0;
@@ -101,11 +106,11 @@ export default function OjoServicio({ slug, className = "" }: { slug: string; cl
   return (
     <div ref={caja} aria-hidden="true" className={className}>
       {slug === "estrabismo" ? (
-        <BrockEscena activo={activo} />
+        <BrockEscena activo={activo && !tapado} />
       ) : slug === "vision-binocular" ? (
-        <DosOjosEscena activo={activo} />
+        <DosOjosEscena activo={activo && !tapado} />
       ) : (
-        <OjoEscena activo={activo} pupila={m?.pupila ?? 0.3} seguir={m?.seguir ?? true} mirar={m?.mirar} />
+        <OjoEscena activo={activo && !tapado} pupila={m?.pupila ?? 0.3} seguir={m?.seguir ?? true} mirar={m?.mirar} />
       )}
     </div>
   );

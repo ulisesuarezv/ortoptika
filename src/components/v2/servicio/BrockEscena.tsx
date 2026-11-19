@@ -18,11 +18,12 @@
  * unmount a root" en desarrollo).
  */
 import { Suspense, useId, useLayoutEffect, useMemo, useRef } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import { ContactShadows, Line } from "@react-three/drei";
 import type { Line2 } from "three/addons/lines/Line2.js";
 import * as THREE from "three";
 import { OjoEstudio, OjoModelo } from "@/components/three/OjoEscena";
+import Lienzo, { Respaldo } from "@/components/three/Lienzo";
 
 export const brockScroll = { p: 0 };
 
@@ -146,6 +147,7 @@ function Cuenta({ i, pos, color, fija, onFijar }: { i: number; pos: THREE.Vector
 const poseOjo = () => ({ x: 0, y: 0, rx: 0, ry: 0, s: R_OJO, sep: 0 });
 
 function Escena({ id, modo, oscuro, reducir }: { id: string; modo: "auto" | "scroll"; oscuro: boolean; reducir: boolean }) {
+  const ultimoEncuadre = useRef("");
   const est = useRef<Estado>({ fija: 1, desv: 0, lineas: 0, manual: -100, ai: { x: 0, y: 0 }, ad: { x: 0, y: 0 } });
   const lineaI = useRef<Line2>(null);
   const lineaD = useRef<Line2>(null);
@@ -218,7 +220,14 @@ function Escena({ id, modo, oscuro, reducir }: { id: string; modo: "auto" | "scr
     }
 
     // cámara en modo scroll: viaja entre planos y se reencuadra
-    if (modo === "scroll") encuadrar(camera as THREE.PerspectiveCamera, size, planoScroll(brockScroll.p, dir), 0.8);
+    // (solo si cambió el scroll o el tamaño: el encuadre es una búsqueda)
+    if (modo === "scroll") {
+      const clave = `${brockScroll.p.toFixed(4)}|${size.width}x${size.height}`;
+      if (clave !== ultimoEncuadre.current) {
+        ultimoEncuadre.current = clave;
+        encuadrar(camera as THREE.PerspectiveCamera, size, planoScroll(brockScroll.p, dir), 0.8);
+      }
+    }
 
     // la etiqueta se aparta cuando aparece la cuenta doble (ocuparía su sitio)
     colocar(etq.fij, objetivo, camera, size.width, size.height, "calc(-100% - 28px)", 0, est.current.lineas * (1 - ss(0.15, 0.45, d)));
@@ -257,13 +266,15 @@ function Escena({ id, modo, oscuro, reducir }: { id: string; modo: "auto" | "scr
         <group position={OD} rotation-y={Math.PI}>
           <OjoModelo seguir={false} vivo={false} pupila={0.3} pose={poseOjo} mirar={() => est.current.ad} />
         </group>
+        {/* sombra de contacto: el modelo casi no se mueve, así que se dibuja UNA vez
+            (frames={1}) y dentro del mismo Suspense, para que ya incluya los ojos */}
+        {!oscuro && <ContactShadows frames={1} position={[0, -0.75, -0.6]} scale={10} blur={2.6} opacity={0.22} far={1.4} color="#02223b" />}
       </Suspense>
 
       <Line ref={lineaI} points={[OI, CUENTAS[1].pos]} color={linea} lineWidth={1.6} transparent />
       <Line ref={lineaD} points={[OD, CUENTAS[1].pos]} color={linea} lineWidth={1.6} transparent />
       <Line ref={guia} points={[OD, CUENTAS[1].pos]} color={linea} lineWidth={1} dashed dashSize={0.06} gapSize={0.08} transparent opacity={0} />
 
-      {!oscuro && <ContactShadows position={[0, -0.75, -0.6]} scale={10} blur={2.6} opacity={0.22} far={1.4} color="#02223b" />}
     </group>
     </group>
   );
@@ -318,9 +329,9 @@ export default function BrockEscena({ activo = true, modo = "auto", oscuro = fal
           Ojos alineados
         </div>
       </div>
-      <Canvas
+      <Lienzo
+        respaldo={<Respaldo src={modo === "scroll" ? "/3d/respaldo/brock-recorrido.webp" : "/3d/respaldo/brock.webp"} />}
         frameloop={activo ? "always" : "never"}
-        dpr={[1, 2]}
         shadows
         camera={{ fov: 30 }}
         gl={{ antialias: true, alpha: true, toneMapping: THREE.NeutralToneMapping }}
@@ -328,7 +339,7 @@ export default function BrockEscena({ activo = true, modo = "auto", oscuro = fal
         <OjoEstudio />
         {modo === "auto" && <CamaraHero />}
         <Escena id={id} modo={modo} oscuro={oscuro} reducir={reducir} />
-      </Canvas>
+      </Lienzo>
     </div>
   );
 }

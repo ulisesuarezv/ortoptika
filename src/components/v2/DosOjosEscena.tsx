@@ -9,10 +9,11 @@
  * El progreso llega por `dosOjosEstado.p` (lo escribe el scroll en el DOM).
  */
 import { useRef } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import { Line } from "@react-three/drei";
 import * as THREE from "three";
 import { OjoEstudio, OjoModelo, type OjoPose } from "@/components/three/OjoEscena";
+import Lienzo, { Respaldo } from "@/components/three/Lienzo";
 
 export const dosOjosEstado = { p: 0 };
 
@@ -114,15 +115,15 @@ function Par() {
 
 export default function DosOjosEscena({ activo }: { activo: boolean }) {
   return (
-    <Canvas
+    <Lienzo
+      respaldo={<Respaldo src="/3d/respaldo/dos-ojos.webp" />}
       frameloop={activo ? "always" : "never"}
-      dpr={[1, 2]}
       camera={{ position: [0, 1.6, 8.85], fov: 30 }}
       onCreated={({ camera }) => camera.lookAt(0, 0, 0.8)}
       gl={{ antialias: true, alpha: true, toneMapping: THREE.NeutralToneMapping }}
     >
       <OjoEstudio />
       <Par />
-    </Canvas>
+    </Lienzo>
   );
 }

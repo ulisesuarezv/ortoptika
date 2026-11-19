@@ -16,6 +16,7 @@
  */
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
+import { ESCENA_PROTAGONISTA } from "../escenas";
 import { brockScroll, guionScroll } from "./BrockEscena";
 
 const BrockEscena = dynamic(() => import("./BrockEscena"), { ssr: false });
@@ -64,11 +65,29 @@ export default function BrockRecorrido() {
   const cuentasA = useRef<(SVGCircleElement | null)[]>([]);
   const cuentasB = useRef<(SVGCircleElement | null)[]>([]);
   const [activo, setActivo] = useState(false);
+  const [precalentar, setPrecalentar] = useState(false);
 
   useEffect(() => {
     const el = zona.current;
     if (!el) return;
-    const io = new IntersectionObserver(([e]) => setActivo(e.isIntersecting), { rootMargin: "20% 0px" });
+    // Una sola escena 3D dibujando a la vez: el recorrido se activa cuando ya ocupa
+    // la pantalla (no cuando asoma) y avisa para que el hero se pause.
+    const io = new IntersectionObserver(
+      ([e]) => {
+        setActivo(e.isIntersecting);
+        window.dispatchEvent(new CustomEvent(ESCENA_PROTAGONISTA, { detail: e.isIntersecting }));
+      },
+      { rootMargin: "0px 0px -35% 0px" },
+    );
+    // Precalentar: con el navegador libre, dibuja unos frames fuera de pantalla para
+    // compilar shaders y cargar los ojos; así no hay tirón al llegar a la sección.
+    const ric = window.requestIdleCallback ?? ((f: () => void) => window.setTimeout(f, 1200));
+    const cric = window.cancelIdleCallback ?? window.clearTimeout;
+    let fin = 0;
+    const idle = ric(() => {
+      setPrecalentar(true);
+      fin = window.setTimeout(() => setPrecalentar(false), 400);
+    });
     io.observe(el);
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let suave = 0;
@@ -116,6 +135,9 @@ export default function BrockRecorrido() {
     return () => {
       io.disconnect();
       cancelAnimationFrame(raf);
+      cric(idle);
+      window.clearTimeout(fin);
+      window.dispatchEvent(new CustomEvent(ESCENA_PROTAGONISTA, { detail: false }));
     };
   }, []);
 
@@ -127,7 +149,7 @@ export default function BrockRecorrido() {
           className="absolute inset-0 [background-image:linear-gradient(rgba(255,255,255,.04)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.04)_1px,transparent_1px)] [background-size:80px_80px]"
         />
         <div aria-hidden="true" className="absolute inset-x-0 top-0 h-[54%] lg:left-[38%] lg:h-full">
-          <BrockEscena activo={activo} modo="scroll" oscuro />
+          <BrockEscena activo={activo || precalentar} modo="scroll" oscuro />
         </div>
 
         {/* lo que ve el paciente */}
