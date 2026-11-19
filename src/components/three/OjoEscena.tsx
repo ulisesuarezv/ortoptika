@@ -47,6 +47,11 @@ export type OjoProps = {
    * visible en unidades de mundo; devuelve posición, giro, escala y separación.
    */
   pose?: (p: number, v: { halfH: number; aspect: number }) => OjoPose;
+  /**
+   * Mirada externa (opcional): giro objetivo en radianes (x = horizontal,
+   * y = vertical). Si se pasa, el ojo deja de seguir al puntero.
+   */
+  mirar?: () => { x: number; y: number };
 };
 
 export type OjoPose = { x: number; y: number; rx: number; ry: number; s: number; sep: number };
@@ -92,7 +97,7 @@ const GLSL_POLAR = `
   }
 `;
 
-function Ojo({ pupila = 0.3, seguir = true, vivo = true, pose }: OjoProps) {
+function Ojo({ pupila = 0.3, seguir = true, vivo = true, pose, mirar }: OjoProps) {
   const [iris, altura] = useTexture(
     ["/3d/ojo/iris-color.webp", "/3d/ojo/iris-altura.webp"],
     (ts) => {
@@ -340,8 +345,11 @@ function Ojo({ pupila = 0.3, seguir = true, vivo = true, pose }: OjoProps) {
     }
     const sigue = (seguir ? 1 : 0) * (1 - 0.85 * sep);
     const k = reduce.current ? 2 : 9;
-    mirada.current.x += (pointer.x * 0.55 * sigue + sc.off.x - mirada.current.x) * Math.min(1, dt * k);
-    mirada.current.y += (pointer.y * 0.4 * sigue + sc.off.y - mirada.current.y) * Math.min(1, dt * k);
+    const obj = mirar ? mirar() : null;
+    const mx = obj ? obj.x + sc.off.x * 0.3 : pointer.x * 0.55 * sigue + sc.off.x;
+    const my = obj ? obj.y + sc.off.y * 0.3 : pointer.y * 0.4 * sigue + sc.off.y;
+    mirada.current.x += (mx - mirada.current.x) * Math.min(1, dt * k);
+    mirada.current.y += (my - mirada.current.y) * Math.min(1, dt * k);
     g.rotation.y = mirada.current.x;
     g.rotation.x = -mirada.current.y;
 
@@ -433,13 +441,10 @@ function Encuadre({ margen = 2.1, margenMovil = 1.55 }: { margen?: number; marge
   return null;
 }
 
-export default function OjoEscena(props: OjoProps) {
+/** Estudio de luz del ojo (reflejos + luces). Reutilizable en otras escenas. */
+export function OjoEstudio() {
   return (
-    <Canvas
-      dpr={[1, 2]}
-      camera={{ position: [0, 0, 8], fov: 30 }}
-      gl={{ antialias: true, alpha: true, toneMapping: THREE.NeutralToneMapping }}
-    >
+    <>
       <Environment resolution={256} frames={1}>
         {/* softbox redondo arriba a la izquierda: el brillo principal en la córnea */}
         <Lightformer form="circle" intensity={4} position={[-3, 3, 4]} scale={2.2} />
@@ -449,10 +454,25 @@ export default function OjoEscena(props: OjoProps) {
         <Lightformer form="rect" intensity={0.5} color="#c0dbec" position={[0, -4, 2]} scale={[6, 1, 1]} rotation-x={Math.PI / 2} />
         <Lightformer form="ring" intensity={0.5} position={[0, 0, -6]} scale={6} />
       </Environment>
-      <Encuadre />
       <ambientLight intensity={0.6} />
       <directionalLight position={[-3, 4, 5]} intensity={2.6} />
       <directionalLight position={[4, -1, 3]} intensity={0.4} color="#c0dbec" />
+    </>
+  );
+}
+
+export { Ojo as OjoModelo };
+
+export default function OjoEscena({ activo = true, ...props }: OjoProps & { activo?: boolean }) {
+  return (
+    <Canvas
+      frameloop={activo ? "always" : "never"}
+      dpr={[1, 2]}
+      camera={{ position: [0, 0, 8], fov: 30 }}
+      gl={{ antialias: true, alpha: true, toneMapping: THREE.NeutralToneMapping }}
+    >
+      <OjoEstudio />
+      <Encuadre />
       <Ojo {...props} />
     </Canvas>
   );

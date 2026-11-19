@@ -12,7 +12,7 @@
  * detiene, la escena también. El DOM se escribe desde un rAF (sin re-render de
  * React) y el 3D lee el mismo progreso desde `ojoEstado`.
  */
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Ojo from "@/components/three/Ojo";
 import type { OjoPose } from "@/components/three/OjoEscena";
@@ -89,6 +89,16 @@ export default function HeroV2() {
   const ctaFinal = useRef<HTMLDivElement>(null);
   const pista = useRef<HTMLParagraphElement>(null);
   const etiquetas = useRef<(HTMLLIElement | null)[]>([]);
+  const [activo, setActivo] = useState(true);
+
+  // el canvas deja de dibujar cuando el hero sale de pantalla
+  useEffect(() => {
+    const el = zona.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => setActivo(e.isIntersecting), { rootMargin: "10% 0px" });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
   useEffect(() => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -189,7 +199,7 @@ export default function HeroV2() {
           className="absolute inset-0 opacity-0 [background-image:linear-gradient(rgba(2,34,59,.06)_1px,transparent_1px),linear-gradient(90deg,rgba(2,34,59,.06)_1px,transparent_1px)] [background-size:80px_80px]"
         />
 
-        <Ojo className="absolute inset-0" pose={poseHero} />
+        <Ojo className="absolute inset-0" pose={poseHero} activo={activo} />
 
         {/* Cabecera propia de la v2 */}
         <nav className="absolute inset-x-0 top-0 z-20 flex items-center justify-between px-5 py-5 text-sm lg:px-14 lg:py-7">
