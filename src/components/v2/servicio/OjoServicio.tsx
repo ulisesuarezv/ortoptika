@@ -2,7 +2,7 @@
 
 /**
  * Pieza del ojo de cada landing: el mismo modelo del hero, con una mirada que
- * cuenta el servicio. Estrabismo: el ojo se desvía y vuelve. Ambliopía: sigue
+ * cuenta el servicio. Estrabismo: cordón de Brock en 3D (BrockEscena), sin ojo. Ambliopía: sigue
  * al cursor con retraso, como un ojo que aún no trabaja a la par. Terapia
  * visual: recorre un ocho, como en un ejercicio de seguimiento. Optometría
  * pediátrica: sigue al cursor, juguetón y con la pupila más abierta. Visión
@@ -14,6 +14,7 @@ import { dosOjosEstado } from "../DosOjosEscena";
 
 const OjoEscena = dynamic(() => import("@/components/three/OjoEscena"), { ssr: false });
 const DosOjosEscena = dynamic(() => import("../DosOjosEscena"), { ssr: false });
+const BrockEscena = dynamic(() => import("./BrockEscena"), { ssr: false });
 
 const ss = (a: number, b: number, x: number) => {
   const t = Math.min(1, Math.max(0, (x - a) / (b - a)));
@@ -99,7 +100,9 @@ export default function OjoServicio({ slug, className = "" }: { slug: string; cl
   const m = MIRADAS[slug];
   return (
     <div ref={caja} aria-hidden="true" className={className}>
-      {slug === "vision-binocular" ? (
+      {slug === "estrabismo" ? (
+        <BrockEscena activo={activo} />
+      ) : slug === "vision-binocular" ? (
         <DosOjosEscena activo={activo} />
       ) : (
         <OjoEscena activo={activo} pupila={m?.pupila ?? 0.3} seguir={m?.seguir ?? true} mirar={m?.mirar} />

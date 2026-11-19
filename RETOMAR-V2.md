@@ -36,6 +36,12 @@ Estado al 19-nov-2026: home v2 completa y aprobada en `/lab/v2`. Lint y build en
 3. Header/footer v2 globales y llevar la home de `/lab/v2` a `/`.
 4. **Fotos con pacientes: AUTORIZADAS por el usuario (19-nov).** Ya están en el Consultorio de la home (sinoptóforo + 3 verticales). Usar `PHOTOS` de `src/lib/photos.ts` (alt, tamaños, versión -sm) y el componente `Foto` de `Secciones.tsx` (`<picture>`).
 
+## Hecho el 19-nov (sesión 2): estrabismo sin el ojo
+- Tablero de piezas sin ojo: `~/Desktop/KayaoCC/docs/ortoptika-v2/tablero-sin-ojo/`. El usuario eligió empezar por la 01 (cordón de Brock) y pidió **mantener el nivel de la home: usar más modelos 3D, no diagramas planos**.
+- `src/components/v2/servicio/BrockEscena.tsx`: cordón de Brock 3D procedural (cuentas lacadas, luz de `OjoEstudio`, sombra de contacto); el OD se va hacia adentro y aparece la cuenta doble; hover sobre una cuenta la fija; encuadre automático por proporción; etiquetas en DOM proyectadas (NO usar `Html` de drei: da "synchronously unmount a root").
+- Copy validado por la doctora (doc 4 completo): no tocarlo.
+- Siguientes piezas 3D: cartilla (ambliopía), tabla de Hart (terapia visual), pájaro y jaula / sinoptóforo (binocular), cuaderno (pediátrica).
+
 ## Pendientes abiertos
-- Copy nuevo = borrador; validar con la doctora.
+- Copy de las landings (services-content.ts) VALIDADO; el copy nuevo de la home v2 sigue siendo borrador.
 - Faltan músculos extraoculares y retina en el modelo.

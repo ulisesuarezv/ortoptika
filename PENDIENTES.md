@@ -28,22 +28,19 @@
       jueves, 8:00–12:00 y 14:00–18:00. Lunes, viernes y fin de semana
       cerrado. Reflejado en `/contacto`, `ContactSection` y
       `openingHoursSpecification` del schema.
-- [ ] **Validación clínica del copy** por la doctora — sigue **pendiente de
-      firma**. El copy de las 5 landings (`src/lib/services-content.ts`) **ya
-      está publicado** sin ella: se invirtió el orden a propósito. El documento
+- [x] ~~Validación clínica del copy~~ → **aprobada por la doctora** (confirmado
+      el 19-nov-2026): las **7 afirmaciones clínicas** del documento
       `docs-doctora/4-Validacion-clinica-del-contenido-Ortoptika.pdf`
-      (rev. 12-sep-2026) recoge **7 afirmaciones clínicas** citadas textualmente
-      con casillas Apruebo/Ajustar, más la pregunta de si los 5 servicios son
-      los correctos. Verificado el 12-sep: las 7 citas coinciden palabra por
-      palabra con el código. Si el copy cambia, hay que reimprimir el PDF.
-      Puntos que cubre:
-  - [ ] Estrabismo (endotropía/hipermetropía, intermitentes, diplopía súbita = urgencia)
-  - [ ] Ambliopía (corrección → oclusión → terapia; plasticidad en adultos)
-  - [ ] Terapia visual — evidencia CITT en insuficiencia de convergencia; disclaimer TDAH/dislexia
-  - [ ] Visión binocular (4 disfunciones; prismas)
-  - [ ] Optometría pediátrica (calendario de exámenes; **contrastar con la
-        norma colombiana** — es el punto más delicado del documento)
-  - [ ] ¿Faltan o sobran servicios de los 5 actuales? (sin respuesta)
+      (rev. 12-sep-2026), sin ajustes. El copy de `src/lib/services-content.ts`
+      queda congelado: **no cambiar ni una palabra de esas citas** sin volver
+      a validarlas (la v2 reutiliza el mismo copy, así que el SEO no cambia).
+  - [x] Estrabismo (endotropía/hipermetropía, intermitentes, diplopía súbita = urgencia)
+  - [x] Ambliopía (corrección → oclusión → terapia; plasticidad en adultos)
+  - [x] Terapia visual — evidencia CITT en insuficiencia de convergencia; disclaimer TDAH/dislexia
+  - [x] Visión binocular (4 disfunciones; prismas)
+  - [x] Optometría pediátrica (calendario de exámenes)
+  - [ ] ¿Faltan o sobran servicios de los 5 actuales? (confirmar si su firma
+        también respondió esta pregunta)
 
 ## 🟡 SEO / analítica
 
