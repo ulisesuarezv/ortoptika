@@ -183,9 +183,14 @@ function Ojo({ pupila = 0.3, seguir = true, vivo = true }: OjoProps) {
           `
           vec2 h = vObj.xy / ${R_IRIS.toFixed(4)};
           float rad = length(h);
-          if (rad < uPupila) discard;
           diffuseColor.rgb = gl_FrontFacing ? colorIris(uIris, uAltura, h, uPupila) : vec3(0.05, 0.04, 0.05);
           diffuseColor.a *= smoothstep(0.0, 0.08, uSep);
+          // pupila: negra al empezar el despiece (tapa el interior), luego se abre como agujero
+          if (rad < uPupila) {
+            float a = 1.0 - smoothstep(0.25, 0.5, uSep);
+            if (a < 0.01) discard;
+            diffuseColor = vec4(vec3(0.006, 0.008, 0.012), a);
+          }
           `,
         );
     };
@@ -266,12 +271,17 @@ function Ojo({ pupila = 0.3, seguir = true, vivo = true }: OjoProps) {
     const halfH = Math.tan(THREE.MathUtils.degToRad(cam.fov / 2)) * cam.position.z;
     const aspect = size.width / size.height;
     if (aspect >= 1) {
+      // escritorio: a la izquierda, capas abiertas hacia la derecha (texto a la derecha)
       r.position.set(-halfH * aspect * 0.58 * mover, 0, 0);
+      r.rotation.set(0.1 * sep, 1.12 * sep, 0);
+      r.scale.setScalar(1 - 0.24 * sep);
     } else {
-      r.position.set(0, halfH * 0.42 * mover, 0);
+      // móvil: despiece VERTICAL, la esclera abajo y las capas suben (texto abajo)
+      r.position.set(0, (0.1 * halfH - 1.15) * mover, 0);
+      r.rotation.set(-1.0 * sep, 0.12 * sep, 0);
+      r.scale.setScalar(1 - 0.1 * sep);
     }
-    r.rotation.set(0.1 * sep, 1.12 * sep, 0); // 3/4: las capas se abren hacia la derecha
-    r.scale.setScalar(1 - 0.24 * sep);
+    const fs = aspect >= 1 ? 1 : 0.92; // en vertical las capas van más juntas
 
     // microsacadas: saltos pequeños cada 0.6–2.2 s
     const sc = sacada.current;
@@ -289,13 +299,13 @@ function Ojo({ pupila = 0.3, seguir = true, vivo = true }: OjoProps) {
     // capas
     const zc = 1 + (ZOOM_CAPAS - 1) * sep;
     esclera.current.scale.setScalar(1 - 0.08 * sep);
-    corneaG.current.position.z = SEP.cornea * sep - CORNEA_C * (zc - 1) * 0.5;
+    corneaG.current.position.z = SEP.cornea * fs * sep - CORNEA_C * (zc - 1) * 0.5;
     corneaG.current.scale.setScalar(1 + (zc - 1) * 0.5); // la córnea ya es grande: crece menos
     irisM.current.scale.setScalar(zc);
     cristalino.current.scale.set(0.36 * zc, 0.36 * zc, 0.16 * zc);
-    irisM.current.position.z = Z_IRIS + SEP.iris * sep;
+    irisM.current.position.z = Z_IRIS + SEP.iris * fs * sep;
     irisM.current.visible = sep > 0.001;
-    cristalino.current.position.z = Z_IRIS - 0.22 + SEP.cristalino * sep;
+    cristalino.current.position.z = Z_IRIS - 0.22 + SEP.cristalino * fs * sep;
     (cristalino.current.material as THREE.MeshPhysicalMaterial).opacity = 0.32 * ss(0.0, 0.3, sep);
     cristalino.current.visible = sep > 0.001;
     u.uSep.value = sep;
@@ -339,15 +349,16 @@ function Ojo({ pupila = 0.3, seguir = true, vivo = true }: OjoProps) {
 }
 
 /** Aleja la cámara para que el ojo quepa con margen en cualquier proporción. */
-function Encuadre({ margen = 2.1 }: { margen?: number }) {
+function Encuadre({ margen = 2.1, margenMovil = 1.55 }: { margen?: number; margenMovil?: number }) {
   const { camera, size } = useThree();
   useEffect(() => {
     const cam = camera as THREE.PerspectiveCamera;
     const tanV = Math.tan(THREE.MathUtils.degToRad(cam.fov / 2));
     const aspect = size.width / size.height;
-    cam.position.set(0, 0, margen / (tanV * Math.min(aspect, 1)));
+    const m = aspect < 1 ? margenMovil : margen; // en móvil el ojo ocupa más ancho
+    cam.position.set(0, 0, m / (tanV * Math.min(aspect, 1)));
     cam.updateProjectionMatrix();
-  }, [camera, size, margen]);
+  }, [camera, size, margen, margenMovil]);
   return null;
 }
 
