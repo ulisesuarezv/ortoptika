@@ -12,7 +12,7 @@
  * cordones que se cruzan en X en la cuenta fijada; con la endotropía la X se
  * cruza antes de la cuenta y la cuenta se ve doble.
  *
- * COPY EN BORRADOR: no está en el documento 4 validado; pasarlo a la doctora.
+ * Copy de los pasos VALIDADO por la doctora (19-nov-2026): no tocarlo sin ella.
  */
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";

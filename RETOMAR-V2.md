@@ -1,5 +1,16 @@
 # Retomar la v2 (rama feat/v2)
 
+## ▶ EMPEZAR AQUÍ (próxima sesión)
+Estrabismo CERRADO el 19-nov: la doctora vio la página en vivo y aprobó el copy del recorrido del cordón. No hay nada a medias.
+
+**Siguiente tarea:** el usuario tiene **elementos nuevos del consultorio** para usarlos como modelos 3D dedicados en las secciones que faltan (ambliopía, terapia visual, visión binocular, pediátrica).
+1. Pedir las fotos y referencias si aún no están en `~/Desktop/KayaoCC/docs/ortoptika-v2/consultorio-modelos/` (ver el README de esa carpeta): fotos de varios ángulos, medidas aproximadas, y a qué servicio va cada objeto.
+2. Asignar un objeto por servicio. La lista de abajo («Siguientes piezas 3D») era la propuesta ANTES de conocer estos objetos: los objetos reales del consultorio tienen prioridad.
+3. Seguir la receta de estrabismo: escena procedural en R3F con la luz de `OjoEstudio`, materiales lacados, `Lienzo` y `encuadrar()`, más un recorrido con scroll si la pieza lo amerita. Mostrar primero una captura fija y luego el recorrido. El copy nuevo va SIEMPRE a la doctora.
+4. Plantilla a copiar: `BrockEscena.tsx` + `BrockRecorrido.tsx` (respetar las reglas de rendimiento de abajo).
+
+Para enseñarle a la doctora en local: `pnpm build` y luego `python3 -m http.server 3313 --bind 0.0.0.0 -d out` → `http://localhost:3313/lab/v2/servicios/<slug>/` (o la IP local de la Mac en el celular, mismo wifi).
+
 Estado al 19-nov-2026: home v2 completa y aprobada en `/lab/v2`. Lint y build en verde. `/lab/ojo` (página de la otra sesión) sigue funcionando con los cambios de `OjoEscena.tsx`.
 
 `feat/ojo-3d` NO avanzó después de 2726687 (punto de partida de esta rama) y no tiene cambios sin guardar: `feat/v2` ya contiene todo el trabajo del ojo, no hay nada que integrar. Si alguien vuelve a tocar el ojo, que lo haga **sobre `feat/v2`** para evitar conflictos.
@@ -41,11 +52,12 @@ Estado al 19-nov-2026: home v2 completa y aprobada en `/lab/v2`. Lint y build en
 - `src/components/v2/servicio/BrockEscena.tsx`: cordón de Brock 3D procedural (cuentas lacadas, luz de `OjoEstudio`, sombra de contacto); el OD se va hacia adentro y aparece la cuenta doble; hover sobre una cuenta la fija; encuadre automático por proporción; etiquetas en DOM proyectadas (NO usar `Html` de drei: da "synchronously unmount a root").
 - Copy validado por la doctora (doc 4 completo): no tocarlo.
 - (misma sesión) Ojos 3D reales (OjoModelo, R 0.4) en lugar de puntos: la escena se gira 180° para que miren a la luz y a la cámara (`mundo()` convierte puntos). Hero: ciclo solo naranja/verde (la azul saca la cuenta doble del cuadro).
-- `BrockRecorrido.tsx`: sección navy sticky de 460svh tras el hero (solo estrabismo), mismo patrón que DosOjos de la home; 4 pasos + recuadro «Lo que se ve» (la X del cordón). La escena en modo "scroll" lee `brockScroll.p` y la cámara viaja entre `PLANOS`. **Copy de los pasos = borrador para la doctora** (ver PENDIENTES).
+- `BrockRecorrido.tsx`: sección navy sticky de 460svh tras el hero (solo estrabismo), mismo patrón que DosOjos de la home; 4 pasos + recuadro «Lo que se ve» (la X del cordón). La escena en modo "scroll" lee `brockScroll.p` y la cámara viaja entre `PLANOS`. Copy de los pasos **APROBADO por la doctora (19-nov)**.
 - Estado de las escenas en refs propias + registro `ETIQUETAS` por `useId` (el React Compiler no deja mutar objetos que llegan por props).
 - Rendimiento (19-nov): todo lienzo 3D va por `src/components/three/Lienzo.tsx` (resolución adaptativa con PerformanceMonitor: dpr 2 y solo baja si ese equipo no da; respaldo `public/3d/respaldo/*.webp` si no hay WebGL). **Regla: una sola escena 3D dibujando a la vez** — la sección que toma la pantalla emite `ESCENA_PROTAGONISTA` (`src/components/v2/escenas.ts`) y las demás se pausan; activarla con `rootMargin "0px 0px -35% 0px"` y precalentarla en `requestIdleCallback`. Sombras de contacto con `frames={1}`. Medición: `perf3.mjs` (móvil 390, CPU ×4) → estrabismo de 26–205 frames lentos a 1.
-- Siguientes piezas 3D: cartilla (ambliopía), tabla de Hart (terapia visual), pájaro y jaula / sinoptóforo (binocular), cuaderno (pediátrica).
+- Siguientes piezas 3D (propuesta previa; ahora mandan los objetos reales del consultorio, ver EMPEZAR AQUÍ): cartilla (ambliopía), tabla de Hart (terapia visual), pájaro y jaula / sinoptóforo (binocular), cuaderno (pediátrica).
 
 ## Pendientes abiertos
-- Copy de las landings (services-content.ts) VALIDADO; el copy nuevo de la home v2 sigue siendo borrador.
+- Copy de las landings (services-content.ts) y del recorrido del cordón VALIDADO;
+- ¿Faltan o sobran servicios? (PENDIENTES): confirmarlo con la doctora; el copy nuevo de la home v2 sigue siendo borrador.
 - Faltan músculos extraoculares y retina en el modelo.

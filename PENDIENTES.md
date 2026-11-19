@@ -41,12 +41,9 @@
   - [x] Optometría pediátrica (calendario de exámenes)
   - [ ] ¿Faltan o sobran servicios de los 5 actuales? (confirmar si su firma
         también respondió esta pregunta)
-- [ ] **Copy NUEVO sin validar (v2, 19-nov):** los 4 pasos del recorrido «El
-      ejercicio del cordón» en la landing de Estrabismo
+- [x] **Copy del recorrido «El ejercicio del cordón» (v2) APROBADO por la
+      doctora el 19-nov-2026** en revisión en vivo
       (`src/components/v2/servicio/BrockRecorrido.tsx`, constante `PASOS`).
-      Explica el cordón de Brock (X en la cuenta fijada; con endotropía la X se
-      cruza antes y la cuenta se ve doble; supresión). Pasarlo a la doctora
-      antes de publicar la v2.
 
 ## 🟡 SEO / analítica
 
