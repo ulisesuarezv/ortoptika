@@ -25,9 +25,10 @@ const sans = Inter_Tight({
 export default function Page() {
   return (
     <div className={`${serif.variable} ${sans.variable} v2`}>
-      {/* La v2 trae su propia cabecera: se ocultan la del sitio actual, el
-          botón flotante y el cursor (solo en esta ruta de laboratorio). */}
-      <style>{`body > header, body > a[href*="wa.me"], body > div[aria-hidden="true"].pointer-events-none { display: none !important; }`}</style>
+      {/* La v2 trae su propia cabecera: se ocultan la del sitio actual y el
+          botón flotante. El cursor custom de la v1 se apaga y vuelve el nativo
+          (la v1 pone cursor:none en <html> cuando su cursor está activo). */}
+      <style>{`body > header, body > a[href*="wa.me"], html.has-custom-cursor .cursor-root { display: none !important; } html.has-custom-cursor { cursor: auto !important; }`}</style>
       <HeroV2 />
       <section className="flex min-h-[60svh] items-center justify-center bg-[#f6f2ea] px-6 text-center text-[#02223b]">
         <p className="max-w-xl font-[family-name:var(--font-v2-sans)] text-lg text-[#33506a]">
