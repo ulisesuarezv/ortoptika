@@ -19,8 +19,15 @@ Estado al 19-nov-2026: home v2 completa y aprobada en `/lab/v2`. Lint y build en
 - Ojos en globals v1: h1/h2 en navy llevan color de slate → poner `text-white` explícito.
 - 3D: `OjoModelo` + `OjoEstudio` de `components/three/OjoEscena.tsx` con `pose`/`mirar`; canvas con `frameloop` según IntersectionObserver.
 
+## Hecho el 19-nov (tarde): landings de servicio v2
+- `/lab/v2/servicios/[slug]` (5) con `src/components/v2/servicio/LandingV2.tsx`: mismo copy y orden de `services-content.ts`, índice lateral fijo (`Indice.tsx`), foto de `SERVICE_PHOTOS`, otros servicios y cierre navy con `Pie` (extraído de Secciones).
+- Pieza del ojo por servicio (`OjoServicio.tsx`): estrabismo se desvía y vuelve; ambliopía sigue al cursor con retraso; terapia visual recorre un ocho; visión binocular = los dos ojos convergiendo (DosOjosEscena); pediátrica sigue al cursor con pupila grande.
+- Fuentes v2 y el `<style>` que oculta la cabecera v1 pasaron a `src/app/lab/v2/layout.tsx`.
+- Enlaces internos de la v2 con `src/components/v2/rutas.ts` (`BASE = "/lab/v2"`; al publicar, `BASE = ""`).
+- Al publicar: en `src/app/servicios/[slug]/page.tsx` cambiar `ServiceLanding` por `LandingV2` (metadata y JSON-LD se quedan igual).
+
 ## Siguiente: resto de páginas al mismo nivel
-1. Landings `src/app/servicios/[slug]` (5): mismo copy/SEO de `services-content.ts` y JSON-LD; una pieza del ojo por servicio; índice lateral fijo.
+1. (hecho) Landings de servicio — falta el visto bueno del usuario.
 2. `sobre-mi`, `contacto`, `blog`, `privacidad`, `not-found`.
 3. Header/footer v2 globales y llevar la home de `/lab/v2` a `/`.
 4. **Fotos con pacientes: AUTORIZADAS por el usuario (19-nov).** Ya están en el Consultorio de la home (sinoptóforo + 3 verticales). Usar `PHOTOS` de `src/lib/photos.ts` (alt, tamaños, versión -sm) y el componente `Foto` de `Secciones.tsx` (`<picture>`).

@@ -210,7 +210,7 @@ export default function HeroV2() {
           </Link>
           <div className="hidden gap-9 text-[#02223b]/75 lg:flex">
             <a href="#senales">Señales</a>
-            <Link href="/servicios/estrabismo/">Servicios</Link>
+            <a href="#servicios">Servicios</a>
             <Link href="/sobre-mi/">Yeimmy</Link>
             <Link href="/contacto/">Consultorio</Link>
           </div>

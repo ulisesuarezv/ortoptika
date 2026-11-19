@@ -8,6 +8,7 @@ import Link from "next/link";
 import { SERVICES, SITE_CONFIG, whatsappLink } from "@/lib/constants";
 import { PHOTOS, type Photo } from "@/lib/photos";
 import Aparece from "./Aparece";
+import { servicioV2 } from "./rutas";
 
 const serif = "font-[family-name:var(--font-v2-serif)]";
 const eyebrow = "text-[11px] font-semibold uppercase tracking-[0.22em]";
@@ -17,7 +18,7 @@ const eyebrow = "text-[11px] font-semibold uppercase tracking-[0.22em]";
 /* ------------------------------------------------------------------ */
 export function Servicios() {
   return (
-    <section aria-labelledby="servicios-titulo" className="bg-[#f6f2ea] px-5 py-24 text-[#02223b] lg:px-14 lg:py-40">
+    <section id="servicios" aria-labelledby="servicios-titulo" className="bg-[#f6f2ea] px-5 py-24 text-[#02223b] lg:px-14 lg:py-40">
       <div className="mx-auto max-w-[90rem]">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
@@ -39,7 +40,7 @@ export function Servicios() {
           {SERVICES.map((s, i) => (
             <Aparece as="li" key={s.slug} retraso={i * 60} className="border-b border-[#02223b]/15">
               <Link
-                href={`/servicios/${s.slug}/`}
+                href={servicioV2(s.slug)}
                 className="group relative grid grid-cols-[1fr_auto] items-center gap-x-6 gap-y-2 overflow-hidden py-7 lg:grid-cols-[5rem_1fr_1fr_auto] lg:py-10"
               >
                 {/* fondo navy que sube al pasar el ratón */}
@@ -271,19 +272,26 @@ export function Cierre() {
           </div>
         </div>
 
-        <div className="mt-24 flex flex-wrap items-end justify-between gap-6 border-t border-white/15 pt-8 text-xs text-white/50">
-          <span className={`${serif} text-[clamp(3rem,1rem+9vw,10rem)] leading-none tracking-[-0.03em] text-white/90`}>Ortoptika</span>
-          <span className="flex flex-wrap gap-x-6 gap-y-2">
-            <a href={SITE_CONFIG.social.instagram} target="_blank" rel="noopener noreferrer" className="hover:text-white">
-              Instagram
-            </a>
-            <Link href="/privacidad/" className="hover:text-white">
-              Tratamiento de datos
-            </Link>
-            <span>© {new Date().getFullYear()} {SITE_CONFIG.name}</span>
-          </span>
-        </div>
+        <Pie />
       </div>
     </section>
+  );
+}
+
+/** Pie de la v2 (cierra todas las páginas, sobre fondo navy). */
+export function Pie() {
+  return (
+    <div className="mt-24 flex flex-wrap items-end justify-between gap-6 border-t border-white/15 pt-8 text-xs text-white/50">
+      <span className={`${serif} text-[clamp(3rem,1rem+9vw,10rem)] leading-none tracking-[-0.03em] text-white/90`}>Ortoptika</span>
+      <span className="flex flex-wrap gap-x-6 gap-y-2">
+        <a href={SITE_CONFIG.social.instagram} target="_blank" rel="noopener noreferrer" className="hover:text-white">
+          Instagram
+        </a>
+        <Link href="/privacidad/" className="hover:text-white">
+          Tratamiento de datos
+        </Link>
+        <span>© {new Date().getFullYear()} {SITE_CONFIG.name}</span>
+      </span>
+    </div>
   );
 }

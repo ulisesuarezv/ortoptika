@@ -8,6 +8,7 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { dosOjosEstado } from "./DosOjosEscena";
+import { servicioV2 } from "./rutas";
 
 const DosOjosEscena = dynamic(() => import("./DosOjosEscena"), { ssr: false });
 
@@ -118,9 +119,9 @@ export default function DosOjos() {
                 {i === PASOS.length - 1 && (
                   <p className="mt-4 flex flex-wrap gap-1.5 pl-9 text-xs lg:mt-5 lg:gap-2 lg:text-sm">
                     {[
-                      ["Visión binocular", "/servicios/vision-binocular/"],
-                      ["Terapia visual", "/servicios/terapia-visual/"],
-                      ["Estrabismo", "/servicios/estrabismo/"],
+                      ["Visión binocular", servicioV2("vision-binocular")],
+                      ["Terapia visual", servicioV2("terapia-visual")],
+                      ["Estrabismo", servicioV2("estrabismo")],
                     ].map(([t, href]) => (
                       <Link key={href} href={href} className="rounded-full border border-white/25 px-3 py-1.5 transition-colors lg:px-4 lg:py-2 hover:border-[#a8cf45] hover:text-[#a8cf45]">
                         {t} →
