@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <section className="relative h-[100svh] w-full overflow-hidden bg-primary-950">
+    <section className="relative w-full bg-primary-950">
       <LabOjo />
     </section>
   );
