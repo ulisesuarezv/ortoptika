@@ -27,7 +27,11 @@ Estado al 19-nov-2026: home v2 completa y aprobada en `/lab/v2`. Lint y build en
 - Al publicar: en `src/app/servicios/[slug]/page.tsx` cambiar `ServiceLanding` por `LandingV2` (metadata y JSON-LD se quedan igual).
 
 ## Siguiente: resto de páginas al mismo nivel
-1. (hecho) Landings de servicio — falta el visto bueno del usuario.
+1. Landings de servicio: el usuario dijo "se ve bien" (19-nov), **pero el ojo 3D ya está sobreusado** (hero, dos ojos y ahora las 5 landings). **Primera tarea de la próxima sesión:** proponer ideas visuales que NO sean el ojo, en un tablero, antes de construir nada. Puntos de partida:
+   - Pruebas reales del consultorio como interacción: Lang/estereograma (profundidad), cartilla que se desenfoca (acomodación), regla de convergencia o cordón de Brock, filtros rojo-verde.
+   - "Ver como tu hijo ve": simular visión doble o un ojo borroso sobre una foto del consultorio.
+   - Tipografía o diagramas como protagonistas (lámina técnica 2D, trazos de mirada) y más fotos reales.
+   - Dejar el ojo 3D SOLO en la home y, como mucho, en un servicio.
 2. `sobre-mi`, `contacto`, `blog`, `privacidad`, `not-found`.
 3. Header/footer v2 globales y llevar la home de `/lab/v2` a `/`.
 4. **Fotos con pacientes: AUTORIZADAS por el usuario (19-nov).** Ya están en el Consultorio de la home (sinoptóforo + 3 verticales). Usar `PHOTOS` de `src/lib/photos.ts` (alt, tamaños, versión -sm) y el componente `Foto` de `Secciones.tsx` (`<picture>`).
