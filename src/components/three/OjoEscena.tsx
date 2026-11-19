@@ -31,7 +31,8 @@ const CORNEA_C = 0.3888;
 const CORNEA_R = 0.6912;
 const CORNEA_ANG = Math.asin(R_IRIS / CORNEA_R);
 // separación de cada capa en el despiece (eje óptico, +Z = hacia delante)
-const SEP = { cornea: 2.15, iris: 1.45, cristalino: 0.85 };
+const SEP = { cornea: 2.3, iris: 1.65, cristalino: 0.95 };
+const ZOOM_CAPAS = 1.45; // las piezas internas crecen al separarse (convención de despiece)
 
 export type OjoProps = {
   /** Radio de la pupila relativo al iris (0.18 contraída … 0.55 dilatada). */
@@ -265,12 +266,12 @@ function Ojo({ pupila = 0.3, seguir = true, vivo = true }: OjoProps) {
     const halfH = Math.tan(THREE.MathUtils.degToRad(cam.fov / 2)) * cam.position.z;
     const aspect = size.width / size.height;
     if (aspect >= 1) {
-      r.position.set(-halfH * aspect * 0.52 * mover, 0, 0);
+      r.position.set(-halfH * aspect * 0.58 * mover, 0, 0);
     } else {
       r.position.set(0, halfH * 0.42 * mover, 0);
     }
-    r.rotation.set(0.12 * sep, 1.0 * sep, 0); // 3/4: las capas se abren hacia la derecha
-    r.scale.setScalar(1 - 0.18 * sep);
+    r.rotation.set(0.1 * sep, 1.12 * sep, 0); // 3/4: las capas se abren hacia la derecha
+    r.scale.setScalar(1 - 0.24 * sep);
 
     // microsacadas: saltos pequeños cada 0.6–2.2 s
     const sc = sacada.current;
@@ -286,7 +287,12 @@ function Ojo({ pupila = 0.3, seguir = true, vivo = true }: OjoProps) {
     g.rotation.x = -mirada.current.y;
 
     // capas
-    corneaG.current.position.z = SEP.cornea * sep;
+    const zc = 1 + (ZOOM_CAPAS - 1) * sep;
+    esclera.current.scale.setScalar(1 - 0.08 * sep);
+    corneaG.current.position.z = SEP.cornea * sep - CORNEA_C * (zc - 1) * 0.5;
+    corneaG.current.scale.setScalar(1 + (zc - 1) * 0.5); // la córnea ya es grande: crece menos
+    irisM.current.scale.setScalar(zc);
+    cristalino.current.scale.set(0.36 * zc, 0.36 * zc, 0.16 * zc);
     irisM.current.position.z = Z_IRIS + SEP.iris * sep;
     irisM.current.visible = sep > 0.001;
     cristalino.current.position.z = Z_IRIS - 0.22 + SEP.cristalino * sep;
