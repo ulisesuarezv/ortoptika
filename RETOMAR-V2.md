@@ -40,6 +40,9 @@ Estado al 19-nov-2026: home v2 completa y aprobada en `/lab/v2`. Lint y build en
 - Tablero de piezas sin ojo: `~/Desktop/KayaoCC/docs/ortoptika-v2/tablero-sin-ojo/`. El usuario eligió empezar por la 01 (cordón de Brock) y pidió **mantener el nivel de la home: usar más modelos 3D, no diagramas planos**.
 - `src/components/v2/servicio/BrockEscena.tsx`: cordón de Brock 3D procedural (cuentas lacadas, luz de `OjoEstudio`, sombra de contacto); el OD se va hacia adentro y aparece la cuenta doble; hover sobre una cuenta la fija; encuadre automático por proporción; etiquetas en DOM proyectadas (NO usar `Html` de drei: da "synchronously unmount a root").
 - Copy validado por la doctora (doc 4 completo): no tocarlo.
+- (misma sesión) Ojos 3D reales (OjoModelo, R 0.4) en lugar de puntos: la escena se gira 180° para que miren a la luz y a la cámara (`mundo()` convierte puntos). Hero: ciclo solo naranja/verde (la azul saca la cuenta doble del cuadro).
+- `BrockRecorrido.tsx`: sección navy sticky de 460svh tras el hero (solo estrabismo), mismo patrón que DosOjos de la home; 4 pasos + recuadro «Lo que se ve» (la X del cordón). La escena en modo "scroll" lee `brockScroll.p` y la cámara viaja entre `PLANOS`. **Copy de los pasos = borrador para la doctora** (ver PENDIENTES).
+- Estado de las escenas en refs propias + registro `ETIQUETAS` por `useId` (el React Compiler no deja mutar objetos que llegan por props).
 - Siguientes piezas 3D: cartilla (ambliopía), tabla de Hart (terapia visual), pájaro y jaula / sinoptóforo (binocular), cuaderno (pediátrica).
 
 ## Pendientes abiertos

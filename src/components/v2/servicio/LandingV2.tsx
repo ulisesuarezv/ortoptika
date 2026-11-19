@@ -14,6 +14,7 @@ import Aparece from "../Aparece";
 import { Pie } from "../Secciones";
 import { rutaV2, servicioV2 } from "../rutas";
 import Indice from "./Indice";
+import BrockRecorrido from "./BrockRecorrido";
 import OjoServicio from "./OjoServicio";
 
 const serif = "font-[family-name:var(--font-v2-serif)]";
@@ -134,6 +135,9 @@ export default function LandingV2({ content }: { content: ServiceContent }) {
           </div>
         </div>
       </header>
+
+      {/* Estrabismo: el ejercicio del cordón de Brock, contado con scroll */}
+      {content.slug === "estrabismo" && <BrockRecorrido />}
 
       {/* ================= CUERPO CON ÍNDICE ================= */}
       <div className="bg-white px-5 lg:px-14">
