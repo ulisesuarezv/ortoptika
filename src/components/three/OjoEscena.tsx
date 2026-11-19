@@ -41,7 +41,32 @@ export type OjoProps = {
   seguir?: boolean;
   /** Microsacadas y respiración de la pupila. */
   vivo?: boolean;
+  /**
+   * Pose externa (opcional): si se pasa, sustituye la colocación por defecto
+   * (izquierda/arriba según ojoEstado.p). Recibe el progreso y la media altura
+   * visible en unidades de mundo; devuelve posición, giro, escala y separación.
+   */
+  pose?: (p: number, v: { halfH: number; aspect: number }) => OjoPose;
 };
+
+export type OjoPose = { x: number; y: number; rx: number; ry: number; s: number; sep: number };
+
+// Mezcla aditiva que NO toca el alfa del canvas: con canvas transparente,
+// AdditiveBlending escribe alfa 1 y la córnea se ve como un disco negro.
+const SUMA_SIN_ALFA = {
+  blending: THREE.CustomBlending,
+  blendEquation: THREE.AddEquation,
+  blendSrc: THREE.SrcAlphaFactor, // la opacidad del material atenúa la suma
+  blendDst: THREE.OneFactor,
+  blendSrcAlpha: THREE.ZeroFactor,
+  blendDstAlpha: THREE.OneFactor,
+} as const;
+
+// temporales para proyectar las capas sin crear objetos en cada frame
+const V_A = new THREE.Vector3();
+const V_B = new THREE.Vector3();
+const CERO = new THREE.Vector3();
+const PUNTA_CORNEA = new THREE.Vector3(0, 0, CORNEA_C + 0.25);
 
 const ss = (a: number, b: number, x: number) => {
   const t = Math.min(1, Math.max(0, (x - a) / (b - a)));
@@ -67,7 +92,7 @@ const GLSL_POLAR = `
   }
 `;
 
-function Ojo({ pupila = 0.3, seguir = true, vivo = true }: OjoProps) {
+function Ojo({ pupila = 0.3, seguir = true, vivo = true, pose }: OjoProps) {
   const [iris, altura] = useTexture(
     ["/3d/ojo/iris-color.webp", "/3d/ojo/iris-altura.webp"],
     (ts) => {
@@ -88,6 +113,8 @@ function Ojo({ pupila = 0.3, seguir = true, vivo = true }: OjoProps) {
   const irisM = useRef<THREE.Mesh>(null);
   const cristalino = useRef<THREE.Mesh>(null);
   const borde = useRef<THREE.Mesh>(null);
+  const reflejo = useRef<THREE.Mesh>(null); // córnea: reflejo aditivo (ojo entero)
+  const vidrio = useRef<THREE.Mesh>(null); // córnea: vidrio (despiece)
   const { camera, pointer, size } = useThree();
 
   // uniforms en un ref: se mutan cada frame desde useFrame
@@ -205,7 +232,7 @@ function Ojo({ pupila = 0.3, seguir = true, vivo = true }: OjoProps) {
         roughness: 0.02,
         specularIntensity: 1,
         transparent: true,
-        blending: THREE.AdditiveBlending,
+        ...SUMA_SIN_ALFA,
         depthWrite: false,
         envMapIntensity: 1.4,
         side: THREE.DoubleSide,
@@ -215,17 +242,33 @@ function Ojo({ pupila = 0.3, seguir = true, vivo = true }: OjoProps) {
   const matBorde = useMemo(
     () =>
       new THREE.ShaderMaterial({
-        uniforms: { uBorde: { value: 0 }, uColor: { value: new THREE.Color("#c0dbec") } },
+        uniforms: { uBorde: { value: 0 }, uColor: { value: new THREE.Color("#5f9fc8") } },
         transparent: true,
         depthWrite: false,
-        blending: THREE.AdditiveBlending,
         side: THREE.DoubleSide,
         vertexShader: `varying vec3 vN; varying vec3 vV;
           void main(){ vec4 mv = modelViewMatrix * vec4(position,1.0);
             vN = normalize(normalMatrix*normal); vV = normalize(-mv.xyz); gl_Position = projectionMatrix*mv; }`,
         fragmentShader: `uniform float uBorde; uniform vec3 uColor; varying vec3 vN; varying vec3 vV;
           void main(){ float f = pow(1.0 - abs(dot(normalize(vN), vV)), 2.5);
-            gl_FragColor = vec4(uColor * (0.05 + f * 1.3) * uBorde, 1.0); }`,
+            gl_FragColor = vec4(uColor, clamp(0.06 + f * 1.1, 0.0, 1.0) * uBorde); }`,
+      }),
+    [],
+  );
+
+  // vidrio de la córnea en el despiece: mezcla normal (el reflejo aditivo de
+  // arriba solo funciona sobre el ojo; sobre el fondo de la página quema)
+  const matCorneaVidrio = useMemo(
+    () =>
+      new THREE.MeshPhysicalMaterial({
+        color: "#dbe8f1",
+        roughness: 0.04,
+        clearcoat: 1,
+        transparent: true,
+        opacity: 0,
+        depthWrite: false,
+        envMapIntensity: 1.6,
+        side: THREE.DoubleSide,
       }),
     [],
   );
@@ -264,13 +307,19 @@ function Ojo({ pupila = 0.3, seguir = true, vivo = true }: OjoProps) {
     prog.current += (ojoEstado.p - prog.current) * Math.min(1, dt * 6);
     const p = prog.current;
     const mover = ss(0.0, 0.3, p);
-    const sep = ss(0.12, 0.42, p);
+    let sep = ss(0.12, 0.42, p);
 
     // posición: escritorio → izquierda; móvil (vertical) → arriba
     const cam = camera as THREE.PerspectiveCamera;
     const halfH = Math.tan(THREE.MathUtils.degToRad(cam.fov / 2)) * cam.position.z;
     const aspect = size.width / size.height;
-    if (aspect >= 1) {
+    if (pose) {
+      const q = pose(p, { halfH, aspect });
+      r.position.set(q.x, q.y, 0);
+      r.rotation.set(q.rx, q.ry, 0);
+      r.scale.setScalar(q.s);
+      sep = q.sep;
+    } else if (aspect >= 1) {
       // escritorio: a la izquierda, capas abiertas hacia la derecha (texto a la derecha)
       r.position.set(-halfH * aspect * 0.58 * mover, 0, 0);
       r.rotation.set(0.1 * sep, 1.12 * sep, 0);
@@ -310,6 +359,8 @@ function Ojo({ pupila = 0.3, seguir = true, vivo = true }: OjoProps) {
     cristalino.current.visible = sep > 0.001;
     u.uSep.value = sep;
     if (borde.current) (borde.current.material as THREE.ShaderMaterial).uniforms.uBorde.value = ss(0.1, 0.6, sep);
+    if (reflejo.current) (reflejo.current.material as THREE.Material).opacity = 1 - ss(0.0, 0.25, sep);
+    if (vidrio.current) (vidrio.current.material as THREE.Material).opacity = 0.35 * ss(0.05, 0.4, sep);
 
     // pupila con "respiración" (hippus) muy leve
     const resp = vivo && !reduce.current ? Math.sin(tt * 1.3) * 0.012 + Math.sin(tt * 0.37) * 0.01 : 0;
@@ -319,6 +370,23 @@ function Ojo({ pupila = 0.3, seguir = true, vivo = true }: OjoProps) {
     esclera.current.updateWorldMatrix(true, false);
     tmp.current.copy(esclera.current.matrixWorld).invert();
     u.uCamObj.value.copy(camera.position).applyMatrix4(tmp.current);
+
+    // posición en pantalla (px CSS) de cada capa, para etiquetas en el DOM
+    const proy = (o: THREE.Object3D, local: THREE.Vector3, radio: number, d: { x: number; y: number; r: number }) => {
+      o.updateWorldMatrix(true, false);
+      const w = V_A.copy(local).applyMatrix4(o.matrixWorld);
+      const esc = V_B.setFromMatrixScale(o.matrixWorld).x;
+      const b = V_B.set(0, radio * esc, 0).add(w).project(camera);
+      w.project(camera);
+      d.x = (w.x * 0.5 + 0.5) * size.width;
+      d.y = (-w.y * 0.5 + 0.5) * size.height;
+      d.r = Math.abs((b.y - w.y) * 0.5 * size.height);
+    };
+    const c = ojoEstado.capas;
+    proy(esclera.current, CERO, 1, c.esclera);
+    proy(cristalino.current, CERO, 1, c.cristalino);
+    proy(irisM.current, CERO, R_IRIS, c.iris);
+    proy(corneaG.current, PUNTA_CORNEA, R_IRIS, c.cornea);
   });
 
   return (
@@ -335,7 +403,10 @@ function Ojo({ pupila = 0.3, seguir = true, vivo = true }: OjoProps) {
         </mesh>
         <group ref={corneaG}>
           <group position={[0, 0, CORNEA_C]} rotation={[Math.PI / 2, 0, 0]}>
-            <mesh material={matCornea}>
+            <mesh ref={reflejo} material={matCornea}>
+              <sphereGeometry args={[CORNEA_R, 96, 32, 0, Math.PI * 2, 0, CORNEA_ANG]} />
+            </mesh>
+            <mesh ref={vidrio} material={matCorneaVidrio}>
               <sphereGeometry args={[CORNEA_R, 96, 32, 0, Math.PI * 2, 0, CORNEA_ANG]} />
             </mesh>
             <mesh ref={borde} material={matBorde}>
