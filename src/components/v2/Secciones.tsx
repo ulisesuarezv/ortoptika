@@ -6,6 +6,7 @@
  */
 import Link from "next/link";
 import { SERVICES, SITE_CONFIG, whatsappLink } from "@/lib/constants";
+import { PHOTOS, type Photo } from "@/lib/photos";
 import Aparece from "./Aparece";
 
 const serif = "font-[family-name:var(--font-v2-serif)]";
@@ -144,6 +145,21 @@ const PROCESO = [
   ["Controles", "Revisamos el avance y ajustamos el plan hasta cerrar el proceso."],
 ];
 
+/** Foto del consultorio con <picture> (versión -sm en móvil) y pie opcional. */
+function Foto({ foto, className = "", pie }: { foto: Photo; className?: string; pie?: string }) {
+  return (
+    <figure className={`relative overflow-hidden rounded-[2rem] bg-[#e7e1d5] ${className}`}>
+      <picture>
+        <source media="(max-width: 640px)" srcSet={foto.srcSm} />
+        <img src={foto.src} alt={foto.alt} width={foto.width} height={foto.height} loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover" />
+      </picture>
+      {pie && (
+        <figcaption className="absolute bottom-4 left-4 rounded-full bg-white/90 px-4 py-2 text-xs text-[#02223b] backdrop-blur">{pie}</figcaption>
+      )}
+    </figure>
+  );
+}
+
 export function Consultorio() {
   return (
     <section aria-labelledby="consultorio-titulo" className="bg-[#f6f2ea] px-5 py-24 text-[#02223b] lg:px-14 lg:py-40">
@@ -159,20 +175,23 @@ export function Consultorio() {
 
         <div className="mt-14 grid gap-4 lg:mt-20 lg:grid-cols-12">
           <Aparece className="lg:col-span-8">
-            <figure className="relative aspect-[16/10] overflow-hidden rounded-[2rem]">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/images/fotos/sala-terapia.webp" alt="Gimnasio visual del consultorio: tapete de equilibrio, minitrampolín, balón y tabla de letras" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
-              <figcaption className="absolute bottom-4 left-4 rounded-full bg-white/90 px-4 py-2 text-xs backdrop-blur">
-                La terapia visual no se hace sentado frente a una pantalla
-              </figcaption>
-            </figure>
+            <Foto foto={PHOTOS.salaTerapia} className="aspect-[16/10]" pie="La terapia visual no se hace sentado frente a una pantalla" />
           </Aparece>
           <Aparece retraso={120} className="lg:col-span-4">
-            <figure className="relative aspect-[16/10] overflow-hidden rounded-[2rem] lg:aspect-auto lg:h-full">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/images/fotos/instrumentos.webp" alt="Instrumental de ortóptica: prismas, gafa de prueba, flippers y regla de convergencia" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
-            </figure>
+            <Foto foto={PHOTOS.sinoptoforo} className="aspect-[4/3] lg:aspect-auto lg:h-full" pie="Sinoptóforo" />
           </Aparece>
+        </div>
+        {/* En móvil, carrusel horizontal con snap; en escritorio, tres columnas. */}
+        <div className="-mx-5 mt-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-5 pb-2 [scrollbar-width:none] lg:mx-0 lg:grid lg:grid-cols-3 lg:gap-4 lg:overflow-visible lg:px-0 lg:pb-0">
+          {[
+            [PHOTOS.sesionVasos, "Percepción y motricidad"],
+            [PHOTOS.doctoraConsulta, "También con adultos"],
+            [PHOTOS.sesionSecuencias, "Atención y secuencias"],
+          ].map(([foto, pie], i) => (
+            <Aparece key={(foto as Photo).src} retraso={i * 90} className="w-[78%] flex-none snap-start lg:w-auto">
+              <Foto foto={foto as Photo} className="aspect-[4/5]" pie={pie as string} />
+            </Aparece>
+          ))}
         </div>
 
         <ol className="mt-16 grid gap-10 sm:grid-cols-2 lg:mt-24 lg:grid-cols-4 lg:gap-6">

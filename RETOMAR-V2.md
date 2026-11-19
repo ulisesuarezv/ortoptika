@@ -1,6 +1,8 @@
 # Retomar la v2 (rama feat/v2)
 
-Estado al 19-nov-2026: home v2 completa en `/lab/v2` (commit 1fd40e3). Aprobada por el usuario.
+Estado al 19-nov-2026: home v2 completa y aprobada en `/lab/v2`. Lint y build en verde. `/lab/ojo` (página de la otra sesión) sigue funcionando con los cambios de `OjoEscena.tsx`.
+
+`feat/ojo-3d` NO avanzó después de 2726687 (punto de partida de esta rama) y no tiene cambios sin guardar: `feat/v2` ya contiene todo el trabajo del ojo, no hay nada que integrar. Si alguien vuelve a tocar el ojo, que lo haga **sobre `feat/v2`** para evitar conflictos.
 
 ## Cómo arrancar
 - Worktree: `~/Desktop/Ortoptika-v2` (rama `feat/v2`). NO tocar `~/Desktop/Ortoptika` (otra sesión, ojo 3D en `feat/ojo-3d`, puerto 3311).
@@ -21,9 +23,8 @@ Estado al 19-nov-2026: home v2 completa en `/lab/v2` (commit 1fd40e3). Aprobada 
 1. Landings `src/app/servicios/[slug]` (5): mismo copy/SEO de `services-content.ts` y JSON-LD; una pieza del ojo por servicio; índice lateral fijo.
 2. `sobre-mi`, `contacto`, `blog`, `privacidad`, `not-found`.
 3. Header/footer v2 globales y llevar la home de `/lab/v2` a `/`.
-4. **Fotos con pacientes: AUTORIZADAS por el usuario (19-nov)** → se pueden usar `doctora-consulta`, `sesion-secuencias`, `sesion-vasos`, `sinoptoforo` (en `public/images/fotos`). Sumarlas también al Consultorio de la home.
+4. **Fotos con pacientes: AUTORIZADAS por el usuario (19-nov).** Ya están en el Consultorio de la home (sinoptóforo + 3 verticales). Usar `PHOTOS` de `src/lib/photos.ts` (alt, tamaños, versión -sm) y el componente `Foto` de `Secciones.tsx` (`<picture>`).
 
 ## Pendientes abiertos
 - Copy nuevo = borrador; validar con la doctora.
-- Conflictos esperados en `OjoEscena.tsx` al integrar `feat/ojo-3d`.
 - Faltan músculos extraoculares y retina en el modelo.
