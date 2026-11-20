@@ -205,7 +205,13 @@ function Boton({ x }: { x: number }) {
 }
 
 function Tripode() {
-  const patas = [0, (Math.PI * 2) / 3, (Math.PI * 4) / 3].map((a) => a + Math.PI / 2);
+  // una pata hacia atrás y dos abiertas a los lados: ninguna apunta a la cámara
+  // (de frente, una pata hacia delante se lee como un palo vertical)
+  const pies = [
+    [0, -0.72],
+    [-0.95, 0.38],
+    [0.95, 0.38],
+  ] as const;
   const cubo = new THREE.Vector3(0, 0.42, 0);
   return (
     <group>
@@ -222,8 +228,8 @@ function Tripode() {
         <cylinderGeometry args={[0.07, 0.07, 0.14, 20]} />
         <meshPhysicalMaterial {...plastico} />
       </mesh>
-      {patas.map((a, i) => {
-        const pie = new THREE.Vector3(Math.cos(a) * 0.8, 0.03, Math.sin(a) * 0.8);
+      {pies.map(([px, pz], i) => {
+        const pie = new THREE.Vector3(px, 0.03, pz);
         const medio = pie.clone().add(cubo).multiplyScalar(0.5);
         const dir = pie.clone().sub(cubo);
         const q = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.clone().normalize());
@@ -384,8 +390,11 @@ function encuadrar(cam: THREE.PerspectiveCamera, size: { width: number; height: 
   cam.lookAt(centro);
 }
 
+/** Cuánto suben las gafas en el hero al pasar por delante del panel. */
+const SALTO = 0.26;
+
 // hero: de frente, algo por encima, la barra a todo el ancho
-const CENTRO = new THREE.Vector3(0, Y_BARRA * 0.55, 0);
+const CENTRO = new THREE.Vector3(0, Y_BARRA * 0.62, 0);
 const DIR = new THREE.Vector3(0, 0.34, 1).normalize();
 /**
  * En lienzos estrechos (móvil) la barra entera quedaría diminuta: se encuadra
@@ -400,6 +409,8 @@ function claveHero(k: number) {
     new THREE.Vector3((LARGO / 2) * k, Y_BARRA - ALTO, 0),
     new THREE.Vector3(0, 0, 0.8),
     new THREE.Vector3(0, 0, -0.8),
+    // las gafas, levantadas al pasar por el centro, y sus etiquetas
+    new THREE.Vector3(0, Y_BARRA + SALTO + 0.55, 0),
   ];
 }
 
@@ -504,6 +515,7 @@ function Escena({ id, modo, oscuro, reducir }: { id: string; modo: "auto" | "scr
     const etq = etiquetasDe(id);
     let presencia = 1;
     let xGafas: number;
+    let salto = 0;
 
     if (modo === "scroll") {
       const G = guionBarra(barraScroll.p);
@@ -532,9 +544,10 @@ function Escena({ id, modo, oscuro, reducir }: { id: string; modo: "auto" | "scr
       mira.copy(centroTmp);
       if (G.nariz > 0) {
         // ojos a ~5 cm por encima de la punta cercana, mirando a lo largo de la barra
-        bar.localToWorld(tmp.set(LARGO / 2 + 1.3, 0.85, 0));
+        // (algo atrás y mirando un poco abajo: la luz más cercana entra entera)
+        bar.localToWorld(tmp.set(LARGO / 2 + 1.9, 0.85, 0));
         camA.lerp(tmp, G.nariz);
-        bar.localToWorld(tmp.set(-LARGO * 0.18, 0, 0));
+        bar.localToWorld(tmp.set(-LARGO * 0.18, -0.35, 0));
         mira.lerp(tmp, G.nariz);
         camera.position.copy(camA);
         camera.lookAt(mira);
@@ -588,10 +601,13 @@ function Escena({ id, modo, oscuro, reducir }: { id: string; modo: "auto" | "scr
       }
       e.u = reducir ? meta : THREE.MathUtils.damp(e.u, meta, 3.5, dt);
       xGafas = THREE.MathUtils.lerp(-X_MAX, X_MAX, e.u);
+      // al pasar por el centro, las gafas suben un poco: tapan los LED con la mitad
+      // de abajo y dejan ver el panel (perillas y botones)
+      salto = SALTO * (1 - ss(0.55, 1.5, Math.abs(xGafas)));
     }
 
     // las gafas, entre la cámara y el punto de la fila de LED que tapan
-    bar.localToWorld(tmp.set(xGafas, 0.04, 0));
+    bar.localToWorld(tmp.set(xGafas, 0.04 + salto, 0));
     g.position.copy(camera.position).lerp(tmp, 1 - K_GAFAS);
     g.quaternion.copy(camera.quaternion);
     // invertir las gafas = darles la vuelta: el filtro rojo pasa al otro ojo

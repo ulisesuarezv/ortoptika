@@ -9,7 +9,7 @@ Pediátrica ya tiene su pieza sin el ojo: **tablero de cuentas para planchar** (
 - Siguen pendientes: borrador de la barra para la doctora, los 3 ajustes visuales de la barra (ver abajo) y los objetos para ambliopía y terapia visual.
 
 **Orden para la próxima sesión** (abrirla en `~/Desktop/Ortoptika-v2`, no en `~/Desktop/ortoptika`):
-1. Ajustes visuales de la barra (visión binocular): abrir las patas del trípode hacia los lados, que las gafas no tapen el panel al pasar por el centro, y que el LED más cercano no salga cortado en el paso 4 del recorrido.
+1. ~~Ajustes visuales de la barra~~ HECHO (20-nov, tarde): trípode con una pata atrás y dos abiertas a los lados; en el hero las gafas suben `SALTO` al pasar por el centro y dejan ver las perillas (el encuadre del hero reserva sitio arriba, así que la barra sale algo más pequeña: ~1075 px de ancho a 1440 frente a ~1250 antes); en el paso 4 la cámara se aleja y mira un poco abajo, y la luz más cercana entra entera. Respaldo `barra-luces.webp` regenerado.
 2. Juntar en un solo mensaje para la doctora el copy en borrador: los pasos 1-3 de las cuentas (`CuentasRecorrido.tsx`, PASOS) y los 4 de la barra (`BarraRecorrido.tsx`), con las preguntas abiertas de cada uno.
 3. Ambliopía y terapia visual: pedir al usuario la foto del objeto real de cada una y seguir la misma receta (la plantilla más reciente es `CuentasEscena` + `CuentasRecorrido`).
 - Dev: `pnpm exec next dev -p 3312`. Capturas: script de Playwright en el scratchpad de la sesión (se pierde); rehacerlo desde `~/.claude/skills/captura-web/node_modules`, quitando el banner de cookies («Rechazar»). Respaldos sin WebGL: con `reducedMotion: "reduce"` la escena sale completa; ocultar todo menos el canvas para tener fondo transparente.
