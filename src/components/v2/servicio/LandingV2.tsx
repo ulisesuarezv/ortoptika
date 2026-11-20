@@ -17,6 +17,7 @@ import Indice from "./Indice";
 import BarraRecorrido from "./BarraRecorrido";
 import BrockRecorrido from "./BrockRecorrido";
 import CuentasRecorrido from "./CuentasRecorrido";
+import DiscosRecorrido from "./DiscosRecorrido";
 import OjoServicio from "./OjoServicio";
 
 const serif = "font-[family-name:var(--font-v2-serif)]";
@@ -152,6 +153,9 @@ export default function LandingV2({ content }: { content: ServiceContent }) {
 
       {/* Visión binocular: el ejercicio de la barra de luces, contado con scroll */}
       {content.slug === "vision-binocular" && <BarraRecorrido />}
+
+      {/* Terapia visual: los discos de luz (ver un color, buscarlo y tocarlo), contado con scroll */}
+      {content.slug === "terapia-visual" && <DiscosRecorrido />}
 
       {/* Optometría pediátrica: copiar un modelo con cuentas de colores, contado con scroll */}
       {content.slug === "optometria-pediatrica" && <CuentasRecorrido />}

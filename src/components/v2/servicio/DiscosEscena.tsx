@@ -9,8 +9,12 @@
  * el niño toca (o pisa) el que tiene el color de la referencia. El equipo mide
  * el tiempo de reacción. Modelo procedural, sin marcas.
  *
- * Modo "auto" (hero): rondas solas; con el cursor (o un toque en el móvil) se
- * puede jugar: pasar por encima del disco correcto lo «toca».
+ * Dos modos:
+ * - "auto" (hero): rondas solas; con el cursor (o un toque en el móvil) se
+ *   puede jugar: pasar por encima del disco correcto lo «toca».
+ * - "scroll" (DiscosRecorrido): `discosScroll.p` (0…1) cuenta una ronda paso a
+ *   paso (referencia · la mirada busca · el toque y su tiempo) y en el paso 4
+ *   vuelven las rondas solas, con los últimos tiempos debajo.
  */
 import { useId, useLayoutEffect, useMemo, useRef } from "react";
 import { useFrame, useThree, type ThreeEvent } from "@react-three/fiber";
@@ -243,11 +247,17 @@ function Disco({ geo, luz, alToque, pared = false }: { geo: ReturnType<typeof us
 }
 
 // ---------- etiquetas DOM ----------
-type Etiquetas = { ref: HTMLDivElement | null; tiempo: HTMLDivElement | null; tiempoTxt: HTMLSpanElement | null };
+type Etiquetas = {
+  ref: HTMLDivElement | null;
+  tiempo: HTMLDivElement | null;
+  tiempoTxt: HTMLSpanElement | null;
+  hist: HTMLDivElement | null;
+  histTxt: HTMLSpanElement | null;
+};
 const ETIQUETAS = new Map<string, Etiquetas>();
 function etiquetasDe(id: string) {
   let e = ETIQUETAS.get(id);
-  if (!e) ETIQUETAS.set(id, (e = { ref: null, tiempo: null, tiempoTxt: null }));
+  if (!e) ETIQUETAS.set(id, (e = { ref: null, tiempo: null, tiempoTxt: null, hist: null, histTxt: null }));
   return e;
 }
 const proy = new THREE.Vector3();
@@ -276,17 +286,41 @@ function ronda(k: number) {
   return { orden, meta, color: orden[meta] };
 }
 
+// ---------- guion del scroll ----------
+export const discosScroll = { p: 0 };
+/** La ronda que cuenta el recorrido: referencia lima, la respuesta en el cuarto disco. */
+const RONDA_GUION = { orden: [1, 3, 4, 0, 2], meta: 3, color: 0 };
+const P_AUTO = 0.76;
+export function guionDiscos(p: number) {
+  return {
+    ref: ss(0.03, 0.09, p),
+    /** el suelo se enciende disco a disco */
+    suelo: (i: number) => ss(0.27 + i * 0.03, 0.3 + i * 0.03, p),
+    /** la mirada recorre los discos hasta dar con el color */
+    mirada: ss(0.33, 0.36, p) * (1 - ss(0.52, 0.56, p)),
+    busca: ss(0.36, 0.49, p),
+    toque: ss(0.57, 0.6, p),
+    destello: ss(0.57, 0.59, p) * (1 - ss(0.62, 0.7, p)),
+    apaga: ss(0.6, 0.66, p),
+    onda: ss(0.575, 0.7, p),
+    tiempo: ss(0.6, 0.63, p) * (1 - ss(0.71, 0.74, p)),
+    auto: p >= P_AUTO,
+  };
+}
+
 // fases (s): referencia sola · suelo encendido (espera el toque) · acierto · pausa
 const T_REF = 0.9;
 const T_ESPERA = 2.4;
 const T_ACIERTO = 1.1;
 const T_PAUSA = 0.45;
 
-function Escena({ id, reducir }: { id: string; reducir: boolean }) {
+function Escena({ id, modo, oscuro, reducir }: { id: string; modo: "auto" | "scroll"; oscuro: boolean; reducir: boolean }) {
   const geo = useGeometrias();
   const luces = useRef<Luz[]>(Array.from({ length: SUELO.length + 1 }, () => ({ color: COLORES[0].clone(), on: 0, flash: 0, tiembla: 0 })));
-  const est = useRef({ k: 0, t0: 0, fase: "ref" as "ref" | "busca" | "acierto" | "pausa", tReaccion: 0, tocado: -1, iniciado: false });
+  const est = useRef({ k: 0, t0: 0, fase: "ref" as "ref" | "busca" | "acierto" | "pausa", tReaccion: 0, tocado: -1, iniciado: false, hist: [] as number[], clave: "" });
   const grupo = useRef<THREE.Group>(null);
+  const mirada = useRef<THREE.Mesh>(null);
+  const onda = useRef<THREE.Mesh>(null);
   const tmp = useMemo(() => new THREE.Vector3(), []);
 
   const lectores = useMemo(() => Array.from({ length: SUELO.length + 1 }, (_, i) => () => luces.current[i]), []);
@@ -299,6 +333,7 @@ function Escena({ id, reducir }: { id: string; reducir: boolean }) {
         if (i === r.meta) {
           e.tocado = i;
           e.tReaccion = performance.now() / 1000 - e.t0;
+          e.hist = [...e.hist, e.tReaccion].slice(-4);
           e.fase = "acierto";
           e.t0 = performance.now() / 1000;
         } else luces.current[i + 1].tiembla = 1;
@@ -315,8 +350,41 @@ function Escena({ id, reducir }: { id: string; reducir: boolean }) {
       e.t0 = ahora;
     }
     const r = ronda(e.k);
+    const G = modo === "scroll" ? guionDiscos(discosScroll.p) : null;
+    let alfaT = 0;
+    let alfaMirada = 0;
 
-    if (reducir) {
+    if (G && !G.auto) {
+      // una ronda contada paso a paso; al llegar al paso 4 las rondas empiezan de cero
+      const g = RONDA_GUION;
+      L[0].color.copy(COLORES[g.color]);
+      L[0].on = G.ref;
+      L[0].flash = 0;
+      SUELO.forEach((_, i) => {
+        const l = L[i + 1];
+        l.color.copy(COLORES[g.orden[i]]);
+        l.on = G.suelo(i) * (i === g.meta ? 1 : 1 - G.apaga);
+        l.flash = i === g.meta ? G.destello : 0;
+        l.tiembla = 0;
+      });
+      e.tocado = g.meta;
+      e.tReaccion = 0.62;
+      alfaT = G.tiempo;
+      e.k = 1;
+      e.fase = "ref";
+      e.t0 = ahora;
+      e.hist = [];
+      // la mirada: un aro que va de disco en disco hasta el del color
+      alfaMirada = G.mirada;
+      const u = G.busca * g.meta;
+      const i0 = Math.min(g.meta - 1, Math.floor(u));
+      if (mirada.current) mirada.current.position.lerpVectors(SUELO[i0], SUELO[i0 + 1], ss(0.15, 0.85, u - i0)).setY(0.012);
+      if (onda.current) {
+        onda.current.position.copy(SUELO[g.meta]).setY(0.014);
+        onda.current.scale.setScalar(1 + G.onda * 1.6);
+        (onda.current.material as THREE.MeshBasicMaterial).opacity = G.toque * (1 - G.onda) * 0.9;
+      }
+    } else if (reducir) {
       // fijo: referencia y suelo encendidos, sin rondas
       L[0].color.copy(COLORES[r.color]);
       L[0].on = 1;
@@ -333,6 +401,7 @@ function Escena({ id, reducir }: { id: string; reducir: boolean }) {
         // nadie jugó: el «niño» toca el correcto
         e.tocado = r.meta;
         e.tReaccion = 0.48 + azar(e.k * 3 + 1) * 0.42;
+        e.hist = [...e.hist, e.tReaccion].slice(-4);
         e.fase = "acierto";
         e.t0 = ahora;
       } else if (e.fase === "acierto" && t > T_ACIERTO) {
@@ -356,9 +425,23 @@ function Escena({ id, reducir }: { id: string; reducir: boolean }) {
         l.flash = acierto && i === e.tocado ? 1 - ss(0.25, 0.9, ahora - e.t0) : 0;
         l.tiembla = Math.max(0, l.tiembla - dt * 2.5);
       });
+      if (e.fase === "acierto") alfaT = ss(0, 0.15, ahora - e.t0) * (1 - ss(0.85, 1.1, ahora - e.t0));
+    }
+    if (mirada.current) {
+      mirada.current.visible = alfaMirada > 0.01;
+      (mirada.current.material as THREE.MeshBasicMaterial).opacity = alfaMirada;
+    }
+    if (onda.current) onda.current.visible = !!G && !G.auto && G.toque > 0.01 && G.onda < 0.99;
+
+    if (G) {
+      const clave = `${discosScroll.p.toFixed(4)}|${size.width}x${size.height}`;
+      if (clave !== e.clave) {
+        e.clave = clave;
+        encuadrarScroll(camera as THREE.PerspectiveCamera, size, discosScroll.p);
+      }
     }
 
-    if (grupo.current && !reducir) {
+    if (grupo.current && modo === "auto" && !reducir) {
       grupo.current.rotation.y = THREE.MathUtils.damp(grupo.current.rotation.y, pointer.x * 0.05, 3, dt);
     }
 
@@ -366,24 +449,41 @@ function Escena({ id, reducir }: { id: string; reducir: boolean }) {
     const etq = etiquetasDe(id);
     tmp.copy(REF).add(new THREE.Vector3(0, R_GOMA + 0.25, 0));
     colocar(etq.ref, tmp, camera, size.width, size.height, 0, 1);
-    const alfaT = e.fase === "acierto" ? ss(0, 0.15, ahora - e.t0) * (1 - ss(0.85, 1.1, ahora - e.t0)) : 0;
     if (e.tocado >= 0) {
-      tmp.copy(SUELO[e.tocado]).add(new THREE.Vector3(0, 1.25 + 0.2 * ss(0, 1.1, ahora - e.t0), -0.3));
+      const sube = G && !G.auto ? ss(0.6, 0.74, discosScroll.p) : ss(0, 1.1, ahora - e.t0);
+      tmp.copy(SUELO[e.tocado]).add(new THREE.Vector3(0, 1.25 + 0.2 * sube, -0.3));
       if (etq.tiempoTxt) etq.tiempoTxt.textContent = `${e.tReaccion.toFixed(2).replace(".", ",")} s`;
     }
     colocar(etq.tiempo, tmp, camera, size.width, size.height, 0, alfaT);
+    // paso 4: los últimos tiempos
+    if (etq.hist) {
+      etq.hist.style.opacity = String(G?.auto && e.hist.length ? 1 : 0);
+      const txt = e.hist.map((h) => h.toFixed(2).replace(".", ",")).join("  ·  ") + " s";
+      if (etq.histTxt && etq.histTxt.textContent !== txt) etq.histTxt.textContent = txt;
+    }
   });
+
+  const tono = oscuro ? "#062a45" : "#ece6da";
 
   return (
     <group ref={grupo}>
       {/* la pared y el suelo, apenas insinuados: se funden con la página */}
       <mesh position={[0, 2.4, PARED_Z - 0.01]}>
         <planeGeometry args={[9, 6]} />
-        <meshBasicMaterial map={geo.velo} color="#ece6da" transparent depthWrite={false} toneMapped={false} />
+        <meshBasicMaterial map={geo.velo} color={tono} transparent depthWrite={false} toneMapped={false} />
       </mesh>
       <mesh position={[0, -0.004, PARED_Z + 3]} rotation-x={-Math.PI / 2}>
         <planeGeometry args={[10, 6]} />
-        <meshBasicMaterial map={geo.velo} color="#ece6da" transparent depthWrite={false} toneMapped={false} />
+        <meshBasicMaterial map={geo.velo} color={tono} transparent depthWrite={false} toneMapped={false} />
+      </mesh>
+      {/* la mirada que busca y la onda del toque (solo en el recorrido) */}
+      <mesh ref={mirada} rotation-x={-Math.PI / 2} visible={false} renderOrder={4}>
+        <ringGeometry args={[R_GOMA + 0.12, R_GOMA + 0.2, 64]} />
+        <meshBasicMaterial color="#a8cf45" transparent opacity={0} depthWrite={false} toneMapped={false} />
+      </mesh>
+      <mesh ref={onda} rotation-x={-Math.PI / 2} visible={false} renderOrder={4}>
+        <ringGeometry args={[R_GOMA + 0.05, R_GOMA + 0.11, 64]} />
+        <meshBasicMaterial color="#ffffff" transparent opacity={0} depthWrite={false} toneMapped={false} />
       </mesh>
       <group position={REF}>
         <Disco geo={geo} luz={lectores[0]} pared />
@@ -393,7 +493,7 @@ function Escena({ id, reducir }: { id: string; reducir: boolean }) {
           <Disco geo={geo} luz={lectores[i + 1]} alToque={toques[i]} />
         </group>
       ))}
-      <ContactShadows frames={1} position={[0, -0.001, 0]} scale={12} blur={2} opacity={0.32} far={1.2} color="#02223b" />
+      <ContactShadows frames={1} position={[0, -0.001, 0]} scale={12} blur={2} opacity={oscuro ? 0.5 : 0.32} far={1.2} color={oscuro ? "#000000" : "#02223b"} />
     </group>
   );
 }
@@ -406,23 +506,66 @@ const PTS = [
 ];
 const DIR = new THREE.Vector3(0, 1.15, 1).normalize();
 const v = new THREE.Vector3();
-function encuadrar(cam: THREE.PerspectiveCamera, size: { width: number; height: number }) {
-    cam.aspect = size.width / size.height;
-    cam.updateProjectionMatrix();
-    // centro de la caja (no el promedio: hay muchos más puntos en el suelo que en la pared)
-    const centro = new THREE.Box3().setFromPoints(PTS).getCenter(new THREE.Vector3());
-    let lo = 1,
-      hi = 80;
-    for (let k = 0; k < 20; k++) {
-      const d = (lo + hi) / 2;
-      cam.position.copy(centro).addScaledVector(DIR, d);
-      cam.lookAt(centro);
-      cam.updateMatrixWorld();
-      if (PTS.every((p) => (v.copy(p).project(cam), Math.abs(v.x) < 0.8 && Math.abs(v.y) < 0.8))) hi = d;
-      else lo = d;
-    }
-    cam.position.copy(centro).addScaledVector(DIR, hi);
+// centro de la caja (no el promedio: hay muchos más puntos en el suelo que en la pared)
+const centroCaja = (pts: THREE.Vector3[]) => new THREE.Box3().setFromPoints(pts).getCenter(new THREE.Vector3());
+/** Distancia (bisección) a la que todos los puntos caben con margen, mirando a `centro` desde `dir`. */
+function distancia(cam: THREE.PerspectiveCamera, centro: THREE.Vector3, dir: THREE.Vector3, pts: THREE.Vector3[], m: number) {
+  let lo = 1,
+    hi = 80;
+  for (let k = 0; k < 20; k++) {
+    const d = (lo + hi) / 2;
+    cam.position.copy(centro).addScaledVector(dir, d);
     cam.lookAt(centro);
+    cam.updateMatrixWorld();
+    if (pts.every((p) => (v.copy(p).project(cam), Math.abs(v.x) < m && Math.abs(v.y) < m))) hi = d;
+    else lo = d;
+  }
+  return hi;
+}
+const CENTRO_HERO = centroCaja(PTS);
+function encuadrar(cam: THREE.PerspectiveCamera, size: { width: number; height: number }) {
+  cam.aspect = size.width / size.height;
+  cam.updateProjectionMatrix();
+  const d = distancia(cam, CENTRO_HERO, DIR, PTS, 0.8);
+  cam.position.copy(CENTRO_HERO).addScaledVector(DIR, d);
+  cam.lookAt(CENTRO_HERO);
+}
+
+// recorrido: de cerca a la referencia · todo · de cerca al toque · todo, desde más arriba
+const caja = (c: THREE.Vector3, rx: number, ry: number, rz: number) =>
+  [-1, 1].flatMap((a) => [-1, 1].flatMap((b) => [-1, 1].map((k) => c.clone().add(new THREE.Vector3(a * rx, b * ry, k * rz)))));
+const META = SUELO[RONDA_GUION.meta];
+// cada plano se sostiene mientras dura su paso; la cámara solo viaja entre pasos
+const P_REF = { pts: caja(REF, 1.5, 1.5, 0.3), dir: new THREE.Vector3(0, 0.35, 1), m: 0.8 };
+const P_TODO = { pts: PTS, dir: new THREE.Vector3(0, 1.15, 1), m: 0.82 };
+const P_META = { pts: [...caja(META.clone().setY(0.5), 1.5, 0.5, 1.2), META.clone().setY(1.9)], dir: new THREE.Vector3(0.35, 1.05, 1), m: 0.8 };
+const P_ALTO = { pts: PTS, dir: new THREE.Vector3(0, 1.7, 1), m: 0.82 };
+const PLANOS = [
+  { p: 0, ...P_REF },
+  { p: 0.12, ...P_REF },
+  { p: 0.29, ...P_TODO },
+  { p: 0.5, ...P_TODO },
+  { p: 0.6, ...P_META },
+  { p: 0.72, ...P_META },
+  { p: 0.86, ...P_ALTO },
+].map((pl) => ({ ...pl, dir: pl.dir.normalize(), centro: centroCaja(pl.pts) }));
+const cA = new THREE.Vector3(),
+  dI = new THREE.Vector3();
+function encuadrarScroll(cam: THREE.PerspectiveCamera, size: { width: number; height: number }, p: number) {
+  cam.aspect = size.width / size.height;
+  cam.updateProjectionMatrix();
+  let i = 0;
+  while (i < PLANOS.length - 2 && p > PLANOS[i + 1].p) i++;
+  const a = PLANOS[i],
+    b = PLANOS[i + 1];
+  const t = ss(a.p, b.p, p);
+  const da = distancia(cam, a.centro, a.dir, a.pts, a.m);
+  const db = distancia(cam, b.centro, b.dir, b.pts, b.m);
+  cA.copy(a.centro).lerp(b.centro, t);
+  dI.copy(a.dir).lerp(b.dir, t).normalize();
+  cam.position.copy(cA).addScaledVector(dI, THREE.MathUtils.lerp(da, db, t));
+  cam.lookAt(cA);
+  cam.updateMatrixWorld();
 }
 function CamaraHero() {
   const { camera, size } = useThree();
@@ -435,29 +578,38 @@ function CamaraHero() {
 const etiqueta =
   "pointer-events-none absolute left-0 top-0 select-none whitespace-nowrap font-[family-name:var(--font-v2-sans)] text-[10px] font-semibold uppercase tracking-[0.2em] will-change-transform";
 
-export default function DiscosEscena({ activo = true }: { activo?: boolean }) {
+export default function DiscosEscena({ activo = true, modo = "auto", oscuro = false }: { activo?: boolean; modo?: "auto" | "scroll"; oscuro?: boolean }) {
   const reducir = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const id = useId();
   return (
     <div className="relative h-full w-full">
       <div className="pointer-events-none absolute inset-0 z-10 overflow-hidden">
-        <div ref={(e) => void (etiquetasDe(id).ref = e)} className={`${etiqueta} text-[#0e4d7a]`} style={{ opacity: 0 }}>
+        <div ref={(e) => void (etiquetasDe(id).ref = e)} className={`${etiqueta} ${oscuro ? "text-[#a8cf45]" : "text-[#0e4d7a]"}`} style={{ opacity: 0 }}>
           Referencia
         </div>
-        <div ref={(e) => void (etiquetasDe(id).tiempo = e)} className={`${etiqueta} rounded-full bg-[#02223b] px-3 py-1.5 text-white shadow-[0_6px_18px_rgba(2,34,59,0.25)]`} style={{ opacity: 0 }}>
-          <span className="text-[#a8cf45]">Reacción</span> <span ref={(e) => void (etiquetasDe(id).tiempoTxt = e)} className="ml-1 text-[12px] tracking-[0.06em]" />
+        <div ref={(e) => void (etiquetasDe(id).tiempo = e)} className={`${etiqueta} rounded-full px-3 py-1.5 shadow-[0_6px_18px_rgba(2,34,59,0.25)] ${oscuro ? "bg-white text-[#02223b]" : "bg-[#02223b] text-white"}`} style={{ opacity: 0 }}>
+          <span className={oscuro ? "text-[#0e4d7a]" : "text-[#a8cf45]"}>Reacción</span> <span ref={(e) => void (etiquetasDe(id).tiempoTxt = e)} className="ml-1 text-[12px] tracking-[0.06em]" />
         </div>
+        {modo === "scroll" && (
+          <div
+            ref={(e) => void (etiquetasDe(id).hist = e)}
+            className="absolute bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap font-[family-name:var(--font-v2-sans)] text-[10px] font-semibold uppercase tracking-[0.2em] text-[#b9c9d6] transition-opacity duration-500"
+            style={{ opacity: 0 }}
+          >
+            Últimas rondas <span ref={(e) => void (etiquetasDe(id).histTxt = e)} className="ml-2 text-[12px] tracking-[0.06em] text-white" />
+          </div>
+        )}
       </div>
       <Lienzo
-        respaldo={<Respaldo src="/3d/respaldo/discos.webp" />}
+        respaldo={<Respaldo src={modo === "scroll" ? "/3d/respaldo/discos-recorrido.webp" : "/3d/respaldo/discos.webp"} />}
         frameloop={activo ? "always" : "never"}
         shadows
         camera={{ fov: 30 }}
         gl={{ antialias: true, alpha: true, toneMapping: THREE.NeutralToneMapping }}
       >
         <OjoEstudio />
-        <CamaraHero />
-        <Escena id={id} reducir={reducir} />
+        {modo === "auto" && <CamaraHero />}
+        <Escena id={id} modo={modo} oscuro={oscuro} reducir={reducir} />
       </Lienzo>
     </div>
   );
