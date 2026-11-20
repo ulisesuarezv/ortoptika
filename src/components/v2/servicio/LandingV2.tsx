@@ -16,6 +16,7 @@ import { rutaV2, servicioV2 } from "../rutas";
 import Indice from "./Indice";
 import BarraRecorrido from "./BarraRecorrido";
 import BrockRecorrido from "./BrockRecorrido";
+import CuentasRecorrido from "./CuentasRecorrido";
 import OjoServicio from "./OjoServicio";
 
 const serif = "font-[family-name:var(--font-v2-serif)]";
@@ -151,6 +152,9 @@ export default function LandingV2({ content }: { content: ServiceContent }) {
 
       {/* Visión binocular: el ejercicio de la barra de luces, contado con scroll */}
       {content.slug === "vision-binocular" && <BarraRecorrido />}
+
+      {/* Optometría pediátrica: copiar un modelo con cuentas de colores, contado con scroll */}
+      {content.slug === "optometria-pediatrica" && <CuentasRecorrido />}
 
       {/* ================= CUERPO CON ÍNDICE ================= */}
       <div className="bg-white px-5 lg:px-14">

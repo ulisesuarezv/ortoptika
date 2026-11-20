@@ -5,7 +5,7 @@
  * cuenta el servicio. Estrabismo: cordón de Brock en 3D (BrockEscena), sin ojo. Ambliopía: sigue
  * al cursor con retraso, como un ojo que aún no trabaja a la par. Terapia
  * visual: recorre un ocho, como en un ejercicio de seguimiento. Optometría
- * pediátrica: sigue al cursor, juguetón y con la pupila más abierta. Visión
+ * pediátrica: tablero de cuentas de colores (CuentasEscena), sin ojo. Visión
  * binocular: barra de luces y gafas de filtros rojo/azul (BarraLucesEscena), sin ojo.
  */
 import dynamic from "next/dynamic";
@@ -15,6 +15,7 @@ import { ESCENA_PROTAGONISTA } from "../escenas";
 const OjoEscena = dynamic(() => import("@/components/three/OjoEscena"), { ssr: false });
 const BrockEscena = dynamic(() => import("./BrockEscena"), { ssr: false });
 const BarraLucesEscena = dynamic(() => import("./BarraLucesEscena"), { ssr: false });
+const CuentasEscena = dynamic(() => import("./CuentasEscena"), { ssr: false });
 
 const ss = (a: number, b: number, x: number) => {
   const t = Math.min(1, Math.max(0, (x - a) / (b - a)));
@@ -60,7 +61,6 @@ const MIRADAS: Record<string, Mirada> = {
       return { x: Math.sin(t) * 0.5, y: Math.sin(t * 2) * 0.22 };
     },
   },
-  "optometria-pediatrica": { pupila: 0.42, seguir: true },
 };
 
 export default function OjoServicio({ slug, className = "" }: { slug: string; className?: string }) {
@@ -95,6 +95,8 @@ export default function OjoServicio({ slug, className = "" }: { slug: string; cl
         <BrockEscena activo={activo && !tapado} />
       ) : slug === "vision-binocular" ? (
         <BarraLucesEscena activo={activo && !tapado} />
+      ) : slug === "optometria-pediatrica" ? (
+        <CuentasEscena activo={activo && !tapado} />
       ) : (
         <OjoEscena activo={activo && !tapado} pupila={m?.pupila ?? 0.3} seguir={m?.seguir ?? true} mirar={m?.mirar} />
       )}
