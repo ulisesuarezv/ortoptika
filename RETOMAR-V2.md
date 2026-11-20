@@ -1,6 +1,14 @@
 # Retomar la v2 (rama feat/v2)
 
-## ▶ EMPEZAR AQUÍ (próxima sesión)
+## ▶ EMPEZAR AQUÍ (20-nov-2026, lo más reciente)
+Pediátrica ya tiene su pieza sin el ojo: **tablero de cuentas para planchar** (Hama/Perler; la doctora lo usa en TERAPIA y los niños copian un modelo). Foto de referencia: `~/Downloads/IMG_0540 2.HEIC` (no se copió a la carpeta de modelos: el usuario lo rechazó).
+- `CuentasEscena.tsx` (hero "auto": las cuentas saltan del montón y arman el ojo; ciclo de 16 s) + `CuentasRecorrido.tsx` (sticky navy de 460svh, 4 pasos; en el 3 una cuenta queda «Fuera de lugar» y salta a su sitio). Respaldos `cuentas*.webp`.
+- La figura de la foto era Stitch (Disney): NO se reproduce. El dibujo es un ojo en píxeles 21×13 con la paleta (`DIBUJO`).
+- Copy del recorrido = BORRADOR. El usuario aprobó el paso 4; falta la doctora. No decir que la actividad «trata» la ambliopía (PEDIG 2008: actividades de cerca con el parche no mejoran el resultado). Preguntas abiertas para la doctora: edad mínima y tamaño de cuenta (Maxi 10 mm desde 3 años / Midi 5 mm desde 5 años, según Hama).
+- Guardado en el commit 35b853a (lint y build en verde).
+- Siguen pendientes: borrador de la barra para la doctora, los 3 ajustes visuales de la barra (ver abajo) y los objetos para ambliopía y terapia visual.
+
+## EMPEZAR AQUÍ (anterior, 19-nov)
 Estrabismo CERRADO el 19-nov: la doctora vio la página en vivo y aprobó el copy del recorrido del cordón. No hay nada a medias.
 
 **Siguiente tarea:** el usuario tiene **elementos nuevos del consultorio** para usarlos como modelos 3D dedicados en las secciones que faltan (ambliopía, terapia visual, visión binocular, pediátrica).
