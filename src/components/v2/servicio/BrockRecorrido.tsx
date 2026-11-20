@@ -17,7 +17,7 @@
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
 import { ESCENA_PROTAGONISTA } from "../escenas";
-import { brockScroll, guionScroll } from "./BrockEscena";
+import { brockScroll, guionBrock } from "../estadoEscenas";
 
 const BrockEscena = dynamic(() => import("./BrockEscena"), { ssr: false });
 
@@ -112,7 +112,7 @@ export default function BrockRecorrido() {
       if (barra.current) barra.current.style.transform = `scaleX(${suave})`;
 
       // «Lo que se ve»: la X se cruza en la cuenta fijada; con la desviación, antes
-      const g = guionScroll(suave);
+      const g = guionBrock(suave);
       const meta = CUENTAS_Y[g.fija] + 52 * g.desv;
       yc += (meta - yc) * (reduce ? 1 : 0.15);
       const x = (y: number, s: number) => 110 + s * K * (y - yc);

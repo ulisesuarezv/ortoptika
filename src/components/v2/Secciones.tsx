@@ -310,18 +310,49 @@ export function CierreBreve({ titulo, acento, mensaje, children }: { titulo: str
 
 /** Pie de la v2 (cierra todas las páginas, sobre fondo navy). */
 export function Pie() {
+  const col = `${eyebrow} text-[#a8cf45]`;
+  const li = "text-[15px] text-[#b9c9d6] transition-colors hover:text-white";
   return (
-    <div className="mt-24 flex flex-wrap items-end justify-between gap-6 border-t border-white/15 pt-8 text-xs text-white/50">
-      <span className={`${serif} text-[clamp(3rem,1rem+9vw,10rem)] leading-none tracking-[-0.03em] text-white/90`}>Ortoptika</span>
-      <span className="flex flex-wrap gap-x-6 gap-y-2">
-        <a href={SITE_CONFIG.social.instagram} target="_blank" rel="noopener noreferrer" className="hover:text-white">
-          Instagram
-        </a>
-        <Link href={rutaV2("/privacidad/")} className="hover:text-white">
-          Tratamiento de datos
-        </Link>
-        <span>© {new Date().getFullYear()} {SITE_CONFIG.name}</span>
-      </span>
-    </div>
+    <footer className="mt-24 border-t border-white/15 pt-12 text-white">
+      <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-12 lg:gap-6">
+        <nav aria-labelledby="pie-servicios" className="lg:col-span-4">
+          <p id="pie-servicios" className={col}>Servicios</p>
+          <ul className="mt-5 space-y-2.5">
+            {SERVICES.map((s) => (
+              <li key={s.slug}>
+                <Link href={servicioV2(s.slug)} className={li}>{s.titulo}</Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+        <nav aria-labelledby="pie-sitio" className="lg:col-span-3">
+          <p id="pie-sitio" className={col}>Ortoptika</p>
+          <ul className="mt-5 space-y-2.5">
+            <li><Link href={rutaV2("/")} className={li}>Inicio</Link></li>
+            <li><Link href={rutaV2("/sobre-mi/")} className={li}>Sobre mí</Link></li>
+            <li><Link href={rutaV2("/contacto/")} className={li}>Contacto y ubicación</Link></li>
+            <li><Link href={rutaV2("/privacidad/")} className={li}>Tratamiento de datos</Link></li>
+          </ul>
+        </nav>
+        <div className="lg:col-span-5">
+          <p className={col}>Escríbeme</p>
+          <ul className="mt-5 space-y-2.5">
+            <li><a href={whatsappLink()} target="_blank" rel="noopener noreferrer" className={li}>WhatsApp {SITE_CONFIG.telefono}</a></li>
+            <li><a href={`mailto:${SITE_CONFIG.email}`} className={li}>{SITE_CONFIG.email}</a></li>
+            <li><a href={SITE_CONFIG.social.instagram} target="_blank" rel="noopener noreferrer" className={li}>Instagram {SITE_CONFIG.social.instagramHandle}</a></li>
+            {SITE_CONFIG.social.facebook && (
+              <li><a href={SITE_CONFIG.social.facebook} target="_blank" rel="noopener noreferrer" className={li}>Facebook</a></li>
+            )}
+          </ul>
+        </div>
+      </div>
+      <div className="mt-16 flex flex-wrap items-end justify-between gap-6 border-t border-white/15 pt-8 text-xs text-white/50">
+        <span aria-hidden="true" className={`${serif} text-[clamp(3rem,1rem+9vw,10rem)] leading-none tracking-[-0.03em] text-white/90`}>Ortoptika</span>
+        <span className="flex flex-wrap gap-x-6 gap-y-2">
+          <span>{SITE_CONFIG.direccion.ciudad}, {SITE_CONFIG.direccion.departamento}</span>
+          <span>© {new Date().getFullYear()} {SITE_CONFIG.name}</span>
+        </span>
+      </div>
+    </footer>
   );
 }

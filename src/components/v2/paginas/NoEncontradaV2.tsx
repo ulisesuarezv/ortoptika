@@ -38,7 +38,7 @@ export default function NoEncontradaV2() {
         </div>
       </header>
 
-      <nav aria-labelledby="buscabas" className="bg-[#02223b] px-5 pb-10 pt-20 text-white lg:px-14 lg:pt-28">
+      <section aria-labelledby="buscabas" className="bg-[#02223b] px-5 pb-10 pt-20 text-white lg:px-14 lg:pt-28">
         <div className="mx-auto max-w-[90rem]">
           <h2 id="buscabas" className={`${sans} ${eyebrow} text-[#a8cf45]`}>
             ¿Buscabas alguno de estos servicios?
@@ -57,7 +57,7 @@ export default function NoEncontradaV2() {
           </ul>
           <Pie />
         </div>
-      </nav>
+      </section>
     </article>
   );
 }

@@ -220,7 +220,7 @@ export function serviceSchema({
 /**
  * FAQPage: las preguntas frecuentes REALES visibles en la página.
  * Regla: el schema debe reflejar exactamente el contenido renderizado
- * (mismas preguntas y respuestas que el FAQAccordion).
+ * (mismas preguntas y respuestas que la landing).
  */
 export function faqPageSchema(
   items: readonly { question: string; answer: string }[],

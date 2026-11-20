@@ -10,8 +10,8 @@
       texto ni iconos finos sobre blanco/crema (falla contraste AA).
     · Terciario  #02223B (navy muy oscuro) → slate-ink-900. Texto y fondos dark.
   Neutros crema cálidos conservados (eco de la calidez de la foto real).
-  Titulares con serif display (Fraunces); Plus Jakarta para eyebrows/UI e
-  Inter para cuerpo. Enfoque CSS-first de Tailwind v4: los tokens viven en @theme.
+  Tipografías de la v2 (layout raíz): Instrument Serif para titulares e
+  Inter Tight para todo lo demás; los tokens --font-* apuntan a ellas. Enfoque CSS-first de Tailwind v4: los tokens viven en @theme.
 */
 
 @theme {
@@ -67,18 +67,10 @@
   --color-line: color-mix(in srgb, var(--color-slate-ink-900) 12%, transparent);
 
   /* ---- Tipografía ---- */
-  /* DISPLAY — Fraunces (serif) para titulares h1/h2 (preloaded, candidato LCP). */
-  --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
-  /* Itálica de Fraunces como FAMILIA SEPARADA (accent-words / watermarks /
-     índices). Instancia aparte con display:"optional" + preload:false; en frío
-     cae a Georgia itálica métricamente ajustada (ver .accent-word, que fija
-     font-style: italic). */
-  --font-display-italic: var(--font-fraunces-italic), Georgia,
-    "Times New Roman", serif;
-  /* UI — Plus Jakarta Sans para subtítulos (h3-h6), eyebrows y nav. */
-  --font-heading: var(--font-plus-jakarta), ui-sans-serif, system-ui, sans-serif;
-  /* CUERPO — Inter (preloaded). */
-  --font-body: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  /* Apuntan a las fuentes de la v2 que carga el layout raíz. */
+  --font-display: var(--font-v2-serif), Georgia, "Times New Roman", serif;
+  --font-heading: var(--font-v2-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-v2-sans), ui-sans-serif, system-ui, sans-serif;
 
   /* Escala tipográfica editorial — fluida en los tamaños display (clamp) */
   --text-xs: 0.75rem;
@@ -135,7 +127,7 @@
     text-rendering: optimizeLegibility;
   }
 
-  /* Titulares grandes: Fraunces display (serif cálida, de confianza). */
+  /* Titulares grandes: Instrument Serif (peso 600 sintético: es el aspecto aprobado). */
   h1,
   h2 {
     font-family: var(--font-display);
@@ -145,7 +137,7 @@
     color: var(--color-slate-ink-900);
   }
 
-  /* Subtítulos / UI: Plus Jakarta Sans. */
+  /* Subtítulos / UI: Inter Tight. */
   h3,
   h4,
   h5,
@@ -156,338 +148,6 @@
     line-height: 1.15;
     color: var(--color-slate-ink-900);
   }
-}
-
-/*
-  Clases de composición — en @layer components para que las utilidades de
-  Tailwind puedan sobrescribir propiedades puntuales (p. ej. un watermark con
-  text-cream-deep, o un accent-word con text-accent-300 sobre fondo navy).
-  Sin capa ganarían siempre estas reglas y esas utilidades serían inertes.
-*/
-@layer components {
-  /* Palabra acentuada dentro de un titular (recurso editorial): Fraunces
-     ITÁLICA en color de marca (azul). Suele aplicarse sobre <em>, pero fijamos
-     font-style: italic de forma explícita para no depender del elemento. */
-  .accent-word {
-    font-family: var(--font-display-italic);
-    font-style: italic;
-    font-weight: 500;
-    color: var(--color-primary-600);
-  }
-
-  /* Meta-info vertical en el borde de una sección (writing-mode, lee de abajo a arriba). */
-  .vertical-text {
-    writing-mode: vertical-rl;
-    text-orientation: mixed;
-    transform: rotate(180deg);
-  }
-
-  /* Texto contorneado: palabra-gráfico gigante de fondo, ligera. */
-  .text-outline {
-    color: transparent;
-    -webkit-text-stroke: 2px var(--color-primary-200);
-    paint-order: stroke fill;
-  }
-
-  /* Marca de agua tipográfica gigante de fondo (números/palabra como gráfico). */
-  .watermark {
-    font-family: var(--font-display-italic);
-    font-style: italic;
-    font-weight: 500;
-    line-height: 0.72;
-    letter-spacing: -0.02em;
-    color: var(--color-primary-100);
-    pointer-events: none;
-    user-select: none;
-  }
-
-  /* Eyebrow: etiqueta corta de sección con regla de acento lima (gráfica). */
-  .eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    font-family: var(--font-heading);
-    font-size: var(--text-sm);
-    font-weight: 600;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--color-primary-700);
-  }
-  .eyebrow::before {
-    content: "";
-    width: 1.75rem;
-    height: 3px;
-    background: var(--color-accent-500);
-  }
-
-  /* Índice sobredimensionado de sección (marca de agua tipográfica). */
-  .section-index {
-    font-family: var(--font-display-italic);
-    font-weight: 500;
-    font-style: italic;
-    line-height: 1;
-    color: var(--color-primary-200);
-  }
-
-  /* Placeholder de imagen editorial: proporción + marco fácil de reemplazar. */
-  .img-placeholder {
-    position: relative;
-    overflow: hidden;
-    background:
-      radial-gradient(
-        120% 120% at 15% 10%,
-        var(--color-primary-100),
-        transparent 55%
-      ),
-      radial-gradient(
-        120% 120% at 85% 90%,
-        var(--color-accent-100),
-        transparent 55%
-      ),
-      var(--color-cream-soft);
-  }
-  .img-placeholder::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image: radial-gradient(
-      var(--color-line) 1px,
-      transparent 1px
-    );
-    background-size: 22px 22px;
-    opacity: 0.5;
-  }
-
-  /* Marco para la foto real recortada (PNG/WebP con transparencia): fondo
-     de marca suave detrás del sujeto, mismo lenguaje que img-placeholder. */
-  .photo-frame {
-    position: relative;
-    overflow: hidden;
-    background:
-      radial-gradient(
-        120% 120% at 20% 12%,
-        var(--color-primary-100),
-        transparent 60%
-      ),
-      radial-gradient(
-        110% 110% at 85% 95%,
-        var(--color-accent-200),
-        transparent 55%
-      ),
-      var(--color-cream-soft);
-  }
-}
-
-/*
-  Entrada above-the-fold por CSS (Sesión 8) — el hero NO puede depender de GSAP
-  (el Reveal no anima nada en el viewport inicial: ocultar contenido ya pintado
-  hasta hidratar disparaba el LCP a 7s+). Estas clases corren desde el primer
-  frame del CSS, sin JS.
-  REGLA LCP: el candidato a LCP (foto del hero / titular 8xl) solo puede usar
-  `.enter-shift` (transform puro, nunca opacity:0 — un elemento transparente no
-  pinta y retrasa el LCP). `.enter-up` / `.enter-fade` quedan para los
-  elementos secundarios. Delay por elemento vía `--enter-delay` (el bloque de
-  prefers-reduced-motion de abajo anula duración Y delay).
-*/
-/* Usamos la propiedad individual `translate` (no `transform`): compone con los
-   utilities de rotate y translate de Tailwind v4 sin pisarlos al terminar. */
-@keyframes enter-up {
-  from {
-    opacity: 0;
-    translate: 0 18px;
-  }
-  to {
-    opacity: 1;
-    translate: 0 0;
-  }
-}
-@keyframes enter-shift {
-  from {
-    translate: 0 16px;
-  }
-  to {
-    translate: 0 0;
-  }
-}
-@keyframes enter-fade {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-/* Cortina que descubre la foto: solo `scale` (no opacity) sobre un overlay
-   AJENO al <img> del retrato — el <img> permanece pintado desde el frame 0
-   (eager + fetchPriority high intactos), la cortina solo lo cubre y se retira. */
-@keyframes curtain-reveal {
-  from {
-    scale: 1 1;
-  }
-  to {
-    scale: 0 1;
-  }
-}
-
-@layer components {
-  .enter-up {
-    animation: enter-up 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
-    animation-delay: var(--enter-delay, 0s);
-  }
-  /* Transform puro: seguro para el elemento LCP (no retrasa su pintado). */
-  .enter-shift {
-    animation: enter-shift 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
-    animation-delay: var(--enter-delay, 0s);
-  }
-  .enter-fade {
-    animation: enter-fade 0.9s ease-out both;
-    animation-delay: var(--enter-delay, 0s);
-  }
-  .enter-curtain {
-    transform-origin: right center;
-    animation: curtain-reveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
-    animation-delay: var(--enter-delay, 0s);
-  }
-}
-
-/*
-  Animaciones ambiente para las capas de fondo SVG (<Backdrop/>).
-  Reglas: SOLO transform/opacity (compositor GPU), movimiento LENTO y de bajo
-  contraste — ambiente, nunca protagonista. El bloque global de
-  prefers-reduced-motion (abajo) las congela en su primer frame.
-*/
-@keyframes bg-drift {
-  from {
-    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
-  }
-  to {
-    transform: translate3d(2.5%, -3%, 0) rotate(4deg) scale(1.05);
-  }
-}
-@keyframes bg-drift-reverse {
-  from {
-    transform: translate3d(0, 0, 0) rotate(0deg) scale(1.04);
-  }
-  to {
-    transform: translate3d(-3%, 2%, 0) rotate(-5deg) scale(1);
-  }
-}
-@keyframes bg-breathe {
-  from {
-    transform: scale(1);
-    opacity: 0.7;
-  }
-  to {
-    transform: scale(1.06);
-    opacity: 1;
-  }
-}
-@keyframes bg-wave {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
-  to {
-    transform: translate3d(-3.5%, 1.5%, 0);
-  }
-}
-
-.anim-drift {
-  animation: bg-drift 26s ease-in-out infinite alternate;
-  will-change: transform;
-}
-.anim-drift-reverse {
-  animation: bg-drift-reverse 32s ease-in-out infinite alternate;
-  will-change: transform;
-}
-.anim-breathe {
-  animation: bg-breathe 14s ease-in-out infinite alternate;
-  transform-box: fill-box;
-  transform-origin: center;
-  will-change: transform, opacity;
-}
-.anim-wave {
-  animation: bg-wave 30s ease-in-out infinite alternate;
-  will-change: transform;
-}
-
-/*
-  Cursor custom (Sesión 1 de motion) — oculto por defecto; CustomCursor.tsx
-  añade `has-custom-cursor` a <html> SOLO si detecta puntero fino real, sin
-  prefers-reduced-motion, y lo retira en el primer touchstart real. Así el
-  cursor nativo nunca desaparece sin que el reemplazo esté listo.
-  El anillo separa POSICIÓN (transform del wrapper, vía gsap.quickTo) de
-  TAMAÑO/COLOR de variante (transition CSS en el hijo) para no pisar el
-  transform que gestiona GSAP.
-*/
-.cursor-root {
-  display: none;
-}
-html.has-custom-cursor {
-  cursor: none;
-}
-html.has-custom-cursor input,
-html.has-custom-cursor textarea,
-html.has-custom-cursor select {
-  cursor: auto !important;
-}
-html.has-custom-cursor .cursor-root {
-  display: block;
-}
-.cursor-wrap {
-  position: absolute;
-  top: 0;
-  left: 0;
-  will-change: transform;
-}
-.cursor-dot {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 6px;
-  height: 6px;
-  border-radius: 9999px;
-  background-color: var(--color-slate-ink-900);
-  transform: translate(-50%, -50%);
-}
-.cursor-ring {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 2rem;
-  height: 2rem;
-  border-radius: 9999px;
-  border: 1.5px solid var(--color-slate-ink-900);
-  transform: translate(-50%, -50%) scale(1);
-  transition:
-    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
-    background-color 0.3s ease,
-    border-color 0.3s ease;
-}
-.cursor-ring[data-variant="link"] {
-  transform: translate(-50%, -50%) scale(1.6);
-  background-color: color-mix(in srgb, var(--color-accent-500) 22%, transparent);
-  border-color: var(--color-accent-500);
-}
-.cursor-ring[data-variant="media"] {
-  transform: translate(-50%, -50%) scale(2.1);
-  background-color: color-mix(in srgb, var(--color-primary-700) 14%, transparent);
-  border-color: var(--color-primary-700);
-}
-
-/* Sobre superficies oscuras (footer, bandas de consultorio) el cursor navy
-   quedaba invisible: es el MISMO slate-ink-900 del fondo. CustomCursor marca
-   el root con data-theme="dark" al entrar en un [data-cursor-theme="dark"] y
-   aquí se invierte a crema. El lima de la variante "link" ya contrasta contra
-   navy y se conserva; el azul de "media" no, y sube a primary-300. */
-.cursor-root[data-theme="dark"] .cursor-dot {
-  background-color: var(--color-cream);
-}
-.cursor-root[data-theme="dark"] .cursor-ring {
-  border-color: var(--color-cream);
-}
-.cursor-root[data-theme="dark"] .cursor-ring[data-variant="media"] {
-  background-color: color-mix(in srgb, var(--color-primary-300) 18%, transparent);
-  border-color: var(--color-primary-300);
 }
 
 /* Accesibilidad: foco visible AA */

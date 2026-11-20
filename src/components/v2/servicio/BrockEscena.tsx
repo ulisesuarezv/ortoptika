@@ -24,8 +24,8 @@ import type { Line2 } from "three/addons/lines/Line2.js";
 import * as THREE from "three";
 import { OjoEstudio, OjoModelo } from "@/components/three/OjoEscena";
 import Lienzo, { Respaldo } from "@/components/three/Lienzo";
+import { brockScroll, guionBrock } from "../estadoEscenas";
 
-export const brockScroll = { p: 0 };
 
 const ss = (a: number, b: number, x: number) => {
   const t = Math.min(1, Math.max(0, (x - a) / (b - a)));
@@ -79,13 +79,6 @@ function planoScroll(p: number, out: THREE.Vector3) {
   return out.copy(a).lerp(b, ss(pa, pb, p)).normalize();
 }
 
-export function guionScroll(p: number) {
-  return {
-    lineas: ss(0.2, 0.3, p),
-    desv: ss(0.5, 0.58, p) * (1 - ss(0.76, 0.82, p)),
-    fija: p < 0.84 ? 1 : p < 0.9 ? 0 : p < 0.95 ? 1 : 2,
-  };
-}
 
 // ---------- estado por instancia ----------
 type Estado = {
@@ -172,7 +165,7 @@ function Escena({ id, modo, oscuro, reducir }: { id: string; modo: "auto" | "scr
     const t = clock.elapsedTime;
     const etq = etiquetasDe(id);
     if (modo === "scroll") {
-      const g = guionScroll(brockScroll.p);
+      const g = guionBrock(brockScroll.p);
       est.current.fija = g.fija;
       est.current.desv = reducir ? g.desv : THREE.MathUtils.damp(est.current.desv, g.desv, 6, dt);
       est.current.lineas = THREE.MathUtils.damp(est.current.lineas, g.lineas, 6, dt);

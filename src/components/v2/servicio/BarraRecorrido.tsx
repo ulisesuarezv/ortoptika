@@ -15,7 +15,7 @@
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
 import { ESCENA_PROTAGONISTA } from "../escenas";
-import { barraScroll } from "./BarraLucesEscena";
+import { barraScroll } from "../estadoEscenas";
 
 const BarraLucesEscena = dynamic(() => import("./BarraLucesEscena"), { ssr: false });
 

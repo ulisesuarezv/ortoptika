@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
-import Hero from "@/components/sections/Hero";
-import ServicesGrid from "@/components/sections/ServicesGrid";
-import AboutPreview from "@/components/sections/AboutPreview";
-import ConsultorioBand from "@/components/sections/ConsultorioBand";
-import ContactSection from "@/components/sections/ContactSection";
+import HeroV2 from "@/components/v2/HeroV2";
+import Senales from "@/components/v2/Senales";
+import DosOjos from "@/components/v2/DosOjos";
+import { Cierre, Consultorio, Servicios, Yeimmy } from "@/components/v2/Secciones";
 import { SITE_CONFIG } from "@/lib/constants";
 import { buildMetadata } from "@/lib/metadata";
 import { jsonLd, medicalBusinessSchema, personSchema } from "@/lib/schema";
@@ -35,7 +34,7 @@ export const metadata: Metadata = {
 };
 
 /**
- * Home. Secciones como Server Components (la animación vive dentro de Reveal).
+ * Home (v2). El ojo 3D vive en HeroV2 y DosOjos; el resto son Server Components.
  * JSON-LD MedicalBusiness + Person inyectados en la página raíz del sitio.
  */
 export default function Home() {
@@ -45,11 +44,13 @@ export default function Home() {
       <script {...jsonLd(medicalBusinessSchema())} />
       <script {...jsonLd(personSchema())} />
 
-      <Hero />
-      <ServicesGrid />
-      <AboutPreview />
-      <ConsultorioBand />
-      <ContactSection />
+      <HeroV2 />
+      <Senales />
+      <DosOjos />
+      <Servicios />
+      <Yeimmy />
+      <Consultorio />
+      <Cierre />
     </>
   );
 }

@@ -11,7 +11,8 @@
  * disruptivo sin ser idénticas.
  */
 
-import type { FAQItem } from "@/components/ui/FAQAccordion";
+/** Pregunta frecuente: la misma se muestra en la landing y va al JSON-LD FAQPage. */
+export type FAQItem = { question: string; answer: string };
 
 export type BackdropVariant = "blobs" | "waves" | "iris" | "dots";
 

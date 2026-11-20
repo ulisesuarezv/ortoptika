@@ -279,11 +279,11 @@ export default function PrivacidadV2() {
         </div>
       </div>
 
-      <footer className="bg-[#02223b] px-5 pb-10 pt-2 text-white lg:px-14">
+      <div className="bg-[#02223b] px-5 pb-10 pt-px text-white lg:px-14">
         <div className="mx-auto max-w-[90rem]">
           <Pie />
         </div>
-      </footer>
+      </div>
     </article>
   );
 }

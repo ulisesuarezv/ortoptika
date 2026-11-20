@@ -15,7 +15,7 @@
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
 import { ESCENA_PROTAGONISTA } from "../escenas";
-import { discosScroll } from "./DiscosEscena";
+import { discosScroll } from "../estadoEscenas";
 
 const DiscosEscena = dynamic(() => import("./DiscosEscena"), { ssr: false });
 

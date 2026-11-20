@@ -16,7 +16,7 @@
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
 import { ESCENA_PROTAGONISTA } from "../escenas";
-import { cuentasScroll } from "./CuentasEscena";
+import { cuentasScroll } from "../estadoEscenas";
 
 const CuentasEscena = dynamic(() => import("./CuentasEscena"), { ssr: false });
 

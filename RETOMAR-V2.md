@@ -1,6 +1,18 @@
 # Retomar la v2 (rama feat/v2)
 
-## ▶ EMPEZAR AQUÍ (próxima sesión, tras el 20-nov-2026, noche)
+## ▶ EMPEZAR AQUÍ (tras el 20-nov-2026, noche 2): LISTA PARA SUBIR
+La v2 ya ES el sitio en esta rama: vive en las rutas reales (`/`, `/servicios/*`, `/sobre-mi/`, `/contacto/`, `/blog/`, `/privacidad/`, 404) y `/lab` ya no existe (también se fue `/lab/ojo`; está en el historial y en `feat/ojo-3d`). Lint y build en verde. `main` no se ha movido: el merge es fast-forward.
+**Falta solo:** que el usuario dé el visto bueno y hacer merge a `main` + push (eso publica en producción). Antes, si se quiere, `pnpm build` y `python3 -m http.server 3313 -d out` para verlo en local / en el celular.
+- Layout raíz: fuentes v2 (Instrument Serif + Inter Tight; los tokens `--font-*` de globals apuntan a ellas). Fuera Header/Footer/WhatsAppButton/cursor/PageTransition de la v1. Se mantienen ConsentMode, GTM y el aviso de cookies (re-pintado en navy v2).
+- OJO: los h1/h2 llevan peso 600 sintético sobre Instrument Serif (solo existe 400). Es el aspecto aprobado: no "arreglarlo".
+- Navegación global: `Cabecera` (en el flujo de cada página) + `MenuMovil` (dialog modal, foco/Escape nativos) + `CabeceraFlotante` (layout raíz: aparece al subir tras bajar media pantalla; escondida queda `inert`). La home usa Logo/BotonAgendar/MenuMovil dentro de HeroV2. `Pie` ahora es un <footer> con columnas (servicios, páginas, contacto).
+- Rendimiento: los objetos de estado del scroll (`brockScroll`, `dosOjosEstado`, …) pasaron a `components/v2/estadoEscenas.ts`. Importarlos desde *Escena.tsx metía three.js en el JS inicial y anulaba el dynamic(): JS inicial de home/landings 475 → 198 KB gz. **Regla: las secciones nunca importan valores de un *Escena.tsx.**
+- Medido sobre `out/` (Playwright, móvil 390 con CPU ×4 y GPU real `--use-angle=metal`): CLS 0 en todo, LCP < 300 ms local, TBT 240–440 ms en páginas 3D y < 70 ms en el resto. Sin WebGL sale el respaldo webp sin errores. 0 enlaces rotos en el export. Un h1 por página, canonical y JSON-LD correctos; /blog noindex.
+- Limpieza: borrados los componentes v1 sin uso (sections, services, ui, motion, Header/Footer…), CSS muerto de globals y la dependencia gsap. `FAQItem` vive ahora en services-content.
+- Avisos conocidos e inofensivos: `THREE.Clock deprecated` (viene de @react-three/fiber). Next 16.4.6 disponible: no actualizar justo antes de subir.
+- Siguen pendientes de la doctora: mensaje `mensaje-doctora-barra-y-cuentas.md` y el copy marcado como BORRADOR.
+
+## EMPEZAR AQUÍ (anterior, 20-nov noche)
 Páginas restantes de la v2 HECHAS (20-nov, noche), con el contenido de la v1: `/lab/v2/sobre-mi/`, `/lab/v2/contacto/`, `/lab/v2/blog/`, `/lab/v2/privacidad/` y `/lab/v2/no-encontrada/` (vista previa del 404; además `src/app/lab/v2/not-found.tsx`). Falta que el usuario las vea.
 **Siguiente tarea:** header y footer v2 globales y llevar `/lab/v2` a `/` (ver «Al publicar» abajo).
 - Cuerpos en `src/components/v2/paginas/*V2.tsx` (Server Components). Las rutas del lab solo ponen noindex: al publicar, cada ruta real (`src/app/sobre-mi/page.tsx`, etc.) cambia su cuerpo por el componente V2 y se queda con su metadata y JSON-LD. El 404 real: `src/app/not-found.tsx` → `<NoEncontradaV2 />`.

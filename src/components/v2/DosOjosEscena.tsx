@@ -14,8 +14,8 @@ import { Line } from "@react-three/drei";
 import * as THREE from "three";
 import { OjoEstudio, OjoModelo, type OjoPose } from "@/components/three/OjoEscena";
 import Lienzo, { Respaldo } from "@/components/three/Lienzo";
+import { dosOjosEstado } from "./estadoEscenas";
 
-export const dosOjosEstado = { p: 0 };
 
 const ss = (a: number, b: number, x: number) => {
   const t = Math.min(1, Math.max(0, (x - a) / (b - a)));

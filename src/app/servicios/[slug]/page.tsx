@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import ServiceLanding from "@/components/services/ServiceLanding";
+import LandingV2 from "@/components/v2/servicio/LandingV2";
 import { buildMetadata } from "@/lib/metadata";
 import { faqPageSchema, jsonLd, serviceSchema } from "@/lib/schema";
 import { SERVICES_CONTENT } from "@/lib/services-content";
@@ -44,7 +44,7 @@ export default async function ServicioPage({ params }: Props) {
   return (
     <>
       {/* JSON-LD: Service (provider → MedicalBusiness por @id) + FAQPage
-          con las mismas preguntas visibles en el FAQAccordion. */}
+          con las mismas preguntas visibles en la landing. */}
       <script
         {...jsonLd(
           serviceSchema({
@@ -57,7 +57,7 @@ export default async function ServicioPage({ params }: Props) {
       />
       <script {...jsonLd(faqPageSchema(content.faq))} />
 
-      <ServiceLanding content={content} />
+      <LandingV2 content={content} />
     </>
   );
 }

@@ -24,13 +24,13 @@ import * as THREE from "three";
 import { OjoEstudio } from "@/components/three/OjoEscena";
 import Lienzo, { Respaldo } from "@/components/three/Lienzo";
 import { C0, COLOR, DIBUJO, F0, LADO, MESA, MITAD, P, PLACA, enTablero, geoCuenta } from "./CuentasEscena";
+import { ambliopiaScroll } from "../estadoEscenas";
 
 const ss = (a: number, b: number, x: number) => {
   const t = Math.min(1, Math.max(0, (x - a) / (b - a)));
   return t * t * (3 - 2 * t);
 };
 
-export const ambliopiaScroll = { p: 0 };
 
 /** Estado de la imagen: dónde va la división, cuánto se emborrona y apaga el ojo ambliope, etc. */
 type Vista = {

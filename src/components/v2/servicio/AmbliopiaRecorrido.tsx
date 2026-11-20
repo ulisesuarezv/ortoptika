@@ -17,7 +17,7 @@
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
 import { ESCENA_PROTAGONISTA } from "../escenas";
-import { ambliopiaScroll } from "./AmbliopiaEscena";
+import { ambliopiaScroll } from "../estadoEscenas";
 
 const AmbliopiaEscena = dynamic(() => import("./AmbliopiaEscena"), { ssr: false });
 

@@ -1,53 +1,28 @@
 import type { Metadata } from "next";
-import { Fraunces, Plus_Jakarta_Sans, Inter } from "next/font/google";
+import { Instrument_Serif, Inter_Tight } from "next/font/google";
 import "../styles/globals.css";
 import { SITE_CONFIG } from "@/lib/constants";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
-import WhatsAppButton from "@/components/layout/WhatsAppButton";
 import { GtmNoScript, GtmScript } from "@/components/layout/GoogleTagManager";
 import ConsentMode from "@/components/layout/ConsentMode";
 import CookieBanner from "@/components/layout/CookieBanner";
-import PageTransition from "@/components/motion/PageTransition";
-import CustomCursor from "@/components/motion/CustomCursor";
+import CabeceraFlotante from "@/components/v2/CabeceraFlotante";
 
-// Tipografía de marca (next/font/google) — estrategia anti-CLS de la Sesión 7:
-// SOLO 2 woff2 en el camino crítico (Fraunces normal + Inter, ~115KB), que son
-// los candidatos a LCP (titular display + cuerpo) → preload + display:"swap".
-// Plus Jakarta (UI) y la itálica de Fraunces (accent-words/watermarks/índices,
-// familia SEPARADA) van preload:false + display:"optional": NO usar "swap" en
-// ellas — el swap tardío re-wrapeaba los titulares fragmentados y disparaba
-// CLS 0.25 en las landings. Con "optional", en frío se ve el fallback métrico
-// (Georgia itálica, digno) y, ya cacheada, la Fraunces itálica real.
-const fraunces = Fraunces({
+// Tipografías de la v2: Instrument Serif (titulares, candidato a LCP) + Inter
+// Tight (todo lo demás). next/font genera la fuente de respaldo con métricas
+// ajustadas, así que el swap no mueve el texto (CLS).
+// OJO: Instrument Serif solo tiene peso 400 y la base pone 600 a h1/h2: el
+// navegador sintetiza la negrita. Es el aspecto aprobado; no cambiarlo sin querer.
+const serif = Instrument_Serif({
   subsets: ["latin"],
-  axes: ["opsz"],
-  variable: "--font-fraunces",
+  weight: "400",
+  style: ["normal", "italic"],
+  variable: "--font-v2-serif",
   display: "swap",
-  preload: true,
 });
-
-const frauncesItalic = Fraunces({
+const sans = Inter_Tight({
   subsets: ["latin"],
-  axes: ["opsz"],
-  style: "italic",
-  variable: "--font-fraunces-italic",
-  display: "optional",
-  preload: false,
-});
-
-const plusJakarta = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  variable: "--font-plus-jakarta",
-  display: "optional",
-  preload: false,
-});
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-v2-sans",
   display: "swap",
-  preload: true,
 });
 
 export const metadata: Metadata = {
@@ -88,20 +63,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="es"
-      data-scroll-behavior="smooth"
-      className={`${fraunces.variable} ${frauncesItalic.variable} ${plusJakarta.variable} ${inter.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col">
+    <html lang="es" data-scroll-behavior="smooth" className={`${serif.variable} ${sans.variable} h-full antialiased`}>
+      <body className="flex min-h-full flex-col font-[family-name:var(--font-v2-sans)]">
         <ConsentMode />
         <GtmNoScript />
-        <PageTransition />
-        <CustomCursor />
-        <Header />
+        <CabeceraFlotante />
         <main className="flex-1">{children}</main>
-        <Footer />
-        <WhatsAppButton />
         <CookieBanner />
         <GtmScript />
       </body>

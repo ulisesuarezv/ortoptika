@@ -30,6 +30,7 @@ import { ContactShadows } from "@react-three/drei";
 import * as THREE from "three";
 import { OjoEstudio } from "@/components/three/OjoEscena";
 import Lienzo, { Respaldo } from "@/components/three/Lienzo";
+import { barraScroll } from "../estadoEscenas";
 
 const ss = (a: number, b: number, x: number) => {
   const t = Math.min(1, Math.max(0, (x - a) / (b - a)));
@@ -423,7 +424,6 @@ function CamaraHero() {
 }
 
 // ---------- guion del scroll (4 pasos) ----------
-export const barraScroll = { p: 0 };
 
 /** Pivote de la barra: el centro de su cuerpo (ahí la sujeta el trípode). */
 const PIVOTE = new THREE.Vector3(0, Y_BARRA - ALTO / 2, 0);

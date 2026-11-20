@@ -23,8 +23,8 @@ import { ContactShadows, RoundedBox } from "@react-three/drei";
 import * as THREE from "three";
 import { OjoEstudio } from "@/components/three/OjoEscena";
 import Lienzo, { Respaldo } from "@/components/three/Lienzo";
+import { cuentasScroll } from "../estadoEscenas";
 
-export const cuentasScroll = { p: 0 };
 
 const ss = (a: number, b: number, x: number) => {
   const t = Math.min(1, Math.max(0, (x - a) / (b - a)));

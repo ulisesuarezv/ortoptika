@@ -18,7 +18,9 @@ import Ojo from "@/components/three/Ojo";
 import type { OjoPose } from "@/components/three/OjoEscena";
 import { ojoEstado } from "@/components/three/ojoEstado";
 import { SITE_CONFIG, whatsappLink } from "@/lib/constants";
-import { rutaV2 } from "./rutas";
+import { BotonAgendar, Logo, enlaceNav } from "./Cabecera";
+import MenuMovil from "./MenuMovil";
+import { ENLACES } from "./rutas";
 
 // BORRADOR de copy: validar con la doctora antes de publicar.
 const CAPAS = [
@@ -203,28 +205,21 @@ export default function HeroV2() {
         <Ojo className="absolute inset-0" pose={poseHero} activo={activo} />
 
         {/* Cabecera propia de la v2 */}
-        <nav className="absolute inset-x-0 top-0 z-20 flex items-center justify-between px-5 py-5 text-sm lg:px-14 lg:py-7">
-          <Link href={rutaV2("/")} className="flex items-center gap-2.5 text-[15px] font-semibold tracking-[0.14em]">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/images/brand/logo-mark-eye-brain-sm.webp" alt="" width={48} height={26} className="h-[26px] w-auto" />
-            ORTOPTIKA
-          </Link>
-          <div className="hidden gap-9 text-[#02223b]/75 lg:flex">
-            <a href="#senales">Señales</a>
-            <a href="#servicios">Servicios</a>
-            <Link href={rutaV2("/sobre-mi/")}>Yeimmy</Link>
-            <Link href={rutaV2("/contacto/")}>Consultorio</Link>
+        <div className="absolute inset-x-0 top-0 z-20 flex items-center justify-between px-5 py-5 text-sm lg:px-14 lg:py-7">
+          <Logo />
+          <nav aria-label="Principal" className="hidden gap-9 text-[#02223b]/75 lg:flex">
+            <a href="#senales" className={enlaceNav}>Señales</a>
+            {ENLACES.map((e) => (
+              <Link key={e.id} href={e.id === "servicios" ? "#servicios" : e.href} className={enlaceNav}>
+                {e.t}
+              </Link>
+            ))}
+          </nav>
+          <div className="flex items-center gap-2">
+            <BotonAgendar />
+            <MenuMovil />
           </div>
-          <a
-            href={whatsappLink()}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden items-center gap-2.5 rounded-full bg-[#02223b] px-5 py-3 font-medium text-white lg:inline-flex"
-          >
-            <span className="h-2 w-2 rounded-full bg-[#a8cf45]" />
-            Agendar cita
-          </a>
-        </nav>
+        </div>
 
         {/* Texto B */}
         <div className="pointer-events-none absolute inset-x-5 top-[13svh] z-10 lg:inset-x-14 lg:top-[22svh]">

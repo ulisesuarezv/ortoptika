@@ -7,7 +7,7 @@
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { dosOjosEstado } from "./DosOjosEscena";
+import { dosOjosEstado } from "./estadoEscenas";
 import { servicioV2 } from "./rutas";
 
 const DosOjosEscena = dynamic(() => import("./DosOjosEscena"), { ssr: false });

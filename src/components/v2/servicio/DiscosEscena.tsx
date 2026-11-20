@@ -22,6 +22,7 @@ import { ContactShadows } from "@react-three/drei";
 import * as THREE from "three";
 import { OjoEstudio } from "@/components/three/OjoEscena";
 import Lienzo, { Respaldo } from "@/components/three/Lienzo";
+import { discosScroll } from "../estadoEscenas";
 
 const ss = (a: number, b: number, x: number) => {
   const t = Math.min(1, Math.max(0, (x - a) / (b - a)));
@@ -287,7 +288,6 @@ function ronda(k: number) {
 }
 
 // ---------- guion del scroll ----------
-export const discosScroll = { p: 0 };
 /** La ronda que cuenta el recorrido: referencia lima, la respuesta en el cuarto disco. */
 const RONDA_GUION = { orden: [1, 3, 4, 0, 2], meta: 3, color: 0 };
 const P_AUTO = 0.76;
