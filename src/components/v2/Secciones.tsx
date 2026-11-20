@@ -8,7 +8,7 @@ import Link from "next/link";
 import { SERVICES, SITE_CONFIG, whatsappLink } from "@/lib/constants";
 import { PHOTOS, type Photo } from "@/lib/photos";
 import Aparece from "./Aparece";
-import { servicioV2 } from "./rutas";
+import { rutaV2, servicioV2 } from "./rutas";
 
 const serif = "font-[family-name:var(--font-v2-serif)]";
 const eyebrow = "text-[11px] font-semibold uppercase tracking-[0.22em]";
@@ -125,7 +125,7 @@ export function Yeimmy() {
             ))}
           </dl>
           <Aparece retraso={420} className="mt-10">
-            <Link href="/sobre-mi/" className="inline-flex items-center gap-2 border-b border-[#02223b] pb-1 text-sm font-medium">
+            <Link href={rutaV2("/sobre-mi/")} className="inline-flex items-center gap-2 border-b border-[#02223b] pb-1 text-sm font-medium">
               Conocer mi trayectoria →
             </Link>
           </Aparece>
@@ -278,6 +278,36 @@ export function Cierre() {
   );
 }
 
+/**
+ * Cierre corto de las páginas interiores: titular navy, WhatsApp, dónde y cuándo, y el pie.
+ * `children` va entre el botón y los datos (un párrafo propio de la página).
+ */
+export function CierreBreve({ titulo, acento, mensaje, children }: { titulo: string; acento: string; mensaje?: string; children?: React.ReactNode }) {
+  return (
+    <section aria-labelledby="cierre-breve" className="bg-[#02223b] px-5 pb-10 pt-24 text-white lg:px-14 lg:pt-36">
+      <div className="mx-auto max-w-[90rem]">
+        <Aparece>
+          <h2 id="cierre-breve" className={`${serif} max-w-[14ch] text-[clamp(3rem,1rem+5.6vw,7rem)] leading-[0.92] tracking-[-0.02em] text-white`}>
+            {titulo} <em className="text-[#a8cf45]">{acento}</em>
+          </h2>
+        </Aparece>
+        <Aparece retraso={120} className="mt-10 flex flex-wrap items-center gap-x-10 gap-y-6">
+          <a href={whatsappLink(mensaje)} target="_blank" rel="noopener noreferrer" className="inline-flex rounded-full bg-[#a8cf45] px-7 py-4 text-base font-semibold text-[#02223b] transition-transform hover:-translate-y-0.5">
+            Escribir por WhatsApp
+          </a>
+          <p className="text-[15px] leading-relaxed text-[#b9c9d6]">
+            {SITE_CONFIG.direccion.clinica} · {SITE_CONFIG.direccion.ciudad}
+            <br />
+            {SITE_CONFIG.horarios.dias}
+          </p>
+        </Aparece>
+        {children && <div className="mt-12 max-w-[52ch] text-[15px] leading-relaxed text-[#b9c9d6] lg:text-lg">{children}</div>}
+        <Pie />
+      </div>
+    </section>
+  );
+}
+
 /** Pie de la v2 (cierra todas las páginas, sobre fondo navy). */
 export function Pie() {
   return (
@@ -287,7 +317,7 @@ export function Pie() {
         <a href={SITE_CONFIG.social.instagram} target="_blank" rel="noopener noreferrer" className="hover:text-white">
           Instagram
         </a>
-        <Link href="/privacidad/" className="hover:text-white">
+        <Link href={rutaV2("/privacidad/")} className="hover:text-white">
           Tratamiento de datos
         </Link>
         <span>© {new Date().getFullYear()} {SITE_CONFIG.name}</span>

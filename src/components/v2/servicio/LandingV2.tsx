@@ -11,6 +11,7 @@ import { SERVICES, SITE_CONFIG, whatsappLink } from "@/lib/constants";
 import { SERVICE_PHOTOS, type Photo } from "@/lib/photos";
 import type { ServiceContent } from "@/lib/services-content";
 import Aparece from "../Aparece";
+import Cabecera from "../Cabecera";
 import { Pie } from "../Secciones";
 import { rutaV2, servicioV2 } from "../rutas";
 import Indice from "./Indice";
@@ -86,22 +87,7 @@ export default function LandingV2({ content }: { content: ServiceContent }) {
           aria-hidden="true"
           className="absolute -right-[22vw] top-[8%] h-[110vmin] w-[110vmin] rounded-full bg-[radial-gradient(circle,#e3ecdf_0%,#efeee4_45%,transparent_70%)] max-lg:-right-[40vw] max-lg:top-[38%]"
         />
-        <nav className="relative z-20 flex items-center justify-between px-5 py-5 text-sm lg:px-14 lg:py-7">
-          <Link href={rutaV2("/")} className="flex items-center gap-2.5 text-[15px] font-semibold tracking-[0.14em]">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/images/brand/logo-mark-eye-brain-sm.webp" alt="" width={48} height={26} className="h-[26px] w-auto" />
-            ORTOPTIKA
-          </Link>
-          <div className="hidden gap-9 text-[#02223b]/75 lg:flex">
-            <Link href={`${rutaV2("/")}#servicios`}>Servicios</Link>
-            <Link href="/sobre-mi/">Yeimmy</Link>
-            <Link href="/contacto/">Consultorio</Link>
-          </div>
-          <a href={wa} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2.5 rounded-full bg-[#02223b] px-4 py-2.5 font-medium text-white lg:px-5 lg:py-3">
-            <span className="h-2 w-2 rounded-full bg-[#a8cf45]" />
-            <span>Agendar<span className="max-lg:hidden">&nbsp;cita</span></span>
-          </a>
-        </nav>
+        <Cabecera mensaje={hero.whatsappMessage} actual="servicios" />
 
         <div className="relative mx-auto grid max-w-[90rem] px-5 pb-16 pt-6 lg:min-h-[calc(100svh-6.5rem)] lg:grid-cols-12 lg:content-center lg:gap-y-10 lg:px-14 lg:pb-24">
           <div className="relative z-10 lg:col-span-7 lg:row-start-1 lg:self-end">

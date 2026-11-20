@@ -4,7 +4,7 @@
  */
 
 const WHATSAPP_NUMBER = "573213394829"; // formato E.164 sin "+" para wa.me
-const WHATSAPP_DEFAULT_MESSAGE =
+export const WHATSAPP_DEFAULT_MESSAGE =
   "Hola, me gustaría agendar una cita de ortóptica / terapia visual.";
 
 export const SITE_CONFIG = {

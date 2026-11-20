@@ -18,6 +18,7 @@ import Ojo from "@/components/three/Ojo";
 import type { OjoPose } from "@/components/three/OjoEscena";
 import { ojoEstado } from "@/components/three/ojoEstado";
 import { SITE_CONFIG, whatsappLink } from "@/lib/constants";
+import { rutaV2 } from "./rutas";
 
 // BORRADOR de copy: validar con la doctora antes de publicar.
 const CAPAS = [
@@ -203,7 +204,7 @@ export default function HeroV2() {
 
         {/* Cabecera propia de la v2 */}
         <nav className="absolute inset-x-0 top-0 z-20 flex items-center justify-between px-5 py-5 text-sm lg:px-14 lg:py-7">
-          <Link href="/" className="flex items-center gap-2.5 text-[15px] font-semibold tracking-[0.14em]">
+          <Link href={rutaV2("/")} className="flex items-center gap-2.5 text-[15px] font-semibold tracking-[0.14em]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/images/brand/logo-mark-eye-brain-sm.webp" alt="" width={48} height={26} className="h-[26px] w-auto" />
             ORTOPTIKA
@@ -211,8 +212,8 @@ export default function HeroV2() {
           <div className="hidden gap-9 text-[#02223b]/75 lg:flex">
             <a href="#senales">Señales</a>
             <a href="#servicios">Servicios</a>
-            <Link href="/sobre-mi/">Yeimmy</Link>
-            <Link href="/contacto/">Consultorio</Link>
+            <Link href={rutaV2("/sobre-mi/")}>Yeimmy</Link>
+            <Link href={rutaV2("/contacto/")}>Consultorio</Link>
           </div>
           <a
             href={whatsappLink()}

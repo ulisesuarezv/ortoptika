@@ -1,6 +1,17 @@
 # Retomar la v2 (rama feat/v2)
 
-## ▶ EMPEZAR AQUÍ (próxima sesión, tras el 20-nov-2026)
+## ▶ EMPEZAR AQUÍ (próxima sesión, tras el 20-nov-2026, noche)
+Páginas restantes de la v2 HECHAS (20-nov, noche), con el contenido de la v1: `/lab/v2/sobre-mi/`, `/lab/v2/contacto/`, `/lab/v2/blog/`, `/lab/v2/privacidad/` y `/lab/v2/no-encontrada/` (vista previa del 404; además `src/app/lab/v2/not-found.tsx`). Falta que el usuario las vea.
+**Siguiente tarea:** header y footer v2 globales y llevar `/lab/v2` a `/` (ver «Al publicar» abajo).
+- Cuerpos en `src/components/v2/paginas/*V2.tsx` (Server Components). Las rutas del lab solo ponen noindex: al publicar, cada ruta real (`src/app/sobre-mi/page.tsx`, etc.) cambia su cuerpo por el componente V2 y se queda con su metadata y JSON-LD. El 404 real: `src/app/not-found.tsx` → `<NoEncontradaV2 />`.
+- Nuevo: `Cabecera.tsx` (nav de las páginas interiores; LandingV2 ya la usa; la home sigue con la suya en HeroV2), `estilos.ts` (serif/sans/eyebrow/h1/h2), `CierreBreve` en Secciones (cierre navy corto con el Pie) y `PreferenciasCookies.tsx` (panel de cookies con piel v2, misma lógica que ConsentPreferences). `WHATSAPP_DEFAULT_MESSAGE` ahora se exporta de constants.
+- Enlaces internos a sobre-mi, contacto y privacidad ya pasan por `rutaV2` (HeroV2, Secciones, LandingV2).
+- Copy nuevo (BORRADOR, para la doctora): sobre-mi «N años mirando de cerca», «Tres cosas que cuido en cada cita», «¿No sabes por dónde empezar?»; contacto, el globo «El mensaje ya va escrito: solo tienes que enviarlo»; blog, «Cada servicio, explicado». El resto es texto de la v1.
+- Privacidad: el texto legal está COPIADO de la v1 palabra por palabra. Mientras convivan, cualquier cambio va en los dos archivos.
+- Sobre mí: la formación es una línea de tiempo por años que se arma sola desde `SITE_CONFIG.credenciales`.
+- Siguen pendientes: enviar `~/Desktop/KayaoCC/docs/ortoptika-v2/mensaje-doctora-barra-y-cuentas.md` y, opcional, quitar `MIRADAS` de `OjoServicio.tsx`.
+
+## EMPEZAR AQUÍ (anterior, 20-nov tarde)
 Los 5 servicios ya tienen su pieza 3D sin el ojo (estrabismo, ambliopía, terapia visual, visión binocular y pediátrica). El ojo 3D queda solo en la home. El usuario aprobó todo («me gusta»).
 **Siguiente tarea: las páginas que faltan en la v2, al nivel de la home y de las landings:** `sobre-mi`, `contacto`, `blog`, `privacidad`, `not-found`. Después vienen el header y el footer v2 globales y llevar `/lab/v2` a `/` (ver «Siguiente: resto de páginas» más abajo).
 - Respetar el «Sistema v2» (tipos, paleta, `Aparece`, rutas con `rutaV2`/`BASE`). Mirar primero cómo están hoy esas páginas en la v1 (`src/app/...`) y reutilizar su contenido. El copy nuevo va SIEMPRE a la doctora.
