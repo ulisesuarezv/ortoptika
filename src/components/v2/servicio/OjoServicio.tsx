@@ -4,7 +4,7 @@
  * Pieza del ojo de cada landing: el mismo modelo del hero, con una mirada que
  * cuenta el servicio. Estrabismo: cordón de Brock en 3D (BrockEscena), sin ojo. Ambliopía: sigue
  * al cursor con retraso, como un ojo que aún no trabaja a la par. Terapia
- * visual: recorre un ocho, como en un ejercicio de seguimiento. Optometría
+ * visual: discos de luz reactivos (DiscosEscena), sin ojo. Optometría
  * pediátrica: tablero de cuentas de colores (CuentasEscena), sin ojo. Visión
  * binocular: barra de luces y gafas de filtros rojo/azul (BarraLucesEscena), sin ojo.
  */
@@ -16,6 +16,7 @@ const OjoEscena = dynamic(() => import("@/components/three/OjoEscena"), { ssr: f
 const BrockEscena = dynamic(() => import("./BrockEscena"), { ssr: false });
 const BarraLucesEscena = dynamic(() => import("./BarraLucesEscena"), { ssr: false });
 const CuentasEscena = dynamic(() => import("./CuentasEscena"), { ssr: false });
+const DiscosEscena = dynamic(() => import("./DiscosEscena"), { ssr: false });
 
 const ss = (a: number, b: number, x: number) => {
   const t = Math.min(1, Math.max(0, (x - a) / (b - a)));
@@ -95,6 +96,8 @@ export default function OjoServicio({ slug, className = "" }: { slug: string; cl
         <BrockEscena activo={activo && !tapado} />
       ) : slug === "vision-binocular" ? (
         <BarraLucesEscena activo={activo && !tapado} />
+      ) : slug === "terapia-visual" ? (
+        <DiscosEscena activo={activo && !tapado} />
       ) : slug === "optometria-pediatrica" ? (
         <CuentasEscena activo={activo && !tapado} />
       ) : (
