@@ -1,6 +1,13 @@
 # Retomar la v2 (rama feat/v2)
 
-## ▶ EMPEZAR AQUÍ (20-nov-2026, lo más reciente)
+## ▶ EMPEZAR AQUÍ (próxima sesión, tras el 20-nov-2026)
+Los 5 servicios ya tienen su pieza 3D sin el ojo (estrabismo, ambliopía, terapia visual, visión binocular y pediátrica). El ojo 3D queda solo en la home. El usuario aprobó todo («me gusta»).
+**Siguiente tarea: las páginas que faltan en la v2, al nivel de la home y de las landings:** `sobre-mi`, `contacto`, `blog`, `privacidad`, `not-found`. Después vienen el header y el footer v2 globales y llevar `/lab/v2` a `/` (ver «Siguiente: resto de páginas» más abajo).
+- Respetar el «Sistema v2» (tipos, paleta, `Aparece`, rutas con `rutaV2`/`BASE`). Mirar primero cómo están hoy esas páginas en la v1 (`src/app/...`) y reutilizar su contenido. El copy nuevo va SIEMPRE a la doctora.
+- Pendiente de enviar a la doctora: `~/Desktop/KayaoCC/docs/ortoptika-v2/mensaje-doctora-barra-y-cuentas.md` (barra, cuentas, discos y ambliopía, con preguntas). Cuando responda, ajustar los `PASOS` de cada `*Recorrido.tsx`.
+- Limpieza opcional: en `OjoServicio.tsx`, `MIRADAS` ya no la usa ningún servicio (todos tienen escena propia).
+
+## Sesión del 20-nov-2026
 Pediátrica ya tiene su pieza sin el ojo: **tablero de cuentas para planchar** (Hama/Perler; la doctora lo usa en TERAPIA y los niños copian un modelo). Foto de referencia: `~/Downloads/IMG_0540 2.HEIC` (no se copió a la carpeta de modelos: el usuario lo rechazó).
 - `CuentasEscena.tsx` (hero "auto": las cuentas saltan del montón y arman el ojo; ciclo de 16 s) + `CuentasRecorrido.tsx` (sticky navy de 460svh, 4 pasos; en el 3 una cuenta queda «Fuera de lugar» y salta a su sitio). Respaldos `cuentas*.webp`.
 - La figura de la foto era Stitch (Disney): NO se reproduce. El dibujo es un ojo en píxeles 21×13 con la paleta (`DIBUJO`).
