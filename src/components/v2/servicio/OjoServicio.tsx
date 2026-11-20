@@ -6,16 +6,15 @@
  * al cursor con retraso, como un ojo que aún no trabaja a la par. Terapia
  * visual: recorre un ocho, como en un ejercicio de seguimiento. Optometría
  * pediátrica: sigue al cursor, juguetón y con la pupila más abierta. Visión
- * binocular: los dos ojos convergen y se separan.
+ * binocular: barra de luces y gafas de filtros rojo/azul (BarraLucesEscena), sin ojo.
  */
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
-import { dosOjosEstado } from "../DosOjosEscena";
 import { ESCENA_PROTAGONISTA } from "../escenas";
 
 const OjoEscena = dynamic(() => import("@/components/three/OjoEscena"), { ssr: false });
-const DosOjosEscena = dynamic(() => import("../DosOjosEscena"), { ssr: false });
 const BrockEscena = dynamic(() => import("./BrockEscena"), { ssr: false });
+const BarraLucesEscena = dynamic(() => import("./BarraLucesEscena"), { ssr: false });
 
 const ss = (a: number, b: number, x: number) => {
   const t = Math.min(1, Math.max(0, (x - a) / (b - a)));
@@ -82,23 +81,10 @@ export default function OjoServicio({ slug, className = "" }: { slug: string; cl
     };
     window.addEventListener("pointermove", mover, { passive: true });
 
-    // visión binocular: el punto se acerca y se aleja; los ojos convergen
-    let raf = 0;
-    if (slug === "vision-binocular") {
-      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const tick = () => {
-        const c = (reloj() % 7) / 7;
-        dosOjosEstado.p = reduce ? 0.47 : 0.06 + 0.42 * (0.5 - 0.5 * Math.cos(c * Math.PI * 2));
-        raf = requestAnimationFrame(tick);
-      };
-      raf = requestAnimationFrame(tick);
-    }
     return () => {
       io.disconnect();
       window.removeEventListener(ESCENA_PROTAGONISTA, ceder);
       window.removeEventListener("pointermove", mover);
-      cancelAnimationFrame(raf);
-      dosOjosEstado.p = 0;
     };
   }, [slug]);
 
@@ -108,7 +94,7 @@ export default function OjoServicio({ slug, className = "" }: { slug: string; cl
       {slug === "estrabismo" ? (
         <BrockEscena activo={activo && !tapado} />
       ) : slug === "vision-binocular" ? (
-        <DosOjosEscena activo={activo && !tapado} />
+        <BarraLucesEscena activo={activo && !tapado} />
       ) : (
         <OjoEscena activo={activo && !tapado} pupila={m?.pupila ?? 0.3} seguir={m?.seguir ?? true} mirar={m?.mirar} />
       )}

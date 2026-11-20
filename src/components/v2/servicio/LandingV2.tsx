@@ -14,6 +14,7 @@ import Aparece from "../Aparece";
 import { Pie } from "../Secciones";
 import { rutaV2, servicioV2 } from "../rutas";
 import Indice from "./Indice";
+import BarraRecorrido from "./BarraRecorrido";
 import BrockRecorrido from "./BrockRecorrido";
 import OjoServicio from "./OjoServicio";
 
@@ -59,6 +60,7 @@ const Flecha = ({ className = "" }: { className?: string }) => (
 export default function LandingV2({ content }: { content: ServiceContent }) {
   const { hero, queEs, tipos, tratamiento, proceso, paraQuien, faq } = content;
   const n = SERVICES.findIndex((s) => s.slug === content.slug) + 1;
+  const horizontal = content.slug === "vision-binocular";
   const otros = SERVICES.filter((s) => s.slug !== content.slug);
   const fotos = SERVICE_PHOTOS[content.slug] ?? {};
   const foto = fotos.cutout ?? fotos.proceso ?? fotos.bleed;
@@ -118,10 +120,18 @@ export default function LandingV2({ content }: { content: ServiceContent }) {
               </h1>
             </Aparece>
           </div>
-          {/* En móvil el ojo va entre el titular y el texto; en escritorio, a la derecha. */}
-          <OjoServicio slug={content.slug} className="relative -mx-5 -my-2 aspect-[50/51] max-h-[56svh] lg:absolute lg:inset-y-0 lg:right-0 lg:mx-0 lg:my-0 lg:aspect-auto lg:max-h-none lg:w-[46%]" />
-          <div className="relative z-10 lg:col-span-7 lg:row-start-2">
-            <Aparece as="p" retraso={160} className="max-w-[40rem] text-[15px] leading-relaxed text-[#33506a] lg:mt-10 lg:text-lg">
+          {/* En móvil la pieza va entre el titular y el texto; en escritorio, a la derecha.
+              Visión binocular: la barra de luces es larga, va a todo el ancho debajo del texto. */}
+          <OjoServicio
+            slug={content.slug}
+            className={
+              horizontal
+                ? "relative order-last -mx-5 mt-6 h-[clamp(230px,30vw,400px)] lg:col-span-12 lg:row-start-2 lg:mx-0 lg:mt-0"
+                : "relative -mx-5 -my-2 aspect-[50/51] max-h-[56svh] lg:absolute lg:inset-y-0 lg:right-0 lg:mx-0 lg:my-0 lg:aspect-auto lg:max-h-none lg:w-[46%]"
+            }
+          />
+          <div className={`relative z-10 ${horizontal ? "lg:col-span-5 lg:col-start-8 lg:row-start-1 lg:self-end" : "lg:col-span-7 lg:row-start-2"}`}>
+            <Aparece as="p" retraso={160} className={`max-w-[40rem] text-[15px] leading-relaxed text-[#33506a] lg:text-lg ${horizontal ? "max-lg:mt-8" : "lg:mt-10"}`}>
               {hero.lead}
             </Aparece>
             <Aparece retraso={240} className="mt-8 flex flex-wrap gap-3.5">
@@ -138,6 +148,9 @@ export default function LandingV2({ content }: { content: ServiceContent }) {
 
       {/* Estrabismo: el ejercicio del cordón de Brock, contado con scroll */}
       {content.slug === "estrabismo" && <BrockRecorrido />}
+
+      {/* Visión binocular: el ejercicio de la barra de luces, contado con scroll */}
+      {content.slug === "vision-binocular" && <BarraRecorrido />}
 
       {/* ================= CUERPO CON ÍNDICE ================= */}
       <div className="bg-white px-5 lg:px-14">

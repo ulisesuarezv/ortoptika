@@ -61,3 +61,15 @@ Estado al 19-nov-2026: home v2 completa y aprobada en `/lab/v2`. Lint y build en
 - Copy de las landings (services-content.ts) y del recorrido del cordón VALIDADO;
 - ¿Faltan o sobran servicios? (PENDIENTES): confirmarlo con la doctora; el copy nuevo de la home v2 sigue siendo borrador.
 - Faltan músculos extraoculares y retina en el modelo.
+
+## Hecho el 19-nov (sesión 3): visión binocular sin el ojo — barra de luces + gafas rojo/azul
+- Objetos reales del consultorio: barra **Bernell EYEPORT II** (36", 12 LED alternos) + gafas reversibles rojo/azul. Manual oficial: https://s3.amazonaws.com/cdn.bernell.com/downloads/BRMJLEPV2-Individual.pdf (texto extraíble con PDFKit). Sin marcas en el modelo.
+- `BarraLucesEscena.tsx`: modelo procedural (sección barrida con puntas redondeadas, cápsula, perillas, trípode). **Filtro real**: cada lente con `MultiplyBlending` + disco del color de fondo detrás de la escena en los mismos rayos (si no, sobre el lienzo transparente el filtro no tiñe nada). Halos de LED adelantados hacia la cámara (no se cortan contra la barra).
+- Hero de visión binocular: la barra va HORIZONTAL a todo el ancho bajo el texto (`horizontal` en LandingV2: titular a la izquierda, lead a la derecha). Encuadre móvil = solo el tramo central (`tramo()`).
+- `BarraRecorrido.tsx`: sticky navy de 460svh, 4 pasos (barra · gafas · giro vertical/diagonal con gafas invertidas · barra a la nariz con la X de la franja). **Copy = BORRADOR, pendiente de la doctora.**
+- Gotcha: tras mover la cámara en useFrame, `camera.updateMatrixWorld()` antes de `project()`, o proyecta con la matriz vieja.
+
+### EMPEZAR AQUÍ (próxima sesión, tras el 19-nov sesión 3)
+1. Pasar a la doctora el borrador del recorrido de la barra (texto en `BarraRecorrido.tsx`, PASOS). Preguntas abiertas: ¿«el cerebro deja de usar un ojo» es correcto para el paso 2? ¿usa la barra a ~70 cm? ¿hace el ejercicio de la nariz (paso 4) en consulta?
+2. Ajustes visuales que quedaron anotados: el trípode del hero (la pata que viene hacia la cámara parece un palo; abrir las patas a los lados), el panel queda tapado cuando las gafas pasan por el centro, y en el paso 4 del recorrido el LED más cercano sale cortado por abajo.
+3. Siguientes servicios sin el ojo (ambliopía, terapia visual, pediátrica): pedir al usuario los objetos reales del consultorio para cada uno.
