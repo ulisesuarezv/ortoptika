@@ -14,6 +14,7 @@ import Aparece from "../Aparece";
 import { Pie } from "../Secciones";
 import { rutaV2, servicioV2 } from "../rutas";
 import Indice from "./Indice";
+import AmbliopiaRecorrido from "./AmbliopiaRecorrido";
 import BarraRecorrido from "./BarraRecorrido";
 import BrockRecorrido from "./BrockRecorrido";
 import CuentasRecorrido from "./CuentasRecorrido";
@@ -153,6 +154,9 @@ export default function LandingV2({ content }: { content: ServiceContent }) {
 
       {/* Visión binocular: el ejercicio de la barra de luces, contado con scroll */}
       {content.slug === "vision-binocular" && <BarraRecorrido />}
+
+      {/* Ambliopía: el tablero de cuentas como «lo que manda cada ojo», contado con scroll */}
+      {content.slug === "ambliopia" && <AmbliopiaRecorrido />}
 
       {/* Terapia visual: los discos de luz (ver un color, buscarlo y tocarlo), contado con scroll */}
       {content.slug === "terapia-visual" && <DiscosRecorrido />}

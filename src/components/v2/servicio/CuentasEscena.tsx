@@ -37,7 +37,7 @@ const azar = (k: number) => {
 
 // ---------- el dibujo (21 × 13) ----------
 /** N contorno · W blanco · A iris · L aro lima · K pupila · . vacío */
-const DIBUJO = [
+export const DIBUJO = [
   ".........NNN.........",
   "......NNNWWWNNN......",
   "....NNWWWAAAWWWNN....",
@@ -52,22 +52,22 @@ const DIBUJO = [
   "......NNNWWWNNN......",
   ".........NNN.........",
 ];
-const COLOR: Record<string, string> = { N: "#0b2236", W: "#f3efe6", A: "#2f7fb8", L: "#a8cf45", K: "#081420" };
+export const COLOR: Record<string, string> = { N: "#0b2236", W: "#f3efe6", A: "#2f7fb8", L: "#a8cf45", K: "#081420" };
 const MONTON_COLORES = ["#0b2236", "#f3efe6", "#2f7fb8", "#a8cf45", "#f3efe6", "#2f7fb8"];
 
 // ---------- medidas (en pasos de pivote; todo el grupo se escala por P) ----------
-const P = 0.36;
-const LADO = 23; // pivotes por lado
-const MITAD = (LADO - 1) / 2;
-const PLACA = LADO + 0.6;
-const MESA = -0.35; // cara inferior de la placa = la mesa
-const BR_IN = 0.23,
+export const P = 0.36;
+export const LADO = 23; // pivotes por lado
+export const MITAD = (LADO - 1) / 2;
+export const PLACA = LADO + 0.6;
+export const MESA = -0.35; // cara inferior de la placa = la mesa
+export const BR_IN = 0.23,
   BR_OUT = 0.46,
   BH = 0.86;
-const C0 = 1,
+export const C0 = 1,
   F0 = 5; // celda (0,0) del dibujo en el tablero
 
-const enTablero = (i: number, j: number) => new THREE.Vector3(i - MITAD, BH / 2, j - MITAD);
+export const enTablero = (i: number, j: number) => new THREE.Vector3(i - MITAD, BH / 2, j - MITAD);
 
 type Cuenta = { destino: THREE.Vector3; color: THREE.Color; origen: THREE.Vector3; giro: number; alto: number };
 const CUENTAS: Cuenta[] = [];
@@ -202,7 +202,7 @@ export function guionScroll(p: number) {
 }
 
 // ---------- geometrías ----------
-function geoCuenta() {
+export function geoCuenta() {
   const r = 0.11;
   const pts: THREE.Vector2[] = [new THREE.Vector2(BR_IN, 0.05), new THREE.Vector2(BR_IN + 0.05, 0)];
   const arco = (cx: number, cy: number, a0: number, a1: number) => {
