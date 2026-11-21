@@ -48,6 +48,14 @@ const DURACION_ENTRADA = 1.6; // s
 // progreso de la entrada al cargar (0 → 1), lo escribe el rAF del DOM
 const entrada = { v: 0 };
 
+/**
+ * Hacia dónde mira el ojo en reposo en el hero (solo la pose B, la de entrada):
+ * girado hacia el centro de la pantalla, donde está el texto, en vez de al frente.
+ * En móvil el ojo va abajo a la derecha, así que además mira un poco hacia arriba.
+ * El seguimiento del puntero/dedo se suma encima.
+ */
+const MIRADA = { escritorio: { rx: 0, ry: -0.32 }, movil: { rx: -0.22, ry: -0.42 } };
+
 /** Dónde está el ojo en cada momento (unidades de mundo de la escena). */
 function poseHero(p: number, { halfH, aspect }: { halfH: number; aspect: number }): OjoPose {
   const halfW = halfH * aspect;
@@ -67,8 +75,8 @@ function poseHero(p: number, { halfH, aspect }: { halfH: number; aspect: number 
     return {
       x: mix(bx, -halfW * 0.42, m),
       y: mix(-0.04 * halfH, -0.1 * halfH, m),
-      rx: mix(0, 0.1, m),
-      ry: mix(bry, 1.12, m),
+      rx: mix(MIRADA.escritorio.rx, 0.1, m),
+      ry: mix(bry + MIRADA.escritorio.ry, 1.12, m),
       s: mix(bs, 0.98, m),
       sep,
     };
@@ -78,8 +86,8 @@ function poseHero(p: number, { halfH, aspect }: { halfH: number; aspect: number 
   return {
     x: mix(halfW * 0.42, -halfW * 0.4, m),
     y: mix(by, -halfH * 0.36, m),
-    rx: mix(0, -1.2, m),
-    ry: mix(-(1 - i) * 0.6, 0.12, m),
+    rx: mix(MIRADA.movil.rx, -1.2, m),
+    ry: mix(-(1 - i) * 0.6 + MIRADA.movil.ry, 0.12, m),
     s: mix(1.45, 0.7, m),
     sep,
   };
