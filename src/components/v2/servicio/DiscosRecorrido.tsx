@@ -107,16 +107,16 @@ export default function DiscosRecorrido() {
 
   return (
     <section ref={zona} aria-labelledby="discos-titulo" className="relative h-[460svh] bg-[#02223b] text-white">
-      <div className="sticky top-0 h-[100lvh] overflow-hidden">
+      <div className="sticky top-0 flex h-[100lvh] flex-col overflow-hidden lg:block">
         <div
           aria-hidden="true"
           className="absolute inset-0 [background-image:linear-gradient(rgba(255,255,255,.04)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.04)_1px,transparent_1px)] [background-size:80px_80px]"
         />
-        <div aria-hidden="true" className="absolute inset-x-0 top-0 h-[54%] lg:left-[38%] lg:h-full">
+        <div aria-hidden="true" className="relative min-h-0 flex-1 lg:absolute lg:inset-x-0 lg:top-0 lg:left-[38%] lg:h-full">
           <DiscosEscena activo={activo || precalentar} modo="scroll" oscuro />
         </div>
 
-        <div className="absolute inset-x-5 bottom-[calc(100lvh-100svh+1.5rem)] lg:inset-x-auto lg:bottom-auto lg:left-14 lg:top-1/2 lg:w-[34rem] lg:-translate-y-1/2">
+        <div className="relative mx-5 mb-[calc(100lvh-100svh+1.5rem)] mt-3 shrink-0 lg:absolute lg:m-0 lg:inset-x-auto lg:bottom-auto lg:left-14 lg:top-1/2 lg:w-[34rem] lg:-translate-y-1/2">
           <p className="flex items-center gap-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#a8cf45]">
             Discos de luz
             <span className="relative h-px w-16 overflow-hidden bg-white/15">

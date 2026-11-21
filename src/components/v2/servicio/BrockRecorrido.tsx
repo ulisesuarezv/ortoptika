@@ -143,36 +143,36 @@ export default function BrockRecorrido() {
 
   return (
     <section ref={zona} aria-labelledby="cordon-titulo" className="relative h-[460svh] bg-[#02223b] text-white">
-      <div className="sticky top-0 h-[100lvh] overflow-hidden">
+      <div className="sticky top-0 flex h-[100lvh] flex-col overflow-hidden lg:block">
         <div
           aria-hidden="true"
           className="absolute inset-0 [background-image:linear-gradient(rgba(255,255,255,.04)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.04)_1px,transparent_1px)] [background-size:80px_80px]"
         />
-        <div aria-hidden="true" className="absolute inset-x-0 top-0 h-[54%] lg:left-[38%] lg:h-full">
+        <div aria-hidden="true" className="relative min-h-0 flex-1 lg:absolute lg:inset-x-0 lg:top-0 lg:left-[38%] lg:h-full">
           <BrockEscena activo={activo || precalentar} modo="scroll" oscuro />
+          {/* lo que ve el paciente: dentro de la zona de la escena (en móvil, abajo a la derecha; nunca sobre el texto) */}
+          <div
+            ref={vista}
+            aria-hidden="true"
+            className="absolute bottom-2 right-4 z-10 w-[100px] rounded-2xl border border-white/10 bg-white/[0.04] p-2.5 backdrop-blur-sm lg:bottom-12 lg:right-14 lg:w-[210px] lg:p-5"
+            style={{ opacity: 0 }}
+          >
+            <p className="whitespace-nowrap text-[9px] font-semibold uppercase tracking-[0.14em] text-[#a8cf45] lg:text-[10px] lg:tracking-[0.22em]">Lo que se ve</p>
+            <svg viewBox="0 0 220 240" className="mt-2 w-full lg:mt-3">
+              <line ref={cordA} y1={240} y2={0} stroke="#efe8da" strokeWidth={2} strokeOpacity={0.85} />
+              <line ref={cordB} y1={240} y2={0} stroke="#efe8da" strokeWidth={2} strokeOpacity={0.85} />
+              {CUENTAS_Y.map((y, i) => (
+                <g key={i}>
+                  <circle ref={(e) => void (cuentasA.current[i] = e)} cy={y} r={CUENTAS_R[i]} fill={CUENTAS_C[i]} fillOpacity={0.75} />
+                  <circle ref={(e) => void (cuentasB.current[i] = e)} cy={y} r={CUENTAS_R[i]} fill={CUENTAS_C[i]} fillOpacity={0.75} />
+                </g>
+              ))}
+            </svg>
+          </div>
         </div>
 
-        {/* lo que ve el paciente */}
-        <div
-          ref={vista}
-          aria-hidden="true"
-          className="absolute right-4 top-[38svh] w-[118px] rounded-2xl border border-white/10 bg-white/[0.04] p-3 backdrop-blur-sm lg:bottom-12 lg:right-14 lg:top-auto lg:w-[210px] lg:p-5"
-          style={{ opacity: 0 }}
-        >
-          <p className="text-[9px] font-semibold uppercase tracking-[0.22em] text-[#a8cf45] lg:text-[10px]">Lo que se ve</p>
-          <svg viewBox="0 0 220 240" className="mt-2 w-full lg:mt-3">
-            <line ref={cordA} y1={240} y2={0} stroke="#efe8da" strokeWidth={2} strokeOpacity={0.85} />
-            <line ref={cordB} y1={240} y2={0} stroke="#efe8da" strokeWidth={2} strokeOpacity={0.85} />
-            {CUENTAS_Y.map((y, i) => (
-              <g key={i}>
-                <circle ref={(e) => void (cuentasA.current[i] = e)} cy={y} r={CUENTAS_R[i]} fill={CUENTAS_C[i]} fillOpacity={0.75} />
-                <circle ref={(e) => void (cuentasB.current[i] = e)} cy={y} r={CUENTAS_R[i]} fill={CUENTAS_C[i]} fillOpacity={0.75} />
-              </g>
-            ))}
-          </svg>
-        </div>
 
-        <div className="absolute inset-x-5 bottom-[calc(100lvh-100svh+1.5rem)] lg:inset-x-auto lg:bottom-auto lg:left-14 lg:top-1/2 lg:w-[34rem] lg:-translate-y-1/2">
+        <div className="relative mx-5 mb-[calc(100lvh-100svh+1.5rem)] mt-3 shrink-0 lg:absolute lg:m-0 lg:inset-x-auto lg:bottom-auto lg:left-14 lg:top-1/2 lg:w-[34rem] lg:-translate-y-1/2">
           <p className="flex items-center gap-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#a8cf45]">
             El ejercicio del cordón
             <span className="relative h-px w-16 overflow-hidden bg-white/15">
