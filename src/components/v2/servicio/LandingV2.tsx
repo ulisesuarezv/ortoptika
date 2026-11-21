@@ -115,8 +115,8 @@ export default function LandingV2({ content }: { content: ServiceContent }) {
             slug={content.slug}
             className={
               horizontal
-                ? "relative order-last -mx-5 mt-6 h-[clamp(230px,30vw,400px)] lg:col-span-12 lg:row-start-2 lg:mx-0 lg:mt-0"
-                : "relative -mx-5 -my-2 aspect-[50/51] max-h-[56svh] lg:absolute lg:inset-y-0 lg:right-0 lg:mx-0 lg:my-0 lg:aspect-auto lg:max-h-none lg:w-[46%]"
+                ? "relative order-last -mx-5 mt-6 h-[clamp(230px,30vw,400px)] max-sm:h-[min(64vw,50svh)] lg:col-span-12 lg:row-start-2 lg:mx-0 lg:mt-0"
+                : "relative -mx-5 -my-2 h-[min(102vw,56svh)] lg:absolute lg:inset-y-0 lg:right-0 lg:mx-0 lg:my-0 lg:h-auto lg:w-[46%]"
             }
           />
           <div className={`relative z-10 ${horizontal ? "lg:col-span-5 lg:col-start-8 lg:row-start-1 lg:self-end" : "lg:col-span-7 lg:row-start-2"}`}>

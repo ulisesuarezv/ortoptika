@@ -398,10 +398,16 @@ const SALTO = 0.26;
 const CENTRO = new THREE.Vector3(0, Y_BARRA * 0.62, 0);
 const DIR = new THREE.Vector3(0, 0.34, 1).normalize();
 /**
- * En lienzos estrechos (móvil) la barra entera quedaría diminuta: se encuadra
- * solo el tramo central y las gafas recorren ese tramo.
+ * En lienzos estrechos (móvil) la barra de frente o queda diminuta o se sale por
+ * los lados. Ahí se ve ENTERA y a tres cuartos: la cámara se va hacia un lado y
+ * la barra se aleja en perspectiva (el extremo cercano grande, el lejano chico).
  */
-const tramo = (size: { width: number; height: number }) => Math.min(1, Math.max(0.5, size.width / size.height / 2.6));
+const estrecho = (size: { width: number; height: number }) => size.width / size.height < 2;
+const DIR_MOVIL = new THREE.Vector3(1.05, 0.55, 1).normalize();
+// la perspectiva agranda el extremo cercano (derecha): se mira un poco hacia él para centrar el conjunto
+const CENTRO_MOVIL = new THREE.Vector3(LARGO * 0.07, Y_BARRA * 0.62, 0);
+/** Fracción de la barra que se encuadra de frente (en escritorio ancho, toda). */
+const tramo = (size: { width: number; height: number }) => (estrecho(size) ? 1 : Math.min(1, Math.max(0.5, size.width / size.height / 2.6)));
 function claveHero(k: number) {
   return [
     new THREE.Vector3((-LARGO / 2) * k, Y_BARRA + 0.15, 0),
@@ -418,7 +424,8 @@ function claveHero(k: number) {
 function CamaraHero() {
   const { camera, size } = useThree();
   useLayoutEffect(() => {
-    encuadrar(camera as THREE.PerspectiveCamera, size, claveHero(tramo(size)), CENTRO, DIR, 0.94, 0.8);
+    if (estrecho(size)) encuadrar(camera as THREE.PerspectiveCamera, size, claveHero(1), CENTRO_MOVIL, DIR_MOVIL, 0.8, 0.84);
+    else encuadrar(camera as THREE.PerspectiveCamera, size, claveHero(tramo(size)), CENTRO, DIR, 0.94, 0.8);
   }, [camera, size]);
   return null;
 }
@@ -585,7 +592,8 @@ function Escena({ id, modo, oscuro, reducir }: { id: string; modo: "auto" | "scr
       piv.updateMatrixWorld();
       L.grupo = true;
       L.valor = reducir ? 0 : alternado(t);
-      const X_MAX = X_LIM * tramo(size) - 0.4;
+      // a tres cuartos (móvil) el extremo cercano queda al borde: las gafas no llegan tan lejos
+      const X_MAX = (X_LIM * tramo(size) - 0.4) * (estrecho(size) ? 0.7 : 1);
       // ¿se movió el cursor? entonces manda él; si no, las gafas se deslizan solas
       if (Math.abs(pointer.x - e.px) > 1e-4) {
         e.px = pointer.x;

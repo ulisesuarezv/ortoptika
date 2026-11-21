@@ -108,7 +108,7 @@ export default function CuentasRecorrido() {
 
   return (
     <section ref={zona} aria-labelledby="cuentas-titulo" className="relative h-[460svh] bg-[#02223b] text-white">
-      <div className="sticky top-0 h-[100svh] overflow-hidden">
+      <div className="sticky top-0 h-[100lvh] overflow-hidden">
         <div
           aria-hidden="true"
           className="absolute inset-0 [background-image:linear-gradient(rgba(255,255,255,.04)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.04)_1px,transparent_1px)] [background-size:80px_80px]"
@@ -117,7 +117,7 @@ export default function CuentasRecorrido() {
           <CuentasEscena activo={activo || precalentar} modo="scroll" oscuro />
         </div>
 
-        <div className="absolute inset-x-5 bottom-6 lg:inset-x-auto lg:bottom-auto lg:left-14 lg:top-1/2 lg:w-[34rem] lg:-translate-y-1/2">
+        <div className="absolute inset-x-5 bottom-[calc(100lvh-100svh+1.5rem)] lg:inset-x-auto lg:bottom-auto lg:left-14 lg:top-1/2 lg:w-[34rem] lg:-translate-y-1/2">
           <p className="flex items-center gap-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#a8cf45]">
             Cuentas de colores
             <span className="relative h-px w-16 overflow-hidden bg-white/15">
