@@ -48,6 +48,21 @@ const DURACION_ENTRADA = 1.6; // s
 // progreso de la entrada al cargar (0 → 1), lo escribe el rAF del DOM
 const entrada = { v: 0 };
 
+/**
+ * Vistazo de bienvenida: al terminar la entrada, el ojo mira un momento hacia el
+ * centro de la pantalla (donde está el texto) y vuelve a su posición de siempre.
+ * Una sola vez por carga; con reduced-motion no ocurre. `v` = intensidad (0…1).
+ */
+const vistazo = { v: 0 };
+const VISTAZO = {
+  empieza: DURACION_ENTRADA + 0.25, // s desde la carga
+  ida: 0.7,
+  quieto: 0.9,
+  vuelta: 1.0,
+  escritorio: { rx: 0, ry: -0.24 },
+  movil: { rx: -0.14, ry: -0.3 }, // abajo a la derecha: hacia el centro es arriba a la izquierda
+};
+
 /** Dónde está el ojo en cada momento (unidades de mundo de la escena). */
 function poseHero(p: number, { halfH, aspect }: { halfH: number; aspect: number }): OjoPose {
   const halfW = halfH * aspect;
@@ -67,8 +82,8 @@ function poseHero(p: number, { halfH, aspect }: { halfH: number; aspect: number 
     return {
       x: mix(bx, -halfW * 0.42, m),
       y: mix(-0.04 * halfH, -0.1 * halfH, m),
-      rx: mix(0, 0.1, m),
-      ry: mix(bry, 1.12, m),
+      rx: mix(VISTAZO.escritorio.rx * vistazo.v, 0.1, m),
+      ry: mix(bry + VISTAZO.escritorio.ry * vistazo.v, 1.12, m),
       s: mix(bs, 0.98, m),
       sep,
     };
@@ -78,8 +93,8 @@ function poseHero(p: number, { halfH, aspect }: { halfH: number; aspect: number 
   return {
     x: mix(halfW * 0.42, -halfW * 0.4, m),
     y: mix(by, -halfH * 0.36, m),
-    rx: mix(0, -1.2, m),
-    ry: mix(-(1 - i) * 0.6, 0.12, m),
+    rx: mix(VISTAZO.movil.rx * vistazo.v, -1.2, m),
+    ry: mix(-(1 - i) * 0.6 + VISTAZO.movil.ry * vistazo.v, 0.12, m),
     s: mix(1.45, 0.7, m),
     sep,
   };
@@ -115,7 +130,10 @@ export default function HeroV2() {
     const tick = () => {
       const el = zona.current;
       if (el) {
-        entrada.v = reduce ? 1 : Math.min(1, (performance.now() - t0) / 1000 / DURACION_ENTRADA);
+        const seg = (performance.now() - t0) / 1000;
+        entrada.v = reduce ? 1 : Math.min(1, seg / DURACION_ENTRADA);
+        const a = VISTAZO.empieza, b = a + VISTAZO.ida + VISTAZO.quieto;
+        vistazo.v = reduce ? 0 : ss(a, a + VISTAZO.ida, seg) * (1 - ss(b, b + VISTAZO.vuelta, seg));
         const r = el.getBoundingClientRect();
         const total = r.height - window.innerHeight;
         const p = Math.min(1, Math.max(0, -r.top / total));
