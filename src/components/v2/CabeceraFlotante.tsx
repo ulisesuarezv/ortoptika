@@ -49,7 +49,7 @@ export default function CabeceraFlotante() {
         visible ? "translate-y-0 opacity-100" : "-translate-y-[140%] opacity-0"
       }`}
     >
-      <Logo />
+      <Logo compacto />
       <nav aria-label="Accesos rápidos" className="hidden gap-9 text-[#02223b]/75 lg:flex">
         {ENLACES.map((e) => (
           <Link key={e.id} href={e.href} aria-current={actual === e.id ? "page" : undefined} className={enlaceNav}>

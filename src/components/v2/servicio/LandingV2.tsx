@@ -101,7 +101,7 @@ export default function LandingV2({ content }: { content: ServiceContent }) {
               </span>
             </Aparece>
             <Aparece retraso={80}>
-              <h1 className={`${serif} mt-6 text-[clamp(3.2rem,1rem+6.4vw,7rem)] leading-[0.92] tracking-[-0.02em] text-[#02223b]`}>
+              <h1 className={`${serif} mt-6 text-[clamp(3.2rem,1rem+6.4vw,7rem)] leading-[0.92] lg:[@media(max-height:820px)]:text-[clamp(3rem,1rem+4.2vw,5.4rem)] tracking-[-0.02em] text-[#02223b]`}>
                 <span className="block">{hero.tituloPre}</span>
                 <span className="block">
                   {hero.tituloGrande} <em className="text-[#0e4d7a]">{hero.tituloAccent}</em>

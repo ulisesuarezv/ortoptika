@@ -11,12 +11,15 @@ import { ENLACES, rutaV2, type EnlaceId } from "./rutas";
 export const enlaceNav =
   "transition-colors hover:text-[#02223b] aria-[current]:text-[#02223b] aria-[current]:underline aria-[current]:decoration-[#a8cf45] aria-[current]:decoration-2 aria-[current]:underline-offset-8";
 
-export function Logo() {
+/** `compacto`: versión de la cabecera flotante (oculta la palabra antes). */
+export function Logo({ compacto = false }: { compacto?: boolean }) {
   return (
     <Link href={rutaV2("/")} className="flex items-center gap-2.5 text-[15px] font-semibold tracking-[0.14em] text-[#02223b]">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src="/images/brand/logo-mark-eye-brain-sm.webp" alt="" width={48} height={26} className="h-[26px] w-auto" />
-      ORTOPTIKA
+      {/* Por debajo de 370 px (400 en la cabecera flotante, que tiene menos sitio) no caben
+          la palabra, «Agendar» y el menú: queda el ojo y la palabra solo para lectores. */}
+      <span className={compacto ? "max-[399px]:sr-only" : "max-[369px]:sr-only"}>ORTOPTIKA</span>
     </Link>
   );
 }

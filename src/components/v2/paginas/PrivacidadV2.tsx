@@ -106,7 +106,7 @@ export default function PrivacidadV2() {
             </div>
           </aside>
 
-          <div className="pb-24 pt-16 lg:col-span-8 lg:col-start-5 lg:pb-36 lg:pt-24">
+          <div className="min-w-0 pb-24 pt-16 lg:col-span-8 lg:col-start-5 lg:pb-36 lg:pt-24">
             <Seccion id="que-datos" n={1}>
               <p className={p}>
                 Este sitio <strong className="font-semibold text-[#02223b]">no tiene formularios</strong> y no guarda información en un servidor propio. Solo se

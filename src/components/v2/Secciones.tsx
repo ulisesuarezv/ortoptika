@@ -116,10 +116,10 @@ export function Yeimmy() {
             entender cómo trabaja cada mirada y a acompañar a las familias, sobre todo a los más pequeños, con
             paciencia y explicaciones claras.
           </Aparece>
-          <dl className="mt-12 grid grid-cols-1 border-t border-[#02223b]/15 sm:grid-cols-3">
+          <dl className="mt-12 grid grid-cols-1 border-t border-[#02223b]/15 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
             {datos.map(([a, b], i) => (
-              <Aparece key={a} retraso={200 + i * 80} className="border-b border-[#02223b]/15 py-5 sm:border-b-0 sm:pr-4">
-                <dt className={`${serif} text-3xl lg:text-4xl`}>{a}</dt>
+              <Aparece key={a} retraso={200 + i * 80} className="border-b border-[#02223b]/15 py-5 sm:border-b-0 sm:pr-4 lg:border-b xl:border-b-0">
+                <dt className={`${serif} text-3xl min-[1440px]:text-4xl`}>{a}</dt>
                 <dd className="mt-1 text-sm text-[#4d6880]">{b}</dd>
               </Aparece>
             ))}

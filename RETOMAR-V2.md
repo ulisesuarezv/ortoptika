@@ -11,6 +11,7 @@ La v2 ya ES el sitio en esta rama: vive en las rutas reales (`/`, `/servicios/*`
 - Limpieza: borrados los componentes v1 sin uso (sections, services, ui, motion, Header/Footer…), CSS muerto de globals y la dependencia gsap. `FAQItem` vive ahora en services-content.
 - Avisos conocidos e inofensivos: `THREE.Clock deprecated` (viene de @react-three/fiber). Next 16.4.6 disponible: no actualizar justo antes de subir.
 - Siguen pendientes de la doctora: mensaje `mensaje-doctora-barra-y-cuentas.md` y el copy marcado como BORRADOR.
+- Responsive revisado (20-nov, noche 3): barrido de las 11 rutas en Chromium (320–1920, 10 anchos) y WebKit/Safari (320–1440, 6 anchos) sin desbordes ni errores. Corregido: logo a ≤369 px (solo el ojo; ≤399 en la flotante), tabla de privacidad que ensanchaba la página en móvil (`min-w-0` en la columna), cifras de Yeimmy que se pisaban a 1024–1279 (en filas hasta xl), ojo del hero que tapaba el párrafo en pantallas 4:3 (`corrida` en poseHero + párrafo más estrecho en lg) y titular de las landings más bajo en pantallas de ≤820 px de alto (1366×768: el botón queda a la vista). 1440×900 no cambia.
 
 ## EMPEZAR AQUÍ (anterior, 20-nov noche)
 Páginas restantes de la v2 HECHAS (20-nov, noche), con el contenido de la v1: `/lab/v2/sobre-mi/`, `/lab/v2/contacto/`, `/lab/v2/blog/`, `/lab/v2/privacidad/` y `/lab/v2/no-encontrada/` (vista previa del 404; además `src/app/lab/v2/not-found.tsx`). Falta que el usuario las vea.

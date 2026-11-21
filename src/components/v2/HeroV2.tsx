@@ -57,7 +57,10 @@ function poseHero(p: number, { halfH, aspect }: { halfH: number; aspect: number 
 
   if (aspect >= 1) {
     // B: enorme, a la derecha, sangrando por el borde. Entra desde fuera girando.
-    const bx = halfW * 0.56 + (1 - i) * halfW * 0.55;
+    // En pantallas más cuadradas que 16:10 (1024×768, iPad apaisado) el ojo pisaba el
+    // párrafo: se corre a la derecha. Desde 16:10 (el encuadre aprobado) no cambia.
+    const corrida = Math.min(0.14, Math.max(0, (1.6 - aspect) * 0.4));
+    const bx = halfW * (0.56 + corrida) + (1 - i) * halfW * 0.55;
     const bs = 1.8 * (0.82 + 0.18 * i);
     const bry = -(1 - i) * 0.9;
     // C: a la izquierda y un poco abajo, girado a 3/4: las capas se abren a la derecha
@@ -230,7 +233,7 @@ export default function HeroV2() {
           >
             Mirar juntos lo que <em className="text-[#0e4d7a]">tu hijo</em> ve.
           </h1>
-          <div ref={cuerpo} className="pointer-events-auto mt-8 max-w-[30rem] will-change-transform lg:mt-14">
+          <div ref={cuerpo} className="pointer-events-auto mt-8 max-w-[30rem] will-change-transform lg:mt-14 lg:max-xl:max-w-[26rem]">
             <p className="text-[15px] leading-relaxed text-[#33506a] lg:text-lg">
               Si se acerca mucho a la pantalla, se cansa al leer o algo en su mirada te inquieta, no tienes
               que adivinar. Lo valoramos con calma y te explico cada paso.
