@@ -8,6 +8,8 @@ export const metadata: Metadata = {
   description:
     "La página que buscas no existe o cambió de lugar. Vuelve al inicio o ve directo a las áreas de atención de Ortoptika.",
   robots: { index: false, follow: true },
+  // Sin esto hereda del layout el canonical de la home.
+  alternates: { canonical: null },
 };
 
 export default function NotFound() {
