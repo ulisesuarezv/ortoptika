@@ -1,6 +1,12 @@
 # Retomar la v2 (rama feat/v2)
 
-## ▶ EMPEZAR AQUÍ (tras el 20-nov-2026, noche 2): LISTA PARA SUBIR
+## ▶ PUBLICADA (20-nov-2026): la v2 está EN PRODUCCIÓN en ortoptikaterapia.com
+`feat/v2` se subió a `main` por fast-forward (último 40b8d77 + este commit de notas). La doctora la revisa en vivo: lo próximo son sus correcciones de copy (todo lo marcado BORRADOR).
+- Verificado en producción: 10 rutas 200, 404 real con la página nueva y sin canonical, /lab 404, www→apex 308, sitemap/robots, GTM, OG como image/png (vercel.json), 0 errores de consola, CLS 0, LCP < 0,9 s (móvil CPU ×4), sin desbordes en Safari/Chromium de 360 a 1440.
+- Arreglo tras la prueba en iPhone: en móvil cada recorrido es una columna (texto abajo con su alto, escena con lo que sobra); antes la escena y «Lo que se ve» pisaban el texto en pantallas bajas.
+- `main` local de este repo puede ir por detrás: el push se hizo con `git push origin feat/v2:main`.
+
+## (anterior) LISTA PARA SUBIR
 La v2 ya ES el sitio en esta rama: vive en las rutas reales (`/`, `/servicios/*`, `/sobre-mi/`, `/contacto/`, `/blog/`, `/privacidad/`, 404) y `/lab` ya no existe (también se fue `/lab/ojo`; está en el historial y en `feat/ojo-3d`). Lint y build en verde. `main` no se ha movido: el merge es fast-forward.
 **Falta solo:** que el usuario dé el visto bueno y hacer merge a `main` + push (eso publica en producción). Antes, si se quiere, `pnpm build` y `python3 -m http.server 3313 -d out` para verlo en local / en el celular.
 - Layout raíz: fuentes v2 (Instrument Serif + Inter Tight; los tokens `--font-*` de globals apuntan a ellas). Fuera Header/Footer/WhatsAppButton/cursor/PageTransition de la v1. Se mantienen ConsentMode, GTM y el aviso de cookies (re-pintado en navy v2).
