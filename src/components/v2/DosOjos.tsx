@@ -81,7 +81,7 @@ export default function DosOjos() {
   }, []);
 
   return (
-    <section ref={zona} aria-labelledby="equipo-titulo" className="relative h-[420svh] bg-[#02223b] text-white">
+    <section ref={zona} aria-labelledby="equipo-titulo" className="relative h-[calc(var(--pantalla,100svh)*4.2)] bg-[#02223b] text-white">
       <div className="sticky top-0 h-[100lvh] overflow-hidden">
         <div
           aria-hidden="true"

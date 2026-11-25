@@ -208,7 +208,7 @@ export default function HeroV2() {
     <section
       ref={zona}
       aria-labelledby="hero-v2-titulo"
-      className="relative h-[300svh] bg-[#f6f2ea] font-[family-name:var(--font-v2-sans)] text-[#02223b]"
+      className="relative h-[calc(var(--pantalla,100svh)*3)] bg-[#f6f2ea] font-[family-name:var(--font-v2-sans)] text-[#02223b]"
     >
       <div className="sticky top-0 h-[100lvh] w-full overflow-hidden">
         {/* Fondo B: halo cálido detrás del ojo. Fondo C: cuadrícula de lámina. */}

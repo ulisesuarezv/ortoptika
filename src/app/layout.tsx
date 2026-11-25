@@ -6,6 +6,7 @@ import { GtmNoScript, GtmScript } from "@/components/layout/GoogleTagManager";
 import ConsentMode from "@/components/layout/ConsentMode";
 import CookieBanner from "@/components/layout/CookieBanner";
 import CabeceraFlotante from "@/components/v2/CabeceraFlotante";
+import AltoPantalla from "@/components/v2/AltoPantalla";
 
 // Tipografías de la v2: Instrument Serif (titulares, candidato a LCP) + Inter
 // Tight (todo lo demás). next/font genera la fuente de respaldo con métricas
@@ -67,6 +68,7 @@ export default function RootLayout({
       <body className="flex min-h-full flex-col font-[family-name:var(--font-v2-sans)]">
         <ConsentMode />
         <GtmNoScript />
+        <AltoPantalla />
         <CabeceraFlotante />
         <main className="flex-1">{children}</main>
         <CookieBanner />

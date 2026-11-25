@@ -109,7 +109,7 @@ export default function BarraRecorrido() {
   }, []);
 
   return (
-    <section ref={zona} aria-labelledby="barra-titulo" className="relative h-[460svh] bg-[#02223b] text-white">
+    <section ref={zona} aria-labelledby="barra-titulo" className="relative h-[calc(var(--pantalla,100svh)*4.6)] bg-[#02223b] text-white">
       <div className="sticky top-0 flex h-[100lvh] flex-col overflow-hidden lg:block">
         <div
           aria-hidden="true"
